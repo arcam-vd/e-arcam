@@ -1,0 +1,14 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:c="http://java.sun.com/jsp/jstl/core"
+    xmlns:sec="http://www.springframework.org/security/tags"
+    xmlns:arcam="http://java.sun.com/jsf/composite/components">
+    <f:metadata>
+        <f:viewParam name="id" value="#{accountValidationBean.id}"/>
+        <f:event listener="#{accountValidationBean.populateEntity}" type="preRenderView" />
+    </f:metadata>
+    <ui:include src="mappingTaxpayer.xhtml"/>
+</ui:composition>

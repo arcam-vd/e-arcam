@@ -1,0 +1,58 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:c="http://java.sun.com/jstl/core"
+    xmlns:arcam="http://java.sun.com/jsf/composite/components"
+    xmlns:sec="http://www.springframework.org/security/tags"
+    template="../layouts/mainLayout.xhtml">
+
+    <ui:param name="hasRoleASJ" value="#{sec:areAnyGranted('ASJ')}"/>
+    <ui:param name="hasRoleCOM" value="#{sec:areAnyGranted('COM')}"/>
+    <ui:param name="hasRoleGES" value="#{sec:areAnyGranted('GES')}"/>
+    <ui:param name="hasRoleADM" value="#{sec:areAnyGranted('ADM')}"/>
+    
+    <ui:param name="titlePage" value="#{bundle['cyberadmin.statisticGeneration.pageTitle']}"/>
+    <ui:param name="backingBean" value="#{generateStatisticBean}"/>
+    <ui:param name="helperText" value="#{helpMsg['cyberadmin.statisticGeneration.help']}"/>
+    
+    <ui:define name="content">
+        <h:form id="form" styleClass="common-detail-form">
+            <p:focus context="form"/>
+            <h:panelGrid width="100%" columns="2" columnClasses="first-col-form-generate-statistic">
+                <h:outputLabel value="#{bundle['cyberadmin.common.label.category']}"/>
+                <arcam:comboBox value="#{backingBean.declarationType}" items="#{cyberAdminDataBean.shortDeclarationTypes}" 
+                    styleClass="form-generate-statistic-category"/>
+                <h:outputLabel value="#{bundle['cyberadmin.common.label.commune']}"/>
+                <arcam:comboBox value="#{backingBean.communeCode}"
+                        styleClass="form-generate-statistic-commune" 
+                        items="#{cyberAdminDataBean.communes}" disabled="#{hasRoleCOM}"/>
+                <h:outputLabel value="#{bundle['cyberadmin.statisticGeneration.from']}"/>
+                <h:panelGrid columns="3" cellpadding="0" cellspacing="0" width="100%" styleClass="form-generate-statistic-period-table" columnClasses=",,float-right">
+                    <p:calendar id="startDateCompId" locale="#{localeBean.lang}" value="#{backingBean.fromDate}" pattern="#{webConstants['DATE_PATTERN']}"/>
+                    <h:panelGroup>
+                        <p:spacer width="5px"/>
+                        <h:outputLabel value="#{bundle['cyberadmin.statisticGeneration.to']}"/>
+                        <p:spacer width="5px"/>
+                    </h:panelGroup>
+                    <p:calendar locale="#{localeBean.lang}" value="#{backingBean.toDate}" styleClass="float-right" pattern="#{webConstants['DATE_PATTERN']}">
+                        <f:validator validatorId="dateRangeValidator" />
+                        <f:attribute name="startDateCompId" value=":form:startDateCompId" />
+                    </p:calendar>
+                </h:panelGrid>
+            </h:panelGrid>
+            <p:spacer height="10"/>
+            <h:panelGrid width="100%" columns="2" columnClasses="first-col-form-generate-statistic">
+                <h:panelGroup />
+                <h:panelGrid cellpadding="0" cellspacing="0" styleClass="form-generate-statistic-period-table">
+                <p:commandButton value="#{bundle['cyberadmin.common.button.generate']}" ajax="false" 
+                        onclick="CyberAdmin.Export.exportCA()"    
+                        action="#{backingBean.exportStatistic}" 
+                        update="form" styleClass="float-right form-button"/>
+                </h:panelGrid>
+            </h:panelGrid>
+             <h:inputHidden id="screenUUID" value="#{backingBean.screenUUID}"/>
+        </h:form>
+    </ui:define>
+</ui:composition>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Context>
+
+  <!-- VIETNAM -->	
+  <Resource name="jdbc/CyberadminDataSourceVN" 
+       auth="Container" type="javax.sql.DataSource" 
+       driverClassName="com.mysql.jdbc.Driver" 
+	   url="jdbc:mysql://192.168.224.171:3306/arcam-cyb?autoReconnect=true" 
+	   username="arcam-cyb" password=""
+       validationQuery="select 1" testOnBorrow="true"
+	   maxActive="200" maxIdle="100" maxWait="5000"/>
+
+  <!-- VM, STG AND PRD -->		   
+  <Resource name="jdbc/CyberadminDataSource" 
+       auth="Container" type="javax.sql.DataSource" 
+       driverClassName="com.mysql.jdbc.Driver" 
+	   url="jdbc:mysql://localhost:3306/arcam-cyb?autoReconnect=true" 
+	   username="arcam-cyb" password="arcam-cyb" 
+       validationQuery="select 1" testOnBorrow="true"
+	   maxActive="200" maxIdle="100" maxWait="5000"/>
+	   
+	<!-- CH TEST -->   
+    <Resource name="jdbc/CyberadminDataSourceCHtest" 
+       auth="Container" type="javax.sql.DataSource" 
+       driverClassName="com.mysql.jdbc.Driver" 
+	   url="jdbc:mysql://vm-arcam-cyb:3306/arcam-cyb-int?autoReconnect=true" 
+	   username="arcam-cyb-int" password="arcam-cyb-int" 
+       validationQuery="select 1" testOnBorrow="true"
+	   maxActive="200" maxIdle="100" maxWait="5000"/>    
+
+	 <!-- CH INTERNAL -->	
+     <Resource name="jdbc/CyberadminDataSourceCHint" 
+       auth="Container" type="javax.sql.DataSource" 
+       driverClassName="com.mysql.jdbc.Driver" 
+	   url="jdbc:mysql://vm-arcam-cyb:3306/arcam-cyb-int?autoReconnect=true" 
+	   username="arcam-cyb-int" password="arcam-cyb-int" 
+       validationQuery="select 1" testOnBorrow="true"
+	   maxActive="200" maxIdle="100" maxWait="5000"/>
+</Context>

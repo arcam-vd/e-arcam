@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+                            http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+                            http://www.springframework.org/schema/context
+                            http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+    <context:component-scan use-default-filters="false" annotation-config="false"
+        base-package="org.arcam.cyberadmin.dao.*.impl">
+        <context:include-filter type="annotation"
+            expression="org.arcam.cyberadmin.dao.core.el4j.services.persistence.generic.dao.AutocollectedGenericDao" />
+    </context:component-scan>
+    
+    <bean id="fallbackDaoPrototype" class="org.arcam.cyberadmin.dao.core.CyberadminFallbackDaoPrototype" scope="prototype"/>
+
+    <bean id="daoRegistry" class="org.arcam.cyberadmin.dao.core.el4j.services.persistence.generic.dao.impl.FallbackDaoRegistry" >
+        <property name="daoPrototypeBeanName" value="fallbackDaoPrototype"/>
+        <property name="namePattern" value="*DaoImpl"/>
+    </bean>
+
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+        <property name="dataSource" ref="cyberadminDataSource"></property>
+
+        <property name="hibernateProperties">
+           <props>
+                <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+                <prop key="hibernate.cache.provider_class">org.hibernate.cache.NoCacheProvider</prop>
+                <prop key="hibernate.cache.use_second_level_cache">false</prop>
+                <prop key="hibernate.max_fetch_depth">3</prop>
+                <prop key="hibernate.show_sql">false</prop>
+                <prop key="hibernate.format_sql">true</prop>
+                <prop key="hibernate.use_sql_comments">true</prop>
+                <prop key="hibernate.connection.release_mode">after_transaction</prop>
+                <prop key="hibernate.jdbc.batch_size">20</prop>
+                <prop key="hibernate.jdbc.fetch_size">100</prop>
+           </props>
+        </property>
+
+        <property name="packagesToScan" value="org.arcam.cyberadmin.dom" />
+        <property name="entityInterceptor" ref="emptyInterceptor" /> 
+    </bean>
+
+    <bean id="emptyInterceptor" class="org.hibernate.EmptyInterceptor" />
+
+    <bean class="org.arcam.cyberadmin.dao.core.el4j.services.persistence.hibernate.dao.HibernateSessionFactoryInjectorBeanPostProcessor">
+        <property name="sessionFactory" ref="sessionFactory" />
+    </bean>
+
+</beans>

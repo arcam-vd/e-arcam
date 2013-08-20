@@ -1,0 +1,57 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	template="layouts/unauthenticatedLayout.xhtml">
+	<ui:define name="content">
+		<form id="login-form" class="login-form"
+			action="j_spring_security_check" method="post" autocomplete='off'>
+			<div class="error">
+				#{sessionScope.SPRING_SECURITY_LAST_EXCEPTION.message}</div>
+			<h:panelGrid columns="2" width="%" columnClasses="login-first-column">
+				<h:outputText value="#{bundle['cyberadmin.login.username']}" />
+				<p:inputText id="j_username" size="40" />
+				<h:outputText value="#{bundle['cyberadmin.login.password']}" />
+				<p:inputText id="j_password" type="password" size="40" />
+
+				<ui:remove>
+					<!--  Links for create a new user and login by email. -->
+				</ui:remove>
+				<h:outputLink value="assujetti/registerTaxpayer.xhtml">
+                    <h:outputText value="#{bundle['cyberadmin.text.newuser']}" />
+                </h:outputLink>
+
+				<h:panelGrid columns="2" cellpadding="0" cellspacing="0"
+					width="100%" columnClasses=",btn_col2">
+					<h:outputLink value="forgetPassword.xhtml">
+						<h:outputText value="#{bundle['cyberadmin.login.forgetPassword']}" />
+					</h:outputLink>
+
+					<ui:remove>
+						<!--  Customize the html button to make it similar to Primesface button. -->
+					</ui:remove>
+					<button id="login_button" type="submit"
+						class="login_button ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">
+						<span class="ui-button-text">#{bundle['cyberadmin.login.button']}</span>
+					</button>
+				</h:panelGrid>
+			</h:panelGrid>
+		</form>
+
+		<ui:remove>
+			<!-- Make default focus for username field -->
+		</ui:remove>
+		<script type='text/javascript'>
+			jQuery(document).ready(
+					function() {
+						(function() {
+							document.forms['login-form'].elements['j_username']
+									.focus();
+						})();
+					});
+		</script>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,113 @@
+/* Overriding the default CSS defined in PrimeFaces for skin 'CyberAdmin' */
+
+.ui-layout-north {
+	z-index: 20 !important;
+	overflow: visible !important;;
+}
+
+.ui-layout-north .ui-layout-unit-content {
+	overflow: visible !important;
+}
+
+.ui-layout-unit {
+	padding: 0em;
+}
+
+.ui-panel .ui-panel-titlebar-icon {
+    float: left !important;
+}
+
+.ui-panel .ui-panel-title {
+    margin: 0.1em 16px 0.2em 0;
+    padding-left: 5px;	
+}
+
+.ui-widget-header {
+	background: none !important;
+    filter: none;
+    border: none;
+    color: none;
+    font-weight: bold;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
+    font-size: 13px;
+}
+
+.ui-widget {
+    font-family: "Century Gothic",Arial,Helvetica,Sans-Serif !important;
+    font-size: 12px;
+}
+
+.ui-widget-content {
+	background: #FDFDFC;
+}
+
+.ui-state-default, .ui-widget-content.ui-state-default, .ui-widget-header.ui-state-default {
+    font-weight: normal !important;
+    filter: none; 
+}
+
+a, a:link {
+    color: #0A71B4;
+    text-decoration: underline;
+}
+
+a:hover {
+    color: #575A4E;
+    text-decoration: none;
+}
+
+.ui-datatable th {
+    text-align: left !important; 
+}
+
+.ui-inputfield, .ui-widget-content .ui-inputfield, .ui-widget-header .ui-inputfield {
+    box-shadow: none !important;
+}
+
+.noheader.ui-datatable table thead {
+    display: none;
+}
+
+.ui-panel .ui-panel-titlebar {
+    padding: 5px !important;
+}
+
+.ui-widget-content a, .ui-widget-header a {
+    color: #0A71B4;
+}
+
+.ui-state-disabled,.ui-state-disabled input, .ui-widget-content .ui-state-disabled, .ui-widget-header .ui-state-disabled {
+    background: none repeat scroll 0 0 #E7E7E7 !important;
+    cursor: default !important;
+    opacity: 0.9;
+}
+
+.ui-widget-overlay {
+    background: none repeat scroll 0 0 #E7E7E7 !important;
+    cursor: default !important;
+}
+
+/* OVERRIDE FOR FILEUPLOAD COMPONENT */
+.fileupload-content{
+    /* display: none; */
+    border: none !important;
+    padding: 0 !important;
+}
+
+.ui-fileupload  .fileupload-buttonbar {
+    /* padding: 0 0; */
+    float: right !important; 
+}
+
+.files {
+    margin: 0 !important;
+    border-collapse: inherit !important; 
+}
+
+.fileupload-content {
+    float: left;
+}
+
+.preview, .name, .size  {
+    display: none !important;
+}

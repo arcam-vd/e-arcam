@@ -1,0 +1,87 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:c="http://java.sun.com/jsp/jstl/core"
+    xmlns:composite="http://java.sun.com/jsf/composite">
+
+<!-- INTERFACE -->
+<composite:interface>
+    <composite:attribute name="id" />
+    <composite:attribute name="backingBeanHandler" />
+    <composite:attribute name="labelUploadButton" />
+    <composite:attribute name="columnClasses" default="file-uploaddownload-col1" />
+    <composite:attribute name="hasMessage" default="true" />
+</composite:interface>
+
+<!-- IMPLEMENTATION -->
+<composite:implementation>
+    <style type="text/css">
+        .error {
+            background-color: #FFBABA;
+            color: #D8000C;
+            font-weight: bold !important;
+            padding-left: 1px;
+         }
+         .ui-message-error-detail {
+            margin-left: 0px !important;
+         }
+    </style>
+    <h:panelGrid id="#{cc.attrs.id}" width="100%" cellpadding="5" cellspacing="0" columns="3" columnClasses="#{cc.attrs.columnClasses}">
+                        <h:outputLabel id="uploadedFileName#{cc.attrs.id}" 
+                                       styleClass="float-right"
+                                       value="#{cc.attrs.backingBeanHandler.displayUploadFileName}"
+                                       title="#{cc.attrs.backingBeanHandler.displayFileNameToolTip}"/>
+                        
+                        <h:panelGroup id="downloadLink#{cc.attrs.id}">
+                        <h:commandLink title="#{bundle['cyberadmin.common.button.document.download']}" 
+                                       immediate="true" rendered="#{cc.attrs.backingBeanHandler.uploadedFile != null}">   
+	                        <h:graphicImage value="/resources/icon/icon_attachment.png" />
+	                        <p:fileDownload value="#{cc.attrs.backingBeanHandler.downloadedFile}" />
+	                     </h:commandLink>
+	                     </h:panelGroup> 
+                                       
+                        <p:fileUpload id="fileUpload" fileUploadListener="#{cc.attrs.backingBeanHandler.handleFileUpload}" label="#{cc.attrs.labelUploadButton}"
+                                sizeLimit="#{webConstants['SIZE_LIMIT']}"
+                                allowTypes="#{webConstants['ALLOW_TYPES']}"
+                                mode="advanced"
+                                auto="true"
+                                styleClass="float-right"
+                                update="uploadedFileName#{cc.attrs.id},downloadLink#{cc.attrs.id},fileUpload"
+                                invalidFileMessage="#{errorMsg['cyberadmin.common.fileUpload.type']}"
+                                invalidSizeMessage="#{errorMsg['cyberadmin.common.fileUpload.size']}"
+                                oncomplete="if(#{cc.attrs.hasMessage}) {hiddenFileName();}">
+                               <p:message showDetail="true" showSummary="false" for="fileUpload" id="msg" display="text" rendered="#{cc.attrs.hasMessage}"/>
+                        </p:fileUpload>  
+                        
+                       <script type="text/javascript">
+                            function hiddenFileName() { 
+                                //Clean error messages
+                                jQuery('.ui-messages').remove();
+                                jQuery('#formAddComment\\:messageRegion').children().remove();
+                                //Moving
+                                jQuery('.ui-message-error-detail').moveTo('#formAddComment\\:messageRegion');
+                                jQuery('.ui-message-error-detail').wrap('<table class="files"><tbody><tr class="template-upload ui-state-error"><td class="error" colSpan="2"></td></tr></tbody></table>');
+                                jQuery('.files').moveTo('#formAddComment\\:messageRegion');
+                            	//Remove the not use element.
+                                jQuery('#formAddComment\\:commentUploadDownload\\:msg').remove();
+                            	jQuery('.fileupload-content').remove();
+                            	
+                            }
+                            
+                            (function(jQuery){
+                                jQuery.fn.moveTo = function(selector){
+                                    return this.each(function(){
+                                        var cl = $(this).clone();
+                                        jQuery(cl).appendTo(selector);
+                                        jQuery(this).remove();
+                                    });
+                                };
+                            })(jQuery);
+                       </script>                 
+   </h:panelGrid>
+</composite:implementation>
+
+</html>

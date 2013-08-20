@@ -1,0 +1,391 @@
+body {
+    font-family: "Century Gothic", Arial, Helvetica, Sans-Serif !important;
+    font-size: 10px !important;
+    font-style: normal;
+    font-weight: normal !important;
+    margin: 0 auto !important;
+    width: 890px !important;
+    height: auto !important;
+}
+
+#top {
+    display: none !important;
+}
+
+#header,#menuBar {
+    display: none !important;
+}
+
+#center {
+    bottom: 0;
+    left: 0;
+    margin: 0;
+    position: static !important;
+    right: 0;
+    visibility: visible;
+    width: 870px !important;
+    z-index: 1;
+    height: auto !important;
+}
+
+.ui-widget {
+    font-family: "Century Gothic", Arial, Helvetica, Sans-Serif !important;
+    font-size: 10px !important;
+}
+
+.ui-widget-header {
+    background: none repeat scroll 0 0 transparent !important;
+    border: medium none;
+    filter: none;
+    font-size: 10px;
+    font-weight: bold;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+
+
+
+.form-declaration-exoneration-table,.form-declaration-extendedTable {
+    width: 600px !important;
+}
+
+.form-declaration-child-table {
+    width: 212px !important;
+}
+
+.form-declaration-asj-buttons {
+    display: none !important;
+}
+
+.form-declaration-gesAdm-buttons {
+    display: none !important;
+}
+
+.form-declaration-rue-facturation {
+    width: 90px !important;
+}
+
+.form-bienTaxe-child-label {
+    padding-left: 2px !important;
+    padding-right: 2px !important;
+}
+
+.form-declaration-peAdress-buton {
+    height: 40px !important;
+    width: 100px !important;
+}
+
+.form-declaration-no-facturation {
+    width: 50px !important;
+}
+
+.form-declaration-npa {
+    width: 40px !important;
+}
+
+.form-declaration-pays {
+    width: 70px !important;
+}
+
+.form-declaration-child-label {
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+}
+
+.form-declaration-cb-adresse {
+    width: 105px !important;
+}
+.form-declaration-table-header {
+    width: 210px !important;
+}
+
+.form-declaration-input {
+    width: 202px;
+}
+
+.first-column-declaration-header {
+    display: none;
+    min-width: 500px !important;
+}
+
+.form-declaration-currency-combobox {
+    width: 158px !important;
+}
+
+.form-declaration-submissionDate {
+    width: 60px !important;
+}
+
+.form-declaration-id {
+    width: 50px !important;
+}
+
+.form-declaration-title {
+    font-size: 10px;
+    font-weight: bold;
+}
+
+.form-declaration-attention {
+    font-size: 10px;
+}
+
+.form-declration-section-title {
+    font-size: 10px;
+    font-weight: bold;
+}
+
+.first-column-declaration-detail-header {
+    width: 350px !important;
+}
+
+.first-column-declaration-ajust-status {
+    width: 130px;
+}
+
+.form-declaration-status-periodicite {
+    width: 250px !important;
+}
+
+.form-declaration-table-ajustRegion {
+    width: 640px !important;
+}
+
+.first-column-form-declaration-ajust {
+    width: 250px !important;
+}
+
+.form-declaration-ajustComment {
+    width: 100px !important;
+}
+
+.form-declaration-amountToPaid {
+    width: 640px !important;
+}
+
+.form-declaration-detail-header-combo {
+    width: 210px !important;
+}
+
+.frist-column-declaration-adressFacturation {
+    width: 80px !important;
+}
+
+.form-declaration-location-lable-child {
+    width: 100px !important;
+}
+
+.form-delcaration-child {
+    padding-left: 0px !important;
+}
+
+.first-column-declaration-adresse-comment {
+    width: 350px !important;
+}
+
+.form-declaration-currency-label  {
+    font-size: 12px;
+}
+
+.form-declaration-location-week-input {
+    width: 50px !important;
+}
+
+.form-declaration-location-time {
+    width: 542px !important;
+}
+
+.first-column-locate-time {
+    width: 300px !important;
+}
+
+.form-declaration-location-info { |
+    width: 890px !important;
+}
+
+.form-declaration-table-total {
+    width: 640px !important;
+}
+
+.form-declaration-comment {
+    height: 100px !important;
+    width: 250px !important;
+}
+
+.form-declaration-location-table-week {
+    width: 150px !important;
+}
+
+.first-column-declaration-location-info {
+    width: 100px !important;
+}
+
+.first-column-declaration-location {
+    width: 100px !important;
+}
+
+.ui-inputfield.form-declaration-currency-input {
+    font-size: 11px !important;
+    font-weight: bold !important;
+    width: 100px;
+}
+
+.form-declaration-zoneMsges-residence,.form-declaration-zoneMsges-location, .form-declaration-zoneMsges-hotel,
+.form-declaration-zoneMsges-camping, .form-declaration-zoneMsges-institut, .form-declaration-zoneMsges-chambre
+{
+    padding-left: 0px !important;
+    width: 400px !important;
+}
+
+.form-declaration-taxCalcul-input {
+    width: 200px !important;   
+}
+
+.first-column-declaration-calcul {
+    width: 330px !important;
+}
+
+.first-column-form-declaration-currency {
+    width: 250px !important;
+    float: left;
+}
+
+.form-declaration-npa {
+    width: 40px;   
+}
+
+.form-declaration-taxeCalcul-table {
+    width: 210px !important;
+}
+
+.form-declaraion-adreeseDuBien {
+    width: 300px !important;
+}
+
+.form-declaration-localite {
+    width: 70px;
+} 
+
+.form-delcaration-child {
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+.form-declaration-rue {
+    width: 80px !important;
+}
+
+.form-declaration-no {
+    width: 50px !important;
+}
+
+.first-column-declaration-periode {
+    width: 80px !important;
+}
+
+.first-column-declaration-amountToPaid {
+    width: 500px;
+}
+
+.form-declaration-currency-label {
+    font-size: 15px;
+}
+
+.form-declaration-ajust-input-comment {
+    width: 150px;
+}
+
+.first-column-declaration-child-calcul {
+    width: 300px !important;
+}
+
+.first-column-declaration-child-calcul {
+    width: 100px !important;
+}
+
+.form-declaration-comment-table {
+    display: none !important;
+}
+
+.form-declaration-header {
+    display: none !important;
+}
+
+table .form-declaration-tableExemption {
+    page-break-before: always !important;
+    position: static !important; 
+}
+
+.form-spacer {
+    height: 250px !important;
+}
+
+.form-declaration-exoneration-table-column {
+    width: 70px !important;
+}
+
+.form-declaration-exoneration-table-input {
+    width: 50px !important;
+}
+
+.print-layout > .ui-layout-unit-content {
+    height: 1630px !important;
+    position: static !important;
+}
+
+.print-layout-res-loc > .ui-layout-unit-content {
+    height: 985px !important;
+    position: static !important;
+}
+
+.ui-state-disabled,.ui-state-disabled input,.ui-widget-content .ui-state-disabled,.ui-widget-header .ui-state-disabled
+    {
+    background: none repeat scroll 0 0 #FFFFFF  !important;
+    cursor: default !important;
+    opacity: 1;
+    filter: Alpha(opacity=100);
+}
+
+.ui-widget-content {
+    border: none !important;
+}
+
+.form-declaration-pirnter-lbl, .form-declaration-pirnter {
+    display: none !important;
+}
+
+.form-declaraion-adreeseDuBien, .form-declaration-child-table-taxel {
+    width: 220px !important;
+}
+
+.form-declaration-eWid {
+    width: 80px !important;    
+}
+
+.form-declaration-eGrid {
+    width: 80px !important;    
+}
+
+.form-declaration-npa input {
+    width: 60px !important;    
+}
+
+.form-declaration-child-table-taxe-COM {
+    width: 380px !important;
+}
+
+.form-declaraion-adreeseDuBien-modifierEGridEWid {
+    width: 250px !important;
+}
+
+.form-declaration-peAdress-buton {
+    display: none !important;    
+}
+
+.form-declaration-cb-adresse {
+    width: 120px !important;
+}
+@page 
+{
+    size: auto;
+    margin:  10mm: 10mm: 10mm: 10mm /* this affects the margin in the printer settings */
+}
+

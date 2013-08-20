@@ -1,0 +1,41 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:arcam="http://java.sun.com/jsf/composite/components"
+    xmlns:sec="http://www.springframework.org/security/tags"
+    template="../layouts/mainLayout.xhtml">
+
+    <ui:define name="content">
+        <h:form id="form">
+            <p:focus context="form"/>
+            <h:panelGrid id="content" width="100%">
+                 <ui:insert name="headerDeclaration"/>
+                 <arcam:adresseFacturation id="adressFacturation" backingBean="#{backingBean}" entity="#{backingBean.entity}"  disabled="#{isViewMode}"/>
+                 <p:spacer height="10" />
+                 <h:panelGrid width="100%" id="taxCalculation"> 
+                          <arcam:infoBienTaxe id="infoBienTaxe" 
+                                backingBean="#{backingBean}" 
+                                entity="#{entity}" 
+                                bienTaxe="#{bienTaxe}"
+                                isViewMode="#{isViewMode}"
+                                isEditMode="#{isEditMode}"
+                                istypeResidence="#{istypeResidence}"
+                                istypeHotel="#{istypeHotel}"
+                                istypeInstitut="#{istypeInstitut}"
+                                istypeCamping="#{istypeCamping}"
+                                istypeChambre="#{istypeChambre}"
+                                istypeLocation="#{istypeLocation}"
+                                hasRoleCOM="#{hasRoleCOM}"
+                                hasRoleGES="#{hasRoleGES}"
+                                hasRoleADM="#{hasRoleADM}"
+                                EGID_VALIDATED="#{EGID_VALIDATED}"/>
+                 </h:panelGrid>
+                 <ui:insert name="customRegionTaxCalculaton"/>
+                 <ui:insert name="customRegionAction"/>
+            </h:panelGrid>
+        </h:form>
+        <ui:insert name="dialogModal"/>
+    </ui:define>
+</ui:composition>

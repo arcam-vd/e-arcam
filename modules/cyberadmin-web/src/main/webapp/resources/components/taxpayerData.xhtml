@@ -1,0 +1,91 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:sec="http://www.springframework.org/security/tags"
+    xmlns:arcam="http://java.sun.com/jsf/composite/components"
+    xmlns:composite="http://java.sun.com/jsf/composite">
+
+<!-- INTERFACE -->
+<composite:interface>
+    <composite:attribute name="entity"/>
+    <composite:attribute name="disabled"/>
+    <composite:attribute name="backingBean"/>
+    <composite:attribute name="isModeEdit"/>
+    <composite:attribute name="isModeNew"/>
+    <composite:attribute name="isModeView"/>
+</composite:interface>
+
+<!-- IMPLEMENTATION -->
+<composite:implementation>
+     <ui:param name="mandatorySign" value="#{bundle['cyberadmin.common.mandatory']}"/>
+     <h:panelGrid  width="100%" cellpadding="0" cellspacing="0">
+                <h:panelGrid width="100%" cellpadding="3" cellspacing="0" columns="2" styleClass="" columnClasses="first-column-taxpayer">
+                    <h:outputLabel value="#{bundle['cyberadmin.common.label.name']}#{mandatorySign}" />
+                    <h:panelGrid width="100%" cellpadding="0" cellspacing="0" columns="3" styleClass="form-taxpayer-input-table">
+                        <p:inputText value="#{cc.attrs.entity.person.nom}" 
+                                    
+                                    label="#{bundle['cyberadmin.common.label.name']}"
+                                    styleClass="form-taxpayer-nom" disabled="#{cc.attrs.disabled}" maxleRngth="255" />
+                            
+                        <h:outputLabel value="#{bundle['cyberadmin.common.label.firstname']}#{mandatorySign}" />
+                        <p:inputText value="#{cc.attrs.entity.person.prenom}"
+                                    
+                                    label="#{bundle['cyberadmin.common.label.firstname']}"
+                                    styleClass="float-right form-taxpayer-prenom" disabled="#{cc.attrs.disabled}" maxlength="255" />
+                    </h:panelGrid>
+                    <h:outputLabel value="#{bundle['cyberadmin.common.label.organisation']}#{mandatorySign}" />
+                    <p:inputText value="#{cc.attrs.entity.person.organisation}"  
+                                    
+                                    label="#{bundle['cyberadmin.common.label.organisation']}"
+                                    styleClass="form-taxpayer-organisation" disabled="#{cc.attrs.disabled}" maxlength="255" />
+                </h:panelGrid>
+                
+                <p:spacer height="10px"/>
+                <h:outputLabel value="#{bundle['cyberadmin.common.label.correspondenceAddress']}" styleClass="form-taxpayer-address-label"/>
+                <p:spacer height="10px"/>
+                <h:panelGrid width="100%" cellpadding="3" cellspacing="0" columns="2" styleClass="" columnClasses="first-column-taxpayer align-top">
+                    <h:outputLabel value="#{bundle['cyberadmin.common.label.additionalAddress']}"/>
+                    <p:inputTextarea value="#{cc.attrs.entity.adresse.adresse}" styleClass="form-taxpayer-addition-address" disabled="#{cc.attrs.disabled}"  maxlength="255"/>
+                    <h:outputLabel value="#{bundle['cyberadmin.common.label.street']}" />
+                    <h:panelGrid columns="5" width="100%" cellpadding="0" cellspacing="0" styleClass="form-taxpayer-input-table">
+                        <p:inputText value="#{cc.attrs.entity.adresse.rue}" styleClass="form-taxpayer-rue" disabled="#{cc.attrs.disabled}"  maxlength="255"/>
+                        <h:outputLabel value="#{bundle['cyberadmin.common.label.number']}"/>
+                        <p:inputText value="#{cc.attrs.entity.adresse.no}" styleClass="form-taxpayer-no" disabled="#{cc.attrs.disabled}"  maxlength="20"/>
+                        <h:outputLabel value="#{bundle['cyberadmin.common.label.country']}#{mandatorySign}"/>
+                        <arcam:comboBox 
+                             items="#{cyberAdminDataBean.countryItems}" 
+                             styleClass="form-taxpayer-combobox float-right"
+                             value="#{cc.attrs.entity.adresse.pays}" required="true" disabled="#{cc.attrs.disabled}"
+                             requiredMessage="#{errorMsg['cyberadmin.declarationDetail.mandatory.pays']}"
+                             rendered="#{cc.attrs.isModeEdit}"/>
+                        <p:inputText value="#{cc.attrs.entity.adresse.country}" styleClass="form-taxpayer-combobox float-right" disabled="#{cc.attrs.disabled}" rendered="#{cc.attrs.isModeView}"/>    
+                    </h:panelGrid>
+                    <h:outputLabel value="#{bundle['cyberadmin.common.label.NPA']}#{mandatorySign}"/>
+                    <arcam:npaComplete 
+                            backingBean="#{cc.attrs.backingBean}" 
+                            value="#{cc.attrs.entity.localiteSuggestion}"
+                            styleClass="form-taxpayer-input-table"
+                            styleClassNpa="form-taxpayer-npa"
+                            styleClassLocalite="form-taxpayer-localite"
+                            address="#{cc.attrs.entity.adresse}"
+                            disabledNpa="#{cc.attrs.disabled}"
+                            disabledLocalite="#{cc.attrs.disabled}"/>
+                    
+                    <h:outputLabel value="#{bundle['cyberadmin.common.label.email']}" />
+                    <h:panelGrid columns="3" width="100%" cellpadding="0" cellspacing="0" styleClass="form-taxpayer-input-table">
+                        <p:inputText value="#{cc.attrs.entity.adresse.email}" styleClass="form-taxpayer-email" autocomplete="off" 
+                         disabled="#{cc.attrs.disabled}" maxlength="255" validator="emailValidator"
+                         label="#{bundle['cyberadmin.common.label.email']}"/>
+                        <h:outputLabel value="#{bundle['cyberadmin.common.label.telephone']}" />
+                        <p:inputText value="#{cc.attrs.entity.adresse.telephone}"  styleClass="float-right form-taxpayer-telephone" maxlength="30"
+                                disabled="#{cc.attrs.disabled}" onkeypress="return CyberAdmin.Number.pressTelephone(event)"/>
+                    </h:panelGrid>
+                </h:panelGrid>
+      </h:panelGrid>
+</composite:implementation>
+
+</html>

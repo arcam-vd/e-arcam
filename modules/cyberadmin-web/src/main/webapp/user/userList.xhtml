@@ -1,0 +1,109 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:c="http://java.sun.com/jsp/jstl/core"
+    xmlns:sec="http://www.springframework.org/security/tags"
+    xmlns:arcam="http://java.sun.com/jsf/composite/components"
+    template="../layouts/mainLayout.xhtml">
+
+<ui:param name="backingBean" value="#{userListBean}"/>
+<ui:param name="titlePage" value="#{bundle['cyberadmin.menu.user.list']}" />
+<ui:param name="helperText" value="#{helpMsg['cyberadmin.userList.help']}"/>
+
+<ui:define name="content">
+    <h:form id="form">
+         <p:focus context="form"/>
+         
+        <h:panelGrid width="100%">
+            <p:spacer height="20"/>
+            <arcam:searchCriteria id="criteria" backingBean="#{backingBean}" 
+                                  reRender=":form:table" 
+                                  freeTextLabel="#{bundle['cyberadmin.userList.searchUser']}"
+                                  tableResultId="form:taxpayerResult"/>
+            
+            <h:panelGrid columns="2" styleClass="float-right">
+                <p:commandButton value="#{bundle['cyberadmin.common.button.export']}" ajax="false" 
+                    action="#{backingBean.exportUsers}" 
+                    onclick="CyberAdmin.Export.exportCA()"/>
+                <p:button value="#{bundle['cyberadmin.userList.button.newUser']}" outcome="userDetail.xhtml"/>
+            </h:panelGrid>
+            
+            <p:spacer height="10" />
+            
+            <!-- Data result table area -->
+            <h:panelGrid id="table" columns="1" cellspacing="0" cellpadding="0" style="width: 100%">
+                <p:dataTable id="taxpayerResult" value="#{userListBean.dataTable.dataModel}" var="item"
+			        rows="#{webConstants['MAX_ROW']}" rowKey="#{item.id}" paginator="true" paginatorPosition="bottom" styleClass="taxpayer-list-data-table"
+			        paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+			        rowsPerPageTemplate="#{webConstants['PAGE_SIZES']}" selectionMode="single" sortBy="#{item.username}"
+                    emptyMessage="#{bundle['cyberadmin.common.table.noResult']}">
+			        
+			        <p:column sortBy="#{item.id}" styleClass="id-column">
+			            <f:facet name="header">
+                            #{bundle['cyberadmin.userList.id']}
+                        </f:facet>
+                        <h:outputLink styleClass="data-table-row-link table-cell" value="userDetail.xhtml">
+                            <h:outputText value="#{item.id}"/>
+                            <f:param name="id" value="#{item.id}" />  
+                        </h:outputLink>
+			        </p:column>
+			        
+			        <p:column sortBy="#{item.lastLogOnDate}" styleClass="small-column">
+                         <f:facet name="header">
+                            #{bundle['cyberadmin.userList.date']}
+                        </f:facet>
+                        <h:outputLink styleClass="data-table-row-link table-cell"  value="userDetail.xhtml">
+                            <h:outputText value="#{item.lastLogOnDate}">
+                                <f:convertDateTime pattern="#{webConstants['DATE_PATTERN']}" timeZone="#{userListBean.currentTimezone}"  />
+                            </h:outputText>
+                            <f:param name="id" value="#{item.id}" />  
+                        </h:outputLink>
+                    </p:column>
+                    <c:set var="userStatus" value="#{!item.activated ? 'DISABLED' : (item.validated ? '' : 'INVALIDATED')}"/>
+                    <c:set var="userStatusTooltip" value="#{!item.activated ? bundle['cyberadmin.userList.disabledTooltip'] : (item.validated ? '' : bundle['cyberadmin.userList.invalidatedTooltip'])}"/>
+                    <p:column sortBy="#{item.username}" styleClass="medium-column">
+                         <f:facet name="header">
+                            #{bundle['cyberadmin.userList.username']}
+                        </f:facet>
+                        <h:outputLink style="padding-right:16px;" styleClass="data-table-row-link table-cell" value="userDetail.xhtml">
+                            <h:outputText value="#{item.username}"/>
+                            <h:panelGroup rendered="#{not empty userStatus}">
+                                <h:outputText id="userNameContentCell" escape="false" value="&#160;&#160;&#160;&#160;&#160;" styleClass="user-list-status-#{userStatus}"/>
+                                <p:tooltip for="userNameContentCell" value="#{userStatusTooltip}"/>
+                            </h:panelGroup>
+                            <f:param name="id" value="#{item.id}" />  
+                        </h:outputLink>
+                        
+                    </p:column>
+                    
+                    <p:column sortBy="#{item.email}" styleClass="large-column">
+                         <f:facet name="header">
+                            #{bundle['cyberadmin.userList.email']}
+                        </f:facet>
+                        <h:outputLink styleClass="data-table-row-link table-cell" value="userDetail.xhtml">
+                            <h:outputText value="#{item.email}"/>
+                            <f:param name="id" value="#{item.id}" />  
+                        </h:outputLink>
+                    </p:column>
+                    
+                    <p:column sortBy="#{item.userType}">
+                         <f:facet name="header">
+                            #{bundle['cyberadmin.userList.type']}
+                        </f:facet>
+                        <h:outputLink styleClass="data-table-row-link table-cell" value="userDetail.xhtml">
+                            <c:set var="resourceKey" value="cyberadmin.common.user.type.#{item.userType}"/>
+                            <h:outputText value="#{bundle[resourceKey]}"/>
+                            <f:param name="id" value="#{item.id}" />  
+                        </h:outputLink>
+                    </p:column>
+			    </p:dataTable>
+            </h:panelGrid>
+            <h:inputHidden id="screenUUID" value="#{backingBean.screenUUID}"/>
+        </h:panelGrid>
+    </h:form>
+
+</ui:define>
+
+</ui:composition>

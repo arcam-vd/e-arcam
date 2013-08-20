@@ -1,0 +1,100 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:c="http://java.sun.com/jsp/jstl/core"
+    xmlns:composite="http://java.sun.com/jsf/composite">
+
+<!-- INTERFACE -->
+<composite:interface>
+    <composite:attribute name="id"/>
+    <composite:attribute name="backingBean"/>
+    <composite:attribute name="canEdit" default="true"/>
+    <composite:attribute name="reRenderAfterSelect"/>
+</composite:interface>
+
+<!-- IMPLEMENTATION -->
+<composite:implementation>
+    <p:dataTable id="#{cc.attrs.id}" value="#{cc.attrs.backingBean.dataTable.dataModel}" var="taxpayer" styleClass="taxpayer-list-data-table"
+                    rows="#{webConstants['MAX_ROW']}" rowKey="#{taxpayer.id}" paginator="true" paginatorPosition="bottom"
+                    paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                    rowsPerPageTemplate="#{webConstants['PAGE_SIZES']}" selectionMode="single" sortBy="#{taxpayer.person.nom}"
+                    selection="#{cc.attrs.backingBean.selectedTaxpayer}" 
+                    emptyMessage="#{bundle['cyberadmin.common.table.noResult']}">
+                    
+                    <p:ajax disabled="#{empty cc.attrs.reRenderAfterSelect}" event="rowSelect" process="@this" update="#{cc.attrs.reRenderAfterSelect}" />  
+                    <p:ajax disabled="#{empty cc.attrs.reRenderAfterSelect}" event="rowUnselect" process="@this" update="#{cc.attrs.reRenderAfterSelect}"/>
+                    
+                    <p:column sortBy="#{taxpayer.id}" styleClass="id-column">
+                        <f:facet name="header">
+                            #{bundle['cyberadmin.taxpayerList.id']}
+                        </f:facet>
+                        <h:outputLink rendered="#{cc.attrs.canEdit}" value="taxpayerDetail.xhtml" styleClass="data-table-row-link table-cell">
+                            <h:outputText value="#{taxpayer.id}" />
+                            <f:param name="id" value="#{taxpayer.id}" />  
+                        </h:outputLink>
+                        <h:outputText value="#{taxpayer.id}" rendered="#{!cc.attrs.canEdit}"/>
+                    </p:column>
+                    
+                    <p:column sortBy="#{taxpayer.person.prenom}" styleClass="medium-column">
+                        <f:facet name="header">
+                            #{bundle['cyberadmin.common.label.firstname']}
+                        </f:facet>
+                        <h:outputLink rendered="#{cc.attrs.canEdit}" value="taxpayerDetail.xhtml" styleClass="data-table-row-link table-cell">
+                            <h:outputText value="#{taxpayer.person.prenom}" />
+                            <f:param name="id" value="#{taxpayer.id}" />  
+                        </h:outputLink>
+                        <h:outputText value="#{taxpayer.person.prenom}" rendered="#{!cc.attrs.canEdit}" />
+                    </p:column>
+                    
+                    <p:column sortBy="#{taxpayer.person.nom}" styleClass="medium-column">
+                        <f:facet name="header">
+                            #{bundle['cyberadmin.common.label.name']}
+                        </f:facet>
+                        <h:outputLink rendered="#{cc.attrs.canEdit}" value="taxpayerDetail.xhtml" styleClass="data-table-row-link table-cell">
+                            <h:outputText value="#{taxpayer.person.nom}" />
+                            <f:param name="id" value="#{taxpayer.id}" />  
+                        </h:outputLink>
+                        <h:outputText value="#{taxpayer.person.nom}" rendered="#{!cc.attrs.canEdit}"/>
+                    </p:column>
+                    
+                    <p:column sortBy="#{taxpayer.person.organisation}" styleClass="medium-column">
+                        <f:facet name="header">
+                            #{bundle['cyberadmin.common.label.organisation']}
+                        </f:facet>
+                        <h:outputLink rendered="#{cc.attrs.canEdit}" value="taxpayerDetail.xhtml" styleClass="data-table-row-link table-cell">
+                            <h:outputText value="#{taxpayer.person.organisation}" />
+                            <f:param name="id" value="#{taxpayer.id}" />  
+                        </h:outputLink>
+                        <h:outputText value="#{taxpayer.person.organisation}" rendered="#{!cc.attrs.canEdit}" />
+                    </p:column>
+                    
+                    <p:column>
+                        <f:facet name="header">
+                            #{bundle['cyberadmin.common.label.address']}
+                        </f:facet>
+                        <h:outputLink rendered="#{cc.attrs.canEdit}" value="taxpayerDetail.xhtml" styleClass="data-table-row-link table-cell">
+                            <h:outputText value="#{taxpayer.address}" />
+                            <f:param name="id" value="#{taxpayer.id}" />  
+                        </h:outputLink>
+                        <h:outputText value="#{taxpayer.address}" rendered="#{!cc.attrs.canEdit}"/>
+                    </p:column>
+                    
+                    <p:column sortBy="#{taxpayer.adresse.localite}" styleClass="large-column">
+                        <f:facet name="header">
+                            #{bundle['cyberadmin.common.label.locality']}
+                        </f:facet>
+                        <h:outputLink rendered="#{cc.attrs.canEdit}" value="taxpayerDetail.xhtml" styleClass="data-table-row-link table-cell">
+                            <h:outputText value="#{taxpayer.adresse.localite}" />
+                            <f:param name="id" value="#{taxpayer.id}" />  
+                        </h:outputLink>
+                        <h:outputText value="#{taxpayer.adresse.localite}" rendered="#{!cc.attrs.canEdit}"/>
+                    </p:column>
+                    
+                </p:dataTable>
+</composite:implementation>
+
+</html>

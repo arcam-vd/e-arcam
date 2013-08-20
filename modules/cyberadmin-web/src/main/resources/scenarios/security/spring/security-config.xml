@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:sec="http://www.springframework.org/schema/security"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+                           http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.1.xsd">
+
+    <!-- No permission -->
+    <sec:http pattern="/login.xhtml" security="none"/>
+	<sec:http pattern="/confirmationAccount.xhtml" security="none"/>
+    <sec:http pattern="/forgetPassword.xhtml" security="none"/> <!-- Screen 1a -->
+    <sec:http pattern="/sendPassword.xhtml" security="none"/> <!-- Screen 1b -->
+    <sec:http pattern="/**/registerTaxpayer.xhtml" security="none"/> <!-- Screen 2 -->
+    <sec:http pattern="/**/registerTaxpayerSuccess.xhtml" security="none"/> <!-- Screen 2a -->
+    
+    <sec:http pattern="/*resource/**" security="none"/>
+
+    <sec:http use-expressions="true" entry-point-ref="authenticationEntryPoint" servlet-api-provision="true">
+        
+        <!-- Basic permission -->
+        <sec:intercept-url pattern="/welcome.xhtml" access="hasAnyAuthority('ASJ,COM,GES,ADM')" />
+        
+        <!-- User profile -->
+        <sec:intercept-url pattern="/user/userProfile.xhtml" access="hasAnyAuthority('ASJ,COM,GES,ADM')" />
+        
+        <!-- ******************************************************************************************************* -->
+        <!-- Assujetties Menu -->
+        <!-- ******************************************************************************************************* -->
+        
+        <!-- List taxpayer -->
+        <sec:intercept-url pattern="/assujetti/taxpayerList.xhtml" access="hasAnyAuthority('VIEW_LIST_TAXPAYERS')" />
+        
+        <!-- taxpayer detail-->
+        <sec:intercept-url pattern="/assujetti/taxpayerDetail.xhtml" access="hasAnyAuthority('VIEW_DETAIL_TAXPAYER,EDIT_DETAIL_TAXPAYER')" />
+        
+        <!-- new taxpayer detail-->
+        <sec:intercept-url pattern="/assujetti/createTaxpayer.xhtml" access="hasAnyAuthority('NEW_TAXPAYER')" />
+        
+        <!-- Validate taxpayer -->
+        <sec:intercept-url pattern="/assujetti/validateTaxpayer.xhtml" access="hasAnyAuthority('VALIDATE_TAXPAYER')" />
+        
+        <!-- Validate taxpayer -->
+        <sec:intercept-url pattern="/assujetti/mappingTaxpayer.xhtml" access="hasAnyAuthority('MAPPING_USER_TAXPAYER')" />
+        
+        <!-- ******************************************************************************************************* -->
+        <!-- Declaration Menu -->
+        <!-- ******************************************************************************************************* -->
+        
+        <!-- create/demand declaration -->
+        <sec:intercept-url pattern="/declaration/bienTaxeDetail.xhtml" access="hasAnyAuthority('REQUEST_DECLARATION,CREATE_DECLARATION')" />
+        
+        <!-- List declaration -->
+        <sec:intercept-url pattern="/declaration/declarationList.xhtml" access="hasAnyAuthority('VIEW_LIST_DECLARATIONS')" />
+
+        <!-- detail declaration -->
+        <sec:intercept-url pattern="/declaration/declarationDetail.xhtml" access="hasAnyAuthority('VIEW_DETAIL_DECLARATION,EDIT_DETAIL_DECLARATION')" />
+        
+        <!-- Reject declaration -->
+        <sec:intercept-url pattern="/declaration/declarationRefuse.xhtml" access="hasAnyAuthority('VIEW_DETAIL_DECLARATION,EDIT_DETAIL_DECLARATION')" />
+        
+        <!-- Export to billing -->
+        <sec:intercept-url pattern="/declaration/declarationsToBilling.xhtml" access="hasAnyAuthority('EXPORT_TO_BILLING')" />
+        
+        <!-- validate billing -->
+        <sec:intercept-url pattern="/declaration/billedDeclarationsToValidate.xhtml" access="hasAnyAuthority('VALIDATE_BILLING')" />
+        
+        <!-- ******************************************************************************************************* -->
+        <!-- Document Menu -->
+        <!-- ******************************************************************************************************* -->
+        
+        <!-- Generate Publipotages -->
+        <sec:intercept-url pattern="/document/generateMailing.xhtml" access="hasAnyAuthority('GENERATE_MAILING')" />
+        
+        <!-- Generate Statistic -->
+        <sec:intercept-url pattern="/document/generateStatistic.xhtml" access="hasAnyAuthority('GENERATE_STATISTIC')" />
+        
+        <!-- ******************************************************************************************************* -->
+        <!-- User Menu -->
+        <!-- ******************************************************************************************************* -->
+        
+        <!-- User list -->
+        <sec:intercept-url pattern="/user/userList.xhtml" access="hasAnyAuthority('VIEW_LIST_USERS')" />
+        
+        <!-- View detail and edit user -->
+        <sec:intercept-url pattern="/user/userDetail.xhtml" access="hasAnyAuthority('VIEW_DETAIL_USER,EDIT_DETAIL_USER')" />
+        
+        <!-- ******************************************************************************************************* -->
+        <!-- Journal Menu -->
+        <!-- ******************************************************************************************************* -->
+        
+        <!-- View Journals list -->
+        <sec:intercept-url pattern="/journal/journalList.xhtml" access="hasAnyAuthority('VIEW_JOURNALS')" />
+        
+        <sec:session-management invalid-session-url="/">
+            <sec:concurrency-control max-sessions="1" expired-url="/" />
+        </sec:session-management>
+
+        <sec:request-cache ref="requestCache" />
+
+        <sec:form-login login-page="/login.xhtml" authentication-success-handler-ref="authenticationSuccessHandler" 
+            always-use-default-target="true" default-target-url="/" />
+        <sec:logout logout-url="/logout" logout-success-url="/" invalidate-session="true" delete-cookies="JSESSIONID" />
+    </sec:http>
+
+    <sec:authentication-manager>
+        <sec:authentication-provider ref="daoAuthenticationProvider" />
+    </sec:authentication-manager>
+    
+    <bean id="redirectStrategy" class="org.arcam.cyberadmin.ui.core.security.CyberadminAjaxAwareRedirectStrategy" />
+
+    <bean id="authenticationSuccessHandler"
+        class="org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler">
+        <property name="redirectStrategy" ref="redirectStrategy" />
+    </bean>
+    
+    <bean id="cyberAdminUserDetailService" class="org.arcam.cyberadmin.service.core.impl.UserServiceImpl" />
+    <bean id="daoAuthenticationProvider" class="org.arcam.cyberadmin.ui.core.security.CyberAdminDaoAuthenticationProvider">
+        <property name="userDetailsService" ref="cyberAdminUserDetailService"/>
+        <property name="passwordEncoder">
+            <bean class="org.springframework.security.authentication.encoding.Md5PasswordEncoder" />
+        </property>
+    </bean>
+
+    <bean id="authenticationEntryPoint"
+        class="org.arcam.cyberadmin.ui.core.security.CyberadminAuthenticationEntryPoint">
+        <property name="loginFormUrl" value="/login.xhtml" />
+    </bean>
+
+    <bean id="requestCache" class="org.springframework.security.web.savedrequest.HttpSessionRequestCache">
+        <property name="requestMatcher">
+            <bean class="org.arcam.cyberadmin.ui.core.security.NonAjaxRequestMatcher" />
+        </property>
+    </bean>
+
+    <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+        <property name="basename" value="WEB-INF/classes/i18n/security_messages" />
+    </bean>
+</beans>

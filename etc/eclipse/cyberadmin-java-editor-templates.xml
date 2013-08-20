@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<templates>
+<template autoinsert="true" context="java" deleted="false" description="File header for technical components" enabled="true" name="header_technical">/*&#13;
+ * ${enclosing_type}&#13;
+ * &#13;
+ * Project: Cyber Admin&#13;
+ * &#13;
+ * Copyright (c) 2013, ARCAM - Association de la Region Cossonay-Aubonne-Morges&#13;
+ * All rights reserved.&#13;
+ * Redistribution and use in source and binary forms, with or without &#13;
+ * modification,are permitted provided that the following conditions are met:&#13;
+ * &#13;
+ * - Redistributions of source code must retain the above copyright notice, &#13;
+ *   this list of conditions and the following disclaimer.&#13;
+ * - Redistributions in binary form must reproduce the above copyright notice, &#13;
+ *   this list of conditions and the following disclaimer in the documentation &#13;
+ *   and/or other materials provided with the distribution.&#13;
+ * &#13;
+ * Neither the name of the ARCAM - Association de la Region &#13;
+ * Cossonay-Aubonne-Morges nor the names of its contributors may be used to &#13;
+ * endorse or promote products derived from this software without specific &#13;
+ * prior written permission.&#13;
+ *&#13;
+ * THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND ANY&#13;
+ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED &#13;
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE&#13;
+ * DISCLAIMED. IN NO EVENT SHALL THE REGENTS AND CONTRIBUTORS BE LIABLE FOR ANY&#13;
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES&#13;
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;&#13;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND&#13;
+ * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT&#13;
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF&#13;
+ * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.&#13;
+ * &#13;
+ */&#13;
+</template>
+</templates>

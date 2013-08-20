@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<faces-config version="2.0" xmlns="http://java.sun.com/xml/ns/javaee"
+    xmlns:xi="http://www.w3.org/2001/XInclude"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd">
+ 
+   <!-- Welcome page -->
+   <navigation-rule>
+        <navigation-case>
+            <from-outcome>welcomeForUnvalidatedUser</from-outcome>
+            <to-view-id>firstAccess.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+	    <navigation-case>
+	        <from-outcome>welcomeForASJ</from-outcome>
+	        <to-view-id>/declaration/declarationList.xhtml</to-view-id>
+	        <redirect />
+	    </navigation-case>
+	    <navigation-case>
+            <from-outcome>welcomeForCOM</from-outcome>
+            <to-view-id>/assujetti/taxpayerList.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>welcomeForGES</from-outcome>
+            <to-view-id>/declaration/declarationList.xhtml</to-view-id>
+            <redirect>
+                <view-param>
+                    <name>type</name>
+                    <value>filled</value>
+                </view-param>
+            </redirect>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>welcomeForADM</from-outcome>
+            <to-view-id>/user/userList.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+	</navigation-rule>
+ 
+   <!-- SCREEN BIEN TAXE DETAIL -->
+    <navigation-rule>
+        <from-view-id>/declaration/bienTaxeDetail.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>DECLARATION_DETAIL</from-outcome>
+            <to-view-id>/declaration/declarationDetail.xhtml</to-view-id>
+            <redirect>
+            </redirect>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>DECLARATION_VIEW</from-outcome>
+            <if>#{userDataSessionBean.currentUser.validated}</if>
+            <to-view-id>/declaration/declarationDetail.xhtml</to-view-id>
+            <redirect>
+                <view-param>
+                    <name>id</name>
+                    <value>#{bienTaxeDetailBean.declaration.id}</value>
+                </view-param>
+            </redirect>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>TAXPAYER_DETAIL</from-outcome>
+            <if>#{userDataSessionBean.currentUser.validated}</if>
+            <to-view-id>/assujetti/taxpayerDetail.xhtml</to-view-id>
+            <redirect>
+                <view-param>
+                    <name>id</name>
+                    <value>#{bienTaxeDetailBean.entity.assujetti.id}</value>
+                </view-param>
+            </redirect>
+        </navigation-case>
+        
+        <navigation-case>
+            <from-outcome>DECLARATION_LIST</from-outcome>
+            <if>#{userDataSessionBean.currentUser.validated}</if>
+            <to-view-id>/declaration/declarationList.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+    </navigation-rule>
+    
+    <!-- SCREEN DECLARATION DETAIL -->
+    <navigation-rule>
+        <from-view-id>/declaration/declarationDetail.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>DECLARATION_LIST</from-outcome>
+            <if>#{userDataSessionBean.currentUser.validated}</if>
+            <to-view-id>/declaration/declarationList.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        
+        <navigation-case>
+            <from-outcome>DECLARATION_FINISH</from-outcome>
+            <to-view-id>/declaration/declarationFinish.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        
+        <navigation-case>
+            <from-outcome>DECLARATION_DETAIL</from-outcome>
+            <to-view-id>/declaration/declarationDetail.xhtml</to-view-id>
+            <redirect>
+                 <view-param>
+                    <name>id</name>
+                    <value>#{declarationDetailBean.entity.id}</value>
+                </view-param>
+            </redirect>
+        </navigation-case>
+    </navigation-rule>
+    
+    <navigation-rule>
+        <from-view-id>/declaration/declarationDetail.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>DECLARATION_LIST</from-outcome>
+            <if>#{not userDataSessionBean.currentUser.validated}</if>
+            <to-view-id>welcome.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+    </navigation-rule>
+    
+     <!-- SCREEN DECLARATION LIST -->
+    <navigation-rule>
+        <from-view-id>/declaration/declarationList.xhtml</from-view-id>
+    </navigation-rule>
+    
+     <!-- SCREEN TAXPAYER DETAIL -->
+     <navigation-rule>
+        <from-view-id>/assujetti/taxpayerDetail.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>TAXPAYER_LIST</from-outcome>
+            <to-view-id>/assujetti/taxpayerList.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+
+    <!-- SCREEN REGISTER TAXPAYER-->
+	<navigation-rule>
+		<from-view-id>/assujetti/registerTaxpayer.xhtml</from-view-id>
+		<navigation-case>
+			<from-outcome>toConfirmPage</from-outcome>
+			<to-view-id>/assujetti/registerTaxpayerSuccess.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+	
+		
+	<!-- SCREEN USER CREATION-->
+    <navigation-rule>
+        <from-view-id>/user/userDetail.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>TO_LIST_USERS</from-outcome>
+            <to-view-id>/user/userList.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>TO_VALIDATE_USERS</from-outcome>
+            <to-view-id>/assujetti/mappingTaxpayerFromUser.xhtml</to-view-id>
+            <redirect >
+                <view-param>
+                    <name>id</name>
+                    <value>#{userDetailBean.id}</value>
+                </view-param>
+            </redirect>
+        </navigation-case>
+    </navigation-rule>
+    
+    <!-- SCREEN ACCOUNTS VALIDATION -->
+    <navigation-rule>
+        <from-view-id>/assujetti/mappingTaxpayer.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>TO_LIST_ACC_TO_VALIDATED</from-outcome>
+            <to-view-id>/assujetti/validateTaxpayer.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    
+    <navigation-rule>
+        <from-view-id>/assujetti/mappingTaxpayerFromUser.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>TO_LIST_ACC_TO_VALIDATED</from-outcome>
+            <to-view-id>/user/userList.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    
+    <!--   SCREEN VALIDATE FACTURES -->
+    <navigation-rule>
+        <from-view-id>/declaration/billedDeclarationsToValidate.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>RELOAD_PAGE</from-outcome>
+            <to-view-id>/declaration/billedDeclarationsToValidate.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    
+    <!--  SCREEN 6 : CONTESTATION DECLARATION -->
+     <navigation-rule>
+        <from-view-id>/declaration/declarationRefuse.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>TO_DECLARATION_FINISH</from-outcome>
+            <to-view-id>/declaration/declarationFinish.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    <navigation-rule>
+        <from-view-id>/forgetPassword.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>TO_PASSWORD_CONFIRM</from-outcome>
+            <to-view-id>/sendPassword.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    
+    
+</faces-config>
+

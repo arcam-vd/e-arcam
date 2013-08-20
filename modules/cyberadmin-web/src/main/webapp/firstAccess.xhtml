@@ -1,0 +1,40 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:c="http://java.sun.com/jstl/core"
+    xmlns:sec="http://www.springframework.org/security/tags"
+    template="layouts/mainLayout.xhtml">
+
+    <ui:param name="hasRoleASJ" value="#{sec:areAnyGranted('BASIC_PERMISSION')}"/>
+    <c:if test="#{hasRoleASJ}">
+        <ui:param name="titlePage" value="#{bundle['cyberadmin.taxpayer.welcomePage.pageTitle']}"/>
+    </c:if>
+    
+    <ui:param name="helperText" value="#{helpMsg['cyberadmin.taxpayer.welcomePage.help']}"/>
+    
+    <ui:define name="content">
+        <h:form id="form">
+			<p:focus context="form"/>
+            <h:panelGrid width="100%">
+                <ui:param name="nomPrenom" value="#{userDataSessionBean.currentUser.userInfo.person.prenom} #{userDataSessionBean.currentUser.userInfo.person.nom}"/>
+                <p:panel id="pnl" header="#{bundle['cyberadmin.taxpayer.welcomePage.headerWelcome']} #{nomPrenom}" toggleable="true"  toggleSpeed="200" widgetVar="panel" >
+                <h:panelGrid id="panelNotification" columns="1" styleClass="notification-declaration" width="100%">
+                     <h:panelGroup>
+                        <h:outputText value="#{bundle['cyberadmin.taxpayer.welcomePage.accountOKMsg']}" /> 
+                     </h:panelGroup>
+                     <h:panelGroup>
+                        <h:outputText value="#{bundle['cyberadmin.taxpayer.welcomePage.newDeclarationMsg']}" />
+                        <p:button value="#{bundle['cyberadmin.common.button.newDeclaration']}" outcome="/declaration/bienTaxeDetail.xhtml" 
+                                  title="#{bundle['cyberadmin.common.button.newDeclaration']}"/>
+                    </h:panelGroup>
+                     <h:panelGroup>
+                        <h:outputText value="#{bundle['cyberadmin.taxpayer.welcomePage.consultDeclarationMsg']}" />
+                    </h:panelGroup>
+                </h:panelGrid>
+                </p:panel>
+            </h:panelGrid>
+            </h:form>
+    </ui:define>
+</ui:composition>

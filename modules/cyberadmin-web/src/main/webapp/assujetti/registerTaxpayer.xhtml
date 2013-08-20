@@ -1,0 +1,174 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:arcam="http://java.sun.com/jsf/composite/components"
+	template="../layouts/unauthenticatedLayout.xhtml">
+    
+
+	<ui:define name="content">
+         <style type="text/css">
+            .login-content {
+                margin: 0 auto !important;
+                min-height: 985px;
+                min-width: 49px;
+                max-height: 985px;
+                width: 890px;
+                z-index: 0;
+            }
+            
+            .login-content-error {
+                margin: 0 auto !important;
+                min-height: 1185px;
+                min-width: 49px;
+                max-height: 1185px;
+                width: 890px;
+                z-index: 0;
+            }
+            
+            .ui-layout-unit .ui-layout-unit-content {
+                overflow: inherit !important;
+            }
+            
+            .footer {
+                position: relative;
+            }
+         </style>
+         <script type="text/javascript">
+             if (jQuery(".ui-messages").children().length > 0){
+            	    jQuery("#content").removeClass("login-content");
+            	    jQuery("#content").addClass("login-content-error");
+             }
+         </script>
+	    <ui:param name="entity" value="#{taxpayerRegistrationBean.entity}"/>
+	    <ui:param name="mandatorySign" value="#{bundle['cyberadmin.common.mandatory']}"></ui:param>
+	
+		<h:form id="form" styleClass="unauthenticated-content-form">
+		    <p:focus context="form"/>
+			<h:outputLabel value="#{bundle['cyberadmin.registration.pageDescription']}" escape="false"/>
+			<div class="unauthenticated-content-detail">
+				<h:panelGrid columns="3" width="100%" styleClass="taxpayer-registration-detail-top" columnClasses="txp-registration-firstcolumn,form-register-taxpayer-input,txp-registration-thirdcolumn">
+				     <h:outputText value="#{bundle['cyberadmin.accountValidation.username']}#{mandatorySign}"/>
+                     <arcam:userNameInputText styleClass="form-register-taxpayer-input float-right" 
+                                value="#{entity.user.username}"
+                                disabled="false"
+                                label="#{bundle['cyberadmin.accountValidation.username']}" 
+                                required="true" autocomplete="off"/>
+                     <h:outputText value="#{bundle['cyberadmin.accountValidation.username.6char']}"/>
+                     
+				     <h:outputText value="#{bundle['cyberadmin.accountValidation.email']}#{mandatorySign}"/>
+				     <p:inputText styleClass="form-register-taxpayer-input float-right" value="#{entity.user.email}" 
+				                  required="true"
+				                  maxlength="255"
+				                  converter="stringTrimmer"
+				                  label="#{bundle['cyberadmin.accountValidation.email']}"  
+				                  autocomplete="off" validator="emailValidator">
+				     </p:inputText>
+				     <h:outputText value=""/>
+				     
+				     <h:outputText value="#{bundle['cyberadmin.userDetail.password']}#{mandatorySign}"/>
+	                 <p:password styleClass="form-register-taxpayer-input float-right" value="#{entity.user.password}"
+	                             label="#{bundle['cyberadmin.userDetail.password']}"
+	                             maxlength="255"   
+	                             match="matchingPassword" required="true">
+	                   <f:validateLength minimum="8"/>
+	                 </p:password> 
+	                 <h:outputText value="#{bundle['cyberadmin.userDetail.password.8char']}"/>
+	                 
+	                 <h:outputText value="#{bundle['cyberadmin.registration.repeatPassword']}"/>
+	                 <p:password id="matchingPassword" styleClass="form-register-taxpayer-input float-right" label="#{bundle['cyberadmin.registration.repeatPassword']}" />
+	                 <h:outputText value=""/>
+	                 
+	                 <h:outputText value="#{bundle['cyberadmin.common.label.organisation']}#{mandatorySign}"/>
+	                 <p:inputText styleClass="form-register-taxpayer-input float-right"
+	                  value="#{entity.user.person.organisation}" maxlength="255"/>
+	                 <h:outputText value=""/>
+	                 
+	                 <h:outputText value="#{bundle['cyberadmin.common.label.name']}#{mandatorySign}"/>
+	                 <p:inputText styleClass="form-register-taxpayer-input float-right"
+	                              label="#{bundle['cyberadmin.common.label.name']}"
+	                              required="true"    
+	                              maxlength="255"
+	                              value="#{entity.user.person.nom}"/>
+	                 <h:outputText value=""/>
+	                 
+	                 <h:outputText value="#{bundle['cyberadmin.common.label.firstname']}#{mandatorySign}"/>
+	                 <p:inputText styleClass="form-register-taxpayer-input float-right" 
+	                              value="#{entity.user.person.prenom}"
+	                              required="true"
+	                              maxlength="255"
+	                              label="#{bundle['cyberadmin.common.label.firstname']}"/>
+	                 <h:outputText value=""/>
+	                 
+				</h:panelGrid>
+				<h:panelGrid columns="1" width="100%">
+				     <h:outputText value="#{bundle['cyberadmin.registration.mailingAddress']}" styleClass="text-bold form-register-taxpayer-address"/>
+				</h:panelGrid>
+				<h:panelGrid id="informationAddress" columns="2" width="100%" styleClass="taxpayer-registration-detail" columnClasses="txp-registration-firstcolumn,form-register-taxpayer-input">
+	                 <h:outputText value="#{bundle['cyberadmin.common.label.additionalAddress']}"/>
+	                 <p:inputTextarea styleClass="form-register-taxpayer-input float-right" value="#{entity.adresse.adresse}" maxlength="255"/>
+	                 
+	                 <h:outputText value="#{bundle['cyberadmin.common.label.street']}"/>
+	                 <h:panelGrid cellpadding="0" cellspacing="0" columns="3" width="100%" styleClass="form-register-taxpayer-table float-right"
+                            columnClasses="txt-registration-street-col1 float-left,txt-registration-street-col2,float-right">
+		                   <p:inputText styleClass="form-register-taxpayer-rue" value="#{entity.adresse.rue}" maxlength="255"/>
+		                   <h:outputText value="#{bundle['cyberadmin.common.label.number']}"/>
+	                       <p:inputText styleClass="form-register-taxpayer-no" value="#{entity.adresse.no}" maxlength="20"/>
+	                 </h:panelGrid>
+	                 
+	               
+                     <h:outputText value="#{bundle['cyberadmin.common.label.country']}#{mandatorySign}"/>
+                     <arcam:comboBox styleClass="form-register-taxpayer-combo-pays float-right" 
+                                     label="#{bundle['cyberadmin.common.label.country']}" 
+                                     items="#{cyberAdminDataBean.countryItems}" 
+                                     haveEmptyItem="false"
+                                     value="#{entity.adresse.pays}" required="true"/>
+                                     
+	                 <h:outputText value="#{bundle['cyberadmin.common.label.NPA']}#{mandatorySign}"/>
+	                 <h:panelGrid id= "npaLocalite" columns="3" width="100%" cellpadding="0" cellspacing="0">
+                     <arcam:npaComplete 
+                            backingBean="#{taxpayerRegistrationBean}" 
+                            value="#{entity.localiteSuggestion}"
+                            styleClass="form-register-taxpayer-table float-right"
+                            defaultStyleClassLocalite=""
+                            styleClassNpa="form-register-taxpayer-npa float-left"
+                            styleClassLocalite="form-register-taxpayer-localite float-right"
+                            address="#{entity.adresse}"
+                            forceSelection="#{entity.adresse.pays eq 'CH'}"/>
+	                 </h:panelGrid>
+	                 <h:outputText value="#{bundle['cyberadmin.common.label.telephone']}#{mandatorySign}"/>
+	                 <p:inputText styleClass="form-register-taxpayer-input float-right"
+	                              label="#{bundle['cyberadmin.common.label.telephone']}"  
+	                              maxlength="30"
+	                              value="#{entity.user.telephone}" required="true"
+                                  onkeypress="return CyberAdmin.Number.pressTelephone(event)"/> 
+	                  
+	               <h:panelGroup/>
+                   <h:panelGroup styleClass="float-right">
+	                   <p:captcha required="true" label="#{bundle['cyberadmin.common.label.captcha']}" language="#{localeBean.lang}"
+                                   validatorMessage="#{errorMsg['cyberadmin.common.captcha']}"
+                                   secure="true"/>
+                    </h:panelGroup>  
+                    
+	            </h:panelGrid>
+	            <p:spacer height="10"/>
+	            <h:panelGrid columns="2" width="100%" 
+                             styleClass="taxpayer-registration-detail" columnClasses="txp-registration-firstcolumn,form-register-taxpayer-input">
+	                 <h:outputLink value="../login.xhtml">
+	                    <h:outputText value="#{bundle['cyberadmin.forgetPassword.returnLogin']}" />
+	                 </h:outputLink>
+	                 
+	                 <p:commandButton id="command-button" 
+	                                  styleClass="float-right" 
+	                                  action="#{taxpayerRegistrationBean.save}"
+                                      ajax="false"
+	                                  value="#{bundle['cyberadmin.registration.createAccount']}"/>
+	            </h:panelGrid>
+	            
+            </div>
+		</h:form>
+
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,39 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:c="http://java.sun.com/jsp/jstl/core"
+    xmlns:composite="http://java.sun.com/jsf/composite">
+
+<!-- INTERFACE -->
+<composite:interface>
+    <composite:attribute name="id"/>
+    <composite:attribute name="value"/>
+    <composite:attribute name="required"/>
+    <composite:attribute name="disabled"/>
+    <composite:attribute name="requiredMessage"/>
+    <composite:attribute name="style"/>
+    <composite:attribute name="styleClass"/>
+    <composite:attribute name="label"/>
+    <composite:attribute name="rendered"/>
+    <composite:attribute name="autocomplete" default="off"/>
+</composite:interface>
+
+<!-- IMPLEMENTATION -->
+<composite:implementation>
+    <p:inputText styleClass="#{cc.attrs.styleClass}" 
+                                value="#{cc.attrs.value}"
+                                disabled="#{cc.attrs.disabled}"
+                                converter="stringTrimmer"
+                                label="#{cc.attrs.label}" 
+                                maxlength="30"
+                                required="#{cc.attrs.required}" autocomplete="#{cc.attrs.autocomplete}">
+                      <f:validateLength minimum="6"/>
+                      <f:validateRegex pattern="#{webConstants['ALPHANUMERICAL_PATTERN']}"/>
+     </p:inputText>
+</composite:implementation>
+
+</html>

@@ -1,0 +1,113 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:arcam="http://java.sun.com/jsf/composite/components"
+    xmlns:sec="http://www.springframework.org/security/tags"
+    template="../layouts/mainLayout.xhtml">
+
+    <ui:define name="content">
+        <h:form id="form">
+            <p:focus for="form"/>
+            <h:panelGrid id="content" width="100%">
+                <ui:insert name="taxpayerDetail">
+                  <h:panelGrid id ="taxpayerNew" width="100%" cellpadding="0" cellspacing="0" rendered="#{isModeNew}">
+                        <arcam:taxpayerData entity="#{entity}" backingBean="#{backingBean}" isModeNew="#{isModeNew}"/>
+                  </h:panelGrid>
+                  <ui:param name="taxpayerHeader" value="#{entity.description}"/>
+<!--                     <ui:param name="taxpayerHeader" value="#{entity.person.prenom} #{entity.person.nom}, #{entity.adresse.rue}, #{entity.adresse.npa} #{entity.adresse.localite}"/>  -->
+                    <p:panel id="taxpayerData" header="#{taxpayerHeader}" toggleable="true" toggleSpeed="200" rendered="#{isModeEdit or isModeView}">
+                        <p:focus context="form"/>
+                        <h:panelGrid width="100%" cellpadding="0" cellspacing="0" columns="2" columnClasses=",align-bottom">
+                            <arcam:taxpayerData entity="#{entity}" disabled="#{isModeView}" backingBean="#{backingBean}" isModeEdit="#{isModeEdit}" isModeView="#{isModeView}"/>
+                            <h:panelGrid width="100%" cellpadding="0" cellspacing="0" columns="1" columnClasses="float-right">
+                                <h:panelGroup>
+                                    <p:commandButton value="#{bundle['cyberadmin.common.button.cancel']}" styleClass="form-button" onclick="bui.hide()" process="@this"
+                                                     action="#{backingBean.cancel}" update="taxpayerData" rendered="#{isModeEdit}"/>
+                                    <p:spacer width="5px"/>
+                                    <p:commandButton id="btnEdit" value="#{bundle['cyberadmin.common.button.edit']}" styleClass="form-button" 
+                                                     actionListener="#{backingBean.changeModeViewToEdit}" update="taxpayerData" rendered="#{isModeView}" onclick="bui.show()"/>
+                                    <p:commandButton id="btnSave" value="#{bundle['cyberadmin.common.button.save']}" styleClass="form-button"  
+                                                     actionListener="#{backingBean.changeModeEditToView}" update="taxpayerData" rendered="#{isModeEdit}" onclick="bui.hide()" />
+                                    <p:defaultCommand target="btnSave" rendered="#{isModeEdit}"/>                 
+                                </h:panelGroup>
+                            </h:panelGrid>
+                        </h:panelGrid>
+                    </p:panel>
+                </ui:insert>
+                
+                <ui:insert name="actionButtonsNew">
+                    <h:panelGrid width="100%" cellpadding="3" cellspacing="0" columns="3" styleClass="" columnClasses="first-column-taxpayer" rendered="#{isModeNew}">
+                        <p:button value="#{bundle['cyberadmin.common.button.cancel']}" outcome="taxpayerList.xhtml"/>
+                        <h:panelGrid  width="100%" cellpadding="0" cellspacing="0" styleClass="form-taxpayer-input-table">
+                            <p:commandButton value="#{bundle['cyberadmin.common.button.save']}" styleClass="float-right form-button" update="taxpayerNew" action="#{backingBean.save}"/>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                </ui:insert>
+                <p:spacer height="10px"/>
+                <ui:insert name="declarationSearch">
+                    <!-- Criteria -->
+                     <h:panelGrid id="declarationSearch" width="100%" cellpadding="0" cellspacing="0" rendered="#{isModeView or isModeEdit}">
+                         <p:panel id="criteria">
+                            <h:panelGrid columns="5" cellspacing="0" width="100%" 
+                                columnClasses="dec-list-label-col, dec-list-input-col, dec-list-label-col, dec-list-input-col, dec-list-button-col">
+                                <h:outputLabel for="freetext" value="#{bundle['cyberadmin.declarationList.searchDeclaration']}" 
+                                    styleClass="large-content-title" />
+                                <p:inputText id="freetext" value="#{taxpayerDeclarationListBean.criteria.freetext}" styleClass="dec-list-field-size" />
+                                <h:outputLabel for="startDateCompId" value="#{bundle['cyberadmin.declarationList.from']}" />
+                                <h:panelGroup cellpadding="0" cellspacing="0">
+                                    <p:calendar id="startDateCompId" showButtonPanel="true" navigator="true" pattern="#{webConstants['DATE_PATTERN']}" 
+                                        value="#{taxpayerDeclarationListBean.criteria.from}" styleClass="dec-list-date-field" />
+                                    <h:outputLabel for="decTo" value="#{bundle['cyberadmin.declarationList.to']}" styleClass="form-delcaration-child" />
+                                    <p:calendar id="decTo" showButtonPanel="true" navigator="true" pattern="#{webConstants['DATE_PATTERN']}" 
+                                        value="#{taxpayerDeclarationListBean.criteria.to}" styleClass="dec-list-date-field">
+                                        <f:validator validatorId="dateRangeValidator" />
+                                        <f:attribute name="startDateCompId" value=":form:startDateCompId" />
+                                    </p:calendar>
+                                </h:panelGroup>
+                                <h:panelGroup>
+                                    <p:commandButton type="reset" value="#{bundle['cyberadmin.common.button.reset']}"  update="criteria"/>
+                                    <p:spacer width="5px"/>
+                                    <p:commandButton id="btnSearch" value="#{bundle['cyberadmin.common.button.search']}" styleClass="form-button" actionListener="#{taxpayerDeclarationListBean.search}" update="result">
+                                         <f:attribute name="tableResultId" value="form:tableDeclaration:tableDeclaration"/>
+                                    </p:commandButton>
+                                    <p:defaultCommand target="btnSearch" rendered="#{isModeView}"/>   
+                                </h:panelGroup>
+                            </h:panelGrid>
+                        </p:panel>
+                        <!-- Data result -->
+                        <p:spacer height="10px"/>
+                        <h:panelGrid columns="4" styleClass="float-right" cellpadding="0" cellspacing="0">
+                                <p:commandButton value="#{bundle['cyberadmin.common.button.export']}" ajax="false" styleClass="form-button"
+                                    action="#{taxpayerDeclarationListBean.exportDeclaration}"
+                                    onclick="CyberAdmin.Export.exportCA()"/>
+                                <p:spacer width="4px"/>
+                                <h:panelGroup>
+                                <p:button value="#{bundle['cyberadmin.declarationList.button.newDeclaration']}"
+                                            outcome="/declaration/bienTaxeDetail.xhtml"
+                                            rendered="#{hasRoleGES or hasRoleADM}">
+                                   <f:param name="taxpayerId" value="#{entity.id}"/>
+                                   <f:param name="fillMode" value="true" />
+                                </p:button>
+                                <p:spacer width="4px" rendered="#{hasRoleGES or hasRoleADM}"/>   
+                                <p:button value="#{bundle['cyberadmin.taxpayerDetail.button.requestDeclaration']}" 
+                                          outcome="/declaration/bienTaxeDetail.xhtml">
+                                    <f:param name="taxpayerId" value="#{entity.id}"/>
+                                 </p:button>
+                                 </h:panelGroup>   
+                                <p:spacer width="15px"/>
+                        </h:panelGrid>
+                        <p:spacer height="10px"/>
+                        <h:panelGrid id="result" width="100%" cellpadding="0" cellspacing="0">
+                            <arcam:declarationTable id="tableDeclaration" backingBean="#{taxpayerDeclarationListBean}" 
+                                renderTaxpayerColumn="false" detailUrl="../declaration/declarationDetail.xhtml" />
+                        </h:panelGrid>  
+                    </h:panelGrid>
+                </ui:insert>
+                <p:blockUI block="declarationSearch" widgetVar="bui" />
+                <h:inputHidden id="screenUUID" value="#{taxpayerDeclarationListBean.screenUUID}"/>
+            </h:panelGrid>
+        </h:form>
+    </ui:define>
+</ui:composition>

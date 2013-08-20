@@ -1,0 +1,83 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:c="http://java.sun.com/jsp/jstl/core"
+    xmlns:sec="http://www.springframework.org/security/tags"
+    template="../layouts/mainLayout.xhtml">
+    
+    <ui:param name="backingBean" value="#{accountValidationListBean}"/>
+    <ui:param name="titlePage" value="#{bundle['cyberadmin.menu.taxpayer.validate']}" />
+    <ui:param name="helperText" value="#{helpMsg['cyberadmin.accountValidationList.help']}"/>
+    
+	<ui:define name="content">
+	   <h:form id="form">
+	       <div class="content-header">
+	           <h:outputLabel value="#{bundle['cyberadmin.accountValidation.header']}" styleClass="large-content-title" />
+	       </div>
+	       <!-- Data result table area -->
+	       <ui:param name="associateScreen" value="mappingTaxpayer.xhtml"/>
+            <h:panelGrid id="table" columns="1" cellspacing="0" cellpadding="0" style="width: 100%">
+                <p:dataTable id="taxpayerResult" value="#{accountValidationListBean.dataTable.dataModel}" var="item"
+                    rows="#{webConstants['MAX_ROW']}" rowKey="#{item.id}" paginator="true" paginatorPosition="bottom" styleClass="taxpayer-list-data-table"
+                    paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                    rowsPerPageTemplate="#{webConstants['PAGE_SIZES']}" selectionMode="single" sortBy="#{item.lastLogOnDate}" sortOrder="descending">
+                    
+                    <p:column sortBy="#{item.id}" styleClass="id-column">
+                        <f:facet name="header">
+                            #{bundle['cyberadmin.userList.id']}
+                        </f:facet>
+                        <h:outputLink styleClass="data-table-row-link table-cell" value="#{associateScreen}">
+                            <h:outputText value="#{item.id}"/>
+                            <f:param name="id" value="#{item.id}" />  
+                        </h:outputLink>
+                    </p:column>
+                    
+                    <p:column sortBy="#{item.lastLogOnDate}" styleClass="small-column">
+                         <f:facet name="header">
+                            #{bundle['cyberadmin.userList.date']}
+                        </f:facet>
+                        <h:outputLink styleClass="data-table-row-link table-cell"  value="#{associateScreen}">
+                            <h:outputText value="#{item.lastLogOnDate}">
+                                <f:convertDateTime pattern="#{webConstants['DATE_PATTERN']}" timeZone="#{accountValidationListBean.currentTimezone}"/>
+                            </h:outputText>
+                            <f:param name="id" value="#{item.id}" />  
+                        </h:outputLink>
+                    </p:column>
+                    <p:column sortBy="#{item.username}" styleClass="medium-column">
+                         <f:facet name="header">
+                            #{bundle['cyberadmin.userList.username']}
+                        </f:facet>
+                        <h:outputLink style="padding-right:16px;" styleClass="data-table-row-link table-cell" value="#{associateScreen}">
+                            <h:outputText value="#{item.username}"/>
+                            <f:param name="id" value="#{item.id}" />  
+                        </h:outputLink>
+                        
+                    </p:column>
+                    
+                    <p:column sortBy="#{item.email}" styleClass="large-column">
+                         <f:facet name="header">
+                            #{bundle['cyberadmin.userList.email']}
+                        </f:facet>
+                        <h:outputLink styleClass="data-table-row-link table-cell" value="#{associateScreen}">
+                            <h:outputText value="#{item.email}"/>
+                            <f:param name="id" value="#{item.id}" />  
+                        </h:outputLink>
+                    </p:column>
+                    
+                    <p:column sortBy="#{item.adresse.adresse}">
+                         <f:facet name="header">
+                            #{bundle['cyberadmin.accountValidation.address']}
+                        </f:facet>
+                        <h:outputLink styleClass="data-table-row-link table-cell" value="#{associateScreen}">
+                            <h:outputText value="#{item.assujetti.adresse.adresse}"/>
+                            <f:param name="id" value="#{item.id}" />  
+                        </h:outputLink>
+                    </p:column>
+                </p:dataTable>
+            </h:panelGrid>
+	       
+       </h:form>
+	</ui:define>
+</ui:composition>

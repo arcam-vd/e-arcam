@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE urlrewrite PUBLIC "-//tuckey.org//DTD UrlRewrite 4.0//EN"
+        "http://www.tuckey.org/res/dtds/urlrewrite4.0.dtd">
+
+<!--
+
+    Configuration file for UrlRewriteFilter
+    http://www.tuckey.org/urlrewrite/
+
+-->
+<urlrewrite>
+
+<!-- VM-ARCAM-CYB -->
+ 	<rule>
+ 		<name>Redirect http</name>
+		<condition name="host">^(vm-arcam-cyb)$</condition>
+ 		<from>^(.*)$</from>
+ 		<to type="permanent-redirect" last="true">http://vm-arcam-cyb.elca.ch$1</to>
+ 	</rule>
+
+<!-- STAGING -->
+<!-- 	<rule> -->
+<!-- 		<name>Redirect http</name> -->
+<!-- 		<condition name="host">^(?!www)(.*)$</condition>  -->
+<!-- 		<from>^(.*)$</from>  -->
+<!-- 		<to type="permanent-redirect" last="true">http://www.e-arcam.ch:8080$1</to> -->
+<!-- 	</rule> -->
+
+
+<!-- PROD -->
+<!-- 	<rule> -->
+<!-- 		<name>Redirect http</name> -->
+<!-- 		<condition name="host">^(?!www)(.*)$</condition>  -->
+<!-- 		<from>^(.*)$</from>  -->
+<!-- 		<to type="permanent-redirect" last="true">http://www.e-arcam.ch$1</to> -->
+<!-- 	</rule> -->
+
+	<rule>
+        <from>^(.*)(/reglement)$</from>
+        <to type="redirect">%{context-path}/resources/documents/Reglement_ARCAM.pdf</to>
+    </rule>
+
+   <rule>
+        <from>^(.*)(/règlement)$</from>
+        <to type="redirect">%{context-path}/resources/documents/Reglement_ARCAM.pdf</to>
+    </rule>
+	
+</urlrewrite>
+

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans  xmlns="http://www.springframework.org/schema/beans" 
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+        xmlns:tx="http://www.springframework.org/schema/tx"
+        xsi:schemaLocation="http://www.springframework.org/schema/beans 
+                            http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+                            http://www.springframework.org/schema/tx
+                            http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
+
+	<bean name="propertyPlaceholder" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <value>classpath:/test_application.properties</value>
+        </property>
+        <property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE"></property>
+    </bean>
+    
+    <bean id="cyberDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="${db.driver}"/>
+        <property name="url" value="${db.url}"/>
+        <property name="username" value="${db.username}"/>
+        <property name="password" value="${db.password}"/>
+        <property name="maxIdle" value="10"/>
+        <property name="maxActive" value="100"/>
+        <property name="maxWait" value="10000"/>
+        <property name="testOnBorrow" value="false"/>
+        <property name="testWhileIdle" value="true"/>
+        <property name="timeBetweenEvictionRunsMillis" value="1200000"/>
+        <property name="minEvictableIdleTimeMillis" value="1800000"/>
+        <property name="numTestsPerEvictionRun" value="5"/>
+        <property name="defaultAutoCommit" value="true"/>
+    </bean>    
+    
+    <bean id="sessionFactory"
+        class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+        <property name="dataSource" ref="cyberDataSource" />      
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.dialect">org.hibernate.dialect.MySQL5InnoDBDialect</prop>
+               	<prop key="hibernate.show_sql">false</prop>
+                <prop key="hibernate.format_sql">false</prop>
+            </props>
+        </property>
+        <property name="packagesToScan" value="org.arcam.cyberadmin.dom" />
+        <property name="entityInterceptor" ref="emptyInterceptor" />
+    </bean>
+    
+    <bean id="emptyInterceptor" class="org.hibernate.EmptyInterceptor" />
+    
+    <!-- Annotation-driven for transactions. "transactionManager" has been defined in hibernateDefaultBeans.xml -->
+	<tx:annotation-driven proxy-target-class="false" transaction-manager="transactionManager" />
+	
+	 <!-- Transaction manager -->
+    <bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory" />
+    </bean>
+</beans>

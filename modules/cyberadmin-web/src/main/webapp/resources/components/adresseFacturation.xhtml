@@ -1,0 +1,97 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:arcam="http://java.sun.com/jsf/composite/components"
+    xmlns:composite="http://java.sun.com/jsf/composite">
+
+<!-- INTERFACE -->
+<composite:interface>
+    <composite:attribute name="id"/>
+    <composite:attribute name="backingBean"/>
+    <composite:attribute name="entity"/>
+    <composite:attribute name="disabled"/>
+</composite:interface>
+
+<!-- IMPLEMENTATION -->
+<composite:implementation>
+    <h:panelGrid width="100%"> 
+         <h:outputLabel value="#{bundle['cyberadmin.declarationDetail.editBillingAddress']}" styleClass="form-declration-section-title"/>
+         <h:panelGrid width="100%" columns="2" columnClasses="first-column-declaration-adresse-comment, align-top"> 
+                 <h:panelGrid id="adressFacturation" width="100%" columns="1" columnClasses="">
+                    <ui:remove><!-- Adresse button --></ui:remove>
+                    <h:panelGrid columns="2" width="100%" id="tableAddressType" columnClasses="frist-column-declaration-adressFacturation">
+                         <h:outputLabel/>
+                         <h:panelGroup>
+                             <p:commandButton id="btnReAdresse" value="#{bundle['cyberadmin.declarationDetail.ReprendreAdresse']}" styleClass="form-declaration-peAdress-buton align-top" 
+                                        title="#{bundle['cyberadmin.declarationDetail.ReprendreAdresse']}" update="addressFacturation"
+                                        actionListener="#{cc.attrs.backingBean.reloadAdresseDeclaration}"
+                                        process="tableAddressType"/>
+                             <p:spacer width="2"/>
+                             <p:selectOneMenu id="addressTypeComboId" editable="false" styleClass="form-declaration-cb-adresse" value="#{cc.attrs.backingBean.adresseType}" disabled="#{cc.attrs.disabled}">
+                                 <f:selectItems value="#{cc.attrs.backingBean.adresseTypes}"/>  
+                             </p:selectOneMenu>
+                         </h:panelGroup>
+                    </h:panelGrid>
+                    
+                    <ui:remove><!-- Personal Information --></ui:remove>
+                    <h:panelGrid id="addressFacturation" columns="2" width="100%"  columnClasses="frist-column-declaration-adressFacturation align-top">
+                           <h:outputLabel value="#{bundle['cyberadmin.common.label.name']}"/>
+                           <p:inputText value="#{cc.attrs.entity.bienTaxe.assujetti.person.nom}" maxlength="255" 
+                                styleClass="form-declaration-input" disabled="true"/>
+                           <h:outputLabel value="#{bundle['cyberadmin.common.label.firstname']}"/>
+                           <p:inputText value="#{cc.attrs.entity.bienTaxe.assujetti.person.prenom}"   maxlength="255" 
+                                styleClass="form-declaration-input" disabled="true"/>
+                           
+                           <h:outputLabel value="#{bundle['cyberadmin.common.label.organisation']}"/>
+                           <p:inputText value="#{cc.attrs.entity.bienTaxe.assujetti.person.organisation}" maxlength="255" 
+                                styleClass="form-declaration-input" disabled="true"/>
+                           
+                           <h:outputLabel value="#{bundle['cyberadmin.common.label.additionalAddress']}" styleClass=""/>
+                           <p:inputTextarea value="#{cc.attrs.entity.adresse.adresse}"  styleClass="form-declaration-input" maxlength="255" 
+                                    disabled="#{cc.attrs.disabled}" rows="5" autoResize="false"/>
+                           
+                           <h:outputLabel value="#{bundle['cyberadmin.common.label.street']}" styleClass=""/>
+                           <h:panelGrid columns="3"  styleClass="form-declaration-child-table" cellpadding="0" cellspacing="0">
+                                <p:inputText value="#{cc.attrs.entity.adresse.rue}"  maxlength="255" 
+                                    styleClass="form-declaration-rue-facturation" disabled="#{cc.attrs.disabled}"/>
+                                <h:outputLabel value="#{bundle['cyberadmin.common.label.number']}" styleClass="form-declaration-child-label"/>
+                                <p:inputText value="#{cc.attrs.entity.adresse.no}"  maxlength="20" 
+                                    styleClass="form-declaration-no-facturation float-right" disabled="#{cc.attrs.disabled}"/>
+                           </h:panelGrid>
+                            
+                           <h:outputLabel value="#{bundle['cyberadmin.common.label.NPA']}#{bundle['cyberadmin.common.mandatory']}" styleClass=""/>
+                           <arcam:npaComplete 
+                                    backingBean="#{cc.attrs.backingBean}" 
+                                    value="#{cc.attrs.entity.localiteSuggestion}"
+                                    styleClass="form-declaration-child-table"
+                                    styleClassNpa="form-declaration-npa"
+                                    styleClassLocalite="form-declaration-pays float-right"
+                                    address="#{cc.attrs.entity.adresse}"
+                                    disabledLocalite="#{cc.attrs.disabled}"
+                                    disabledNpa="#{cc.attrs.disabled}"/>
+                           <h:outputLabel value="#{bundle['cyberadmin.common.label.telephone']}"/>
+                           <p:inputText value="#{cc.attrs.entity.adresse.telephone}" maxlength="30" 
+                                styleClass="form-declaration-input" disabled="#{cc.attrs.disabled}"
+                                onkeypress="return CyberAdmin.Number.pressTelephone(event)"/>
+                           
+                           <h:outputLabel value="#{bundle['cyberadmin.common.label.email']}"/>
+                           <p:inputText value="#{cc.attrs.entity.adresse.email}" maxlength="255"
+                                styleClass="form-declaration-input" disabled="#{cc.attrs.disabled}"
+                                validator="emailValidator"/>
+                           
+                    </h:panelGrid>
+                 </h:panelGrid>
+                 <h:panelGrid id="comment" width="100%" styleClass="">
+                      <h:outputLabel value="#{bundle['cyberadmin.declarationDetail.comment']}" styleClass="form-declration-section-title"/>
+                      <p:inputTextarea id="commentText" styleClass="form-declaration-comment"  maxlength="2500" 
+                            value="#{cc.attrs.entity.userComment}" disabled="#{cc.attrs.disabled}" autoResize="false" rows="20"/>
+                 </h:panelGrid>                     
+         </h:panelGrid>
+     </h:panelGrid>
+</composite:implementation>
+
+</html>

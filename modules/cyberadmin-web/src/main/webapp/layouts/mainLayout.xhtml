@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<f:view locale="#{localeBean.lang}">
+	<h:head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<h:outputStylesheet name="cyberadmin.css" library="css" />
+		<h:outputStylesheet name="cyberadmin.skin.css" library="css" />
+        <link rel="stylesheet" href="#{request.contextPath}/javax.faces.resource/cyberadmin.print.css.xhtml?ln=css" 
+               type="text/css" media="print" />
+		<h:outputScript name="js/cyberadmin.js"/>
+	
+		<!-- Message Resource bundle -->
+		<f:loadBundle basename="/i18n/messages" var="bundle" />
+		<f:loadBundle basename="/i18n/errors" var="errorMsg" />
+		<f:loadBundle basename="/i18n/help" var="helpMsg" />
+	
+		<title>#{bundle['cyberadmin.title']}</title>
+	
+		<style type="text/css" />
+	</h:head>
+
+	<h:body>
+        <ui:include src="waitingDialog.xhtml"/>
+        <ui:param name="styleClassForPrint" value="#{(!istypeResidence and !istypeLocation) ? 'print-layout' : ''}"/>
+        <ui:param name="styleClassForPrintResLoc" value="#{(istypeResidence or istypeLocation) ? 'print-layout-res-loc' : ''}"/>
+		<p:layout fullPage="true">
+			<p:layoutUnit id="top" position="north" size="100" styleClass="header-bar-form">
+				<div id="header">
+					<ui:insert name="header">
+						<ui:include src="header.xhtml" />
+					</ui:insert>
+				</div>
+				<div id="menuBar">
+					<ui:insert name="menuBar">
+						<ui:include src="menuBar.xhtml" />
+					</ui:insert>
+				</div>
+			</p:layoutUnit>
+	
+			<p:layoutUnit id="center" position="center" styleClass="center-content #{styleClassForPrint} #{styleClassForPrintResLoc}">
+                <p:messages id="messages" showDetail="false" autoUpdate="true"/>  
+				<ui:insert name="content"/>
+			</p:layoutUnit>
+		
+			<ui:remove>		
+				<p:layoutUnit styleClass="footer" position="south" size="50"
+					resizable="false" closable="false" collapsible="false">
+					<ui:insert name="footer">
+						<ui:include src="footer.xhtml" />
+					</ui:insert>
+				</p:layoutUnit>
+			</ui:remove>
+		</p:layout>
+	
+	</h:body>
+</f:view>
+</html>

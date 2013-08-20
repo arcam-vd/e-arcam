@@ -1,0 +1,271 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:sec="http://www.springframework.org/security/tags"
+    xmlns:arcam="http://java.sun.com/jsf/composite/components"
+    xmlns:c="http://java.sun.com/jsp/jstl/core"
+    template="../layouts/mainLayout.xhtml">
+    <f:metadata>
+        <f:viewParam name="id" value="#{userDetailBean.id}"/>
+        <f:event listener="#{userDetailBean.populateEntity}" type="preRenderView" />
+    </f:metadata>
+    
+   <ui:param name="helperText" value="#{userDetailBean.helpText}"/>
+   
+   <ui:define name="content">
+        <h:form id="form">
+            <p:focus context="form"/>
+            <div class="user-detail-panel">
+	            <ui:param name="entity" value="#{userDetailBean.entity}"/>
+	            <ui:param name="isASJ" value="#{userDetailBean.entity.userType == 'ASJ'}"/>
+	            <ui:param name="isCommune" value="#{userDetailBean.entity.userType == 'COM'}"/>
+	            <ui:param name="isEditMode" value="#{userDetailBean.editMode}"/>
+	            <ui:param name="isViewMode" value="#{userDetailBean.viewMode}"/>
+	            <ui:param name="userProfileMode" value="#{userDetailBean.userProfileMode}"/>
+	            <ui:param name="isCreationMode" value="#{!isViewMode and !isEditMode}"/>
+	            
+	            
+	            <ui:param name="mandatorySign" value="#{bundle['cyberadmin.common.mandatory']}"/>
+	            <ui:param name="contentWidth" value="100%"/>
+            <h:panelGrid columns="2" width="100%"  cellpadding="3" cellspacing="0" columnClasses="user-detail-col1" >
+                   <h:outputText value="#{bundle['cyberadmin.accountValidation.username']}#{mandatorySign}"/>
+                   <h:panelGrid  width="100%" columns="3" cellpadding="0" cellspacing="0" columnClasses="first-col-user-child-table, second-col-user-child-table">
+                       <arcam:userNameInputText styleClass="form-user-input" 
+                                    value="#{entity.username}"
+                                    disabled="#{isViewMode or isEditMode}"
+                                    label="#{bundle['cyberadmin.accountValidation.username']}" 
+                                    required="true" autocomplete="off"/>
+                       <h:panelGroup/>
+                       <h:panelGrid columns="1" width="100%" cellpadding="0" cellspacing="0" columnClasses="user-detail-secondcol-table-col1,user-detail-second-col2">               
+                         <c:set var="active" value="#{entity.activated and entity.validated}"/>
+                         <c:set var="notValidated" value="#{entity.activated and !entity.validated}"/>
+                         <c:set var="userStatusBundleKey" value="#{active ? 'cyberadmin.userDetail.activated.true' : (notValidated ? 'cyberadmin.userDetail.validated.false' : 'cyberadmin.userDetail.activated.false')}"/>
+                         
+                         <p:inputText styleClass="user-detail-status-field-#{active ? 'active' : (notValidated ? 'not-validated' : 'inactive')} form-user-input-status" 
+                                     value="#{bundle[userStatusBundleKey]}"
+                                     rendered="#{!isCreationMode}"
+                                     disabled="#{isViewMode or isEditMode}" autocomplete="off">
+                        </p:inputText>
+                       </h:panelGrid>
+                    </h:panelGrid>
+                   <h:outputText value="#{bundle['cyberadmin.userDetail.password']}#{mandatorySign}" rendered="#{!userProfileMode}"/>
+                   <p:password styleClass="form-user-input"
+                                 disabled="#{isViewMode or (isEditMode and !userProfileMode)}"
+                                 redisplay="true"
+                                 label="#{bundle['cyberadmin.userDetail.password']}"
+                                 value="#{entity.password}"
+                                 maxlength="255" required="true"
+                                 rendered="#{!userProfileMode}">
+                       <f:validateLength minimum="8"/>
+                   </p:password>
+                   
+                   <h:outputText value="#{bundle['cyberadmin.userDetail.password']}#{mandatorySign}" rendered="#{userProfileMode}"/>
+                   <p:password styleClass="form-user-input"
+                                 disabled="#{isViewMode or (isEditMode and !userProfileMode)}"
+                                 redisplay="true"
+                                 label="#{bundle['cyberadmin.userDetail.password']}"
+                                 value="#{entity.protectedPassword}"
+                                 maxlength="255" required="true"
+                                 match="matchingPassword"
+                                 rendered="#{userProfileMode}">
+                       <f:validateLength minimum="8"/>
+                   </p:password>
+                   
+                   <h:outputText value="#{bundle['cyberadmin.registration.repeatPassword']}#{mandatorySign}" rendered="#{userProfileMode}"/>
+                   <p:password id="matchingPassword" styleClass="form-user-input"
+                                 disabled="#{isViewMode or (isEditMode and !userProfileMode)}"
+                                 redisplay="true"
+                                 label="#{bundle['cyberadmin.registration.repeatPassword']}"
+                                 value="#{entity.protectedPassword}"
+                                 maxlength="255" required="true"
+                                 rendered="#{userProfileMode}">
+                       <f:validateLength minimum="8"/>
+                   </p:password>
+                   
+                   <h:outputText value="#{bundle['cyberadmin.userDetail.type']}#{mandatorySign}"/>
+                   <h:panelGrid width="100%" cellpadding="0" cellspacing="0" columns="3" columnClasses="first-col-user-child-table, second-col-user-child-table"> 
+                       <p:selectOneMenu id="userTypeCombo" value="#{entity.userType}"
+                            editable="false" styleClass="form-user-input-combobox-user"
+                            disabled="#{isViewMode or isEditMode}" 
+                            label="#{bundle['cyberadmin.userDetail.type']}">
+                            <c:if test="#{isCreationMode}">
+                                <f:selectItems value="#{cyberAdminDataBean.userTypesForCreation}"/>
+                            </c:if>
+                            <c:if test="#{isViewMode or isEditMode}">
+                                <f:selectItems value="#{cyberAdminDataBean.userTypes}"/>
+                            </c:if>
+                            <p:ajax event="change" update="labelArcam, arcamCheckbox, organisationCommune, address" execute="@this" />
+                        </p:selectOneMenu>
+                        <h:panelGroup id="labelArcam">
+                            <p:spacer width="10px"/>
+                            <h:outputText value="#{bundle['cyberadmin.userDetail.arcam']}" rendered="#{!isASJ and !isCommune}"/>
+                        </h:panelGroup>
+                        <h:panelGroup  id="arcamCheckbox">
+                            <p:selectBooleanCheckbox rendered="#{!isASJ and !isCommune}" value="#{entity.arcam}" disabled="#{isViewMode or isEditMode}"/>
+                        </h:panelGroup>
+                   </h:panelGrid>
+                   
+                   <h:outputText value="#{bundle['cyberadmin.common.label.name']}#{mandatorySign}"/>
+                   <h:panelGrid width="100%" cellpadding="0" cellspacing="0" columns="3" columnClasses="first-col-user-child-table, second-col-user-child-table"> 
+                       <p:inputText styleClass="form-user-input" required="true"
+                                      label="#{bundle['cyberadmin.common.label.name']}"    
+                                      maxlength="255"
+                                      disabled="#{isViewMode}" 
+                                      value="#{entity.person.nom}"/>
+                       <h:panelGroup>
+                            <p:spacer width="10px"/>
+    	                    <h:outputText value="#{bundle['cyberadmin.common.label.firstname']}#{mandatorySign}"/>
+                       </h:panelGroup>
+    	               <p:inputText styleClass="form-user-input-prenom float-right" 
+    	                                  required="true" value="#{entity.person.prenom}"
+    	                                  maxlength="255"
+    	                                  disabled="#{isViewMode}" 
+    	                                  label="#{bundle['cyberadmin.common.label.firstname']}"/>
+                   </h:panelGrid> 
+             </h:panelGrid>
+             
+             <h:panelGrid id="organisationCommune" cellpadding="0" cellspacing="0" width="100%">
+                 <h:panelGrid columns="2" width="100%"  cellpadding="3" cellspacing="0" columnClasses="user-detail-col1" rendered="#{isASJ or isCommune}">
+                     <h:outputText value="#{bundle['cyberadmin.common.label.organisation']}" rendered="#{isASJ}"/>
+                     <h:outputText value="#{bundle['cyberadmin.common.label.commune']}#{mandatorySign}" rendered="#{isCommune}"/>
+                     
+                     <h:panelGrid  columns="1" cellpadding="0" cellspacing="0" width="100%" columnClasses="">      
+                           <p:inputText styleClass="form-user-input" disabled="#{isViewMode}" value="#{entity.person.organisation}" maxlength="255" rendered="#{isASJ}"/>
+                           <arcam:comboBox   label="#{bundle['cyberadmin.common.label.commune']}" 
+                                             items="#{cyberAdminDataBean.communes}" 
+                                             rendered="#{isCommune}"
+                                             required="true"
+                                             disabled="#{isViewMode}" 
+                                             value="#{entity.communeCode}"
+                                             styleClass="form-user-input-combobox-user"
+                                             haveEmptyItem="false"/>
+                    </h:panelGrid>
+                </h:panelGrid>
+            </h:panelGrid>
+            <h:panelGrid id="address" cellpadding="0" cellspacing="0" width="100%">
+            <p:spacer height="5px" rendered="#{isASJ}"/>
+                <h:outputText id="mailingAddress"  value="#{bundle['cyberadmin.common.label.correspondenceAddress']}" 
+                    styleClass="text-bold user-detail-address-label" rendered="#{isASJ}"/>
+                <h:panelGrid columns="2" width="100%"  cellpadding="3" cellspacing="0" columnClasses="user-detail-col1">                
+                   <h:outputText value="#{bundle['cyberadmin.common.label.additionalAddress']}" styleClass="align-top" rendered="#{isASJ}"/>
+                   <p:inputTextarea styleClass="form-user-input-adresse" maxlength="255" rendered="#{isASJ}"
+                                    disabled="#{isViewMode}" 
+                                    value="#{entity.assujetti.adresse.adresse}"/>
+                                        
+                   <h:outputText value="#{bundle['cyberadmin.common.label.street']}" rendered="#{isASJ}"/>
+                   <h:panelGrid columns="5" width="100%" columnClasses="form-user-input-rue" cellpadding="0" cellspacing="0" rendered="#{isASJ}">       
+                       <p:inputText styleClass="form-user-input-rue"
+                                     disabled="#{isViewMode}" 
+                                     label="#{bundle['cyberadmin.common.label.street']}"
+                                     value="#{entity.assujetti.adresse.rue}"
+                                     maxlength="255"/>
+                       <h:panelGroup>
+                            <p:spacer width="10px"/>
+                            <h:outputText value="#{bundle['cyberadmin.common.label.number']}&#160;"/>
+                       </h:panelGroup> 
+                      <p:inputText styleClass="form-user-input-no"
+                             label="#{bundle['cyberadmin.common.label.number']}"
+                             disabled="#{isViewMode}" 
+                             value="#{entity.assujetti.adresse.no}"
+                             maxlength="20"/>
+                             
+                      <h:outputText value="#{bundle['cyberadmin.common.label.country']}#{mandatorySign}&#160;"/>
+                      <arcam:comboBox
+                                 label="#{bundle['cyberadmin.common.label.country']}" 
+                                 items="#{cyberAdminDataBean.countryItems}" 
+                                 styleClass="form-user-input-combobox-pay float-right"
+                                 disabled="#{isViewMode}" 
+                                 value="#{entity.assujetti.adresse.pays}"
+                                 haveEmptyItem="false" required="true"/>             
+                       
+                   </h:panelGrid>
+                
+                  <h:outputText value="#{bundle['cyberadmin.common.label.NPA']}#{mandatorySign}" rendered="#{isASJ}"/>
+                  <h:panelGrid columns="3" width="100%" columnClasses="user-detail-col1" cellpadding="0" cellspacing="0" rendered="#{isASJ}">       
+                       <arcam:npaComplete 
+                                backingBean="#{userDetailBean}" 
+                                value="#{entity.localiteSuggestion}"
+                                styleClass="form-user-npa-complete"
+                                styleClassNpa=""
+                                styleClassLocalite="form-user-input-localite float-right"
+                                defaultStyleClassLocalite=""
+                                address="#{entity.assujetti.adresse}"
+                                disabledNpa="#{isViewMode}"
+                                disabledLocalite="#{isViewMode}"
+                                columnClasses="npa-complete-col1,npa-complete-col2,npa-complete-col3 float-right"/>
+                                              
+                       
+                </h:panelGrid>
+                
+                <h:outputText value="#{bundle['cyberadmin.common.label.email']}#{mandatorySign}"/>
+                <h:panelGrid columns="3" width="100%" columnClasses="form-user-input-email,,float-right" cellpadding="0" cellspacing="0" >       
+                       <p:inputText styleClass="form-user-input-email"
+                                     label="#{bundle['cyberadmin.common.label.email']}"
+                                     required="true"
+                                     value="#{entity.email}"
+                                     disabled="#{isViewMode}" 
+                                     converter="stringTrimmer"
+                                     validator="emailValidator"
+                                     maxlength="255"/>
+                       <h:panelGroup>
+                            <p:spacer width="10px"/>
+                            <h:outputText value="#{bundle['cyberadmin.common.label.telephone']}#{mandatorySign}"/>
+                       </h:panelGroup>             
+                        <p:inputText styleClass="form-user-input-telephone"
+                                 required="true"
+                                 disabled="#{isViewMode}" 
+                                 label="#{bundle['cyberadmin.common.label.telephone']}"
+                                 value="#{entity.telephone}"
+                                 onkeypress="return CyberAdmin.Number.pressTelephone(event)"
+                                 maxlength="255"/>
+                       
+                </h:panelGrid>  
+                </h:panelGrid>
+            </h:panelGrid>
+            
+            <p:spacer height="10"/>
+            <h:panelGrid columns="2" width="100%" cellspacing="0" cellpadding="0" styleClass="form-user-buttons">
+            
+                    <ui:remove><!-- BUTTONS FOR CREATION USER SCREEN. --></ui:remove>
+                    <p:button value="#{bundle['cyberadmin.common.button.cancel']}" styleClass="form-button"
+                                     title="#{bundle['cyberadmin.common.button.cancel']}"
+                                     rendered="#{isCreationMode}"
+                                     outcome="userList.xhtml"/>
+                    <p:commandButton styleClass="float-right form-button" value="#{bundle['cyberadmin.common.button.follow']}"
+                                     rendered="#{isCreationMode}"
+                                     update="form"
+                                     action="#{userDetailBean.save}"/>
+                                     
+                    <ui:remove><!-- BUTTONS FOR VIEW USER SCREEN. --></ui:remove>
+                    <p:button value="#{bundle['cyberadmin.common.button.return']}" styleClass="form-button"
+                                     title="#{bundle['cyberadmin.common.button.return']}"
+                                     rendered="#{isViewMode}"
+                                     outcome="../welcome.xhtml"/>
+                    <h:panelGrid columns="2" width="250" cellspacing="0" cellpadding="0" rendered="#{isViewMode}" styleClass="float-right">
+                        <p:commandButton styleClass="form-button" value="#{bundle['cyberadmin.userDetail.deactivate']}"
+                                     action="#{userDetailBean.deactivateUser}" update="form" rendered="#{entity.activated and !userProfileMode}"/>
+                        <p:commandButton styleClass="form-button" value="#{bundle['cyberadmin.userDetail.activate']}"
+                                     action="#{userDetailBean.deactivateUser}" update="form" rendered="#{!entity.activated and !userProfileMode}"/>             
+                        <p:commandButton id="modifyUserInfoBtn" styleClass="float-right form-button" value="#{bundle['cyberadmin.common.button.edit']}"
+                                     action="#{userDetailBean.setScreenMode(true, false)}" update="form"/>
+                        <p:defaultCommand target="modifyUserInfoBtn"/>    
+                    </h:panelGrid>
+                    
+                    <ui:remove><!--     BUTTONS FOR EDIT USER SCREEN. --></ui:remove> 
+                    <p:spacer rendered="#{isEditMode}"/>                   
+                    <h:panelGrid columns="2" width="270" cellspacing="0" cellpadding="0" rendered="#{isEditMode}" styleClass="float-right">
+                        <p:commandButton styleClass="float-right form-button" value="#{bundle['cyberadmin.common.button.cancel']}"
+                                     process="@this"
+                                     action="#{userDetailBean.cancelEditingUser}" update="form"/>              
+                        <p:commandButton id="updateUserInfoBtn" styleClass="float-right form-button" value="#{bundle['cyberadmin.common.button.save']}"
+                                     action="#{userDetailBean.save}" update="form"/>
+                        <p:defaultCommand target="updateUserInfoBtn"/>     
+                    </h:panelGrid>                  
+                                     
+            </h:panelGrid>
+            </div>
+        </h:form>
+    </ui:define>
+</ui:composition>

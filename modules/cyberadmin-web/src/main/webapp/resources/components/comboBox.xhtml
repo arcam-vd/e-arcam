@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:c="http://java.sun.com/jsp/jstl/core"
+    xmlns:composite="http://java.sun.com/jsf/composite">
+
+<!-- INTERFACE -->
+<composite:interface>
+    <composite:attribute name="id"/>
+    <composite:attribute name="value"/>
+    <composite:attribute name="items"/>
+    <composite:attribute name="required"/>
+    <composite:attribute name="disabled"/>
+    <composite:attribute name="requiredMessage"/>
+    <composite:attribute name="style"/>
+    <composite:attribute name="styleClass" default="combobox-size" required="false" />
+    <composite:attribute name="label"/>
+    <composite:attribute name="haveEmptyItem" default="true"/>
+    <composite:attribute name="rendered"/>
+    <composite:attribute name="ajaxEventListener" method-signature="void listener(javax.faces.event.AjaxBehaviorEvent)" required="false"/>
+    <composite:attribute name="update"/>
+    <composite:attribute name="disabledAjaxCal" default="true"/>
+    <composite:attribute name="disabledAjaxMail" default="true"/>
+    <composite:attribute name="disabledAjaxReLoadFiscaleDate" default="true"/>
+    <composite:attribute name="backingBean"/>
+</composite:interface>
+
+<!-- IMPLEMENTATION -->
+<composite:implementation>
+    <p:selectOneMenu id="#{cc.attrs.id}" value="#{cc.attrs.value}" disabled="#{cc.attrs.disabled}" requiredMessage="#{cc.attrs.requiredMessage}" rendered="#{cc.attrs.rendered}"
+        required="#{cc.attrs.required}" editable="false" styleClass="#{cc.attrs.styleClass}" style="#{cc.attrs.style}"
+        label="#{cc.attrs.label}">
+        <c:if test="#{cc.attrs.haveEmptyItem}">
+            <f:selectItem itemLabel="#{bundle['cyberadmin.common.combobox.emptyItem']}" itemValue="" />  
+        </c:if>
+        <f:selectItems value="#{cc.attrs.items}" />
+        <p:ajax event="change" listener="#{cc.attrs.backingBean.reCalcuTaxeCalDoms}" disabled="#{cc.attrs.disabledAjaxCal}" update="#{cc.attrs.update}"/>
+        <p:ajax event="change" listener="#{cc.attrs.backingBean.refreshCanal}" disabled="#{cc.attrs.disabledAjaxMail}" update="#{cc.attrs.update}"/>
+        <p:ajax event="change" disabled="#{cc.attrs.disabledAjaxReLoadFiscaleDate}" update="#{cc.attrs.update}"/>
+    </p:selectOneMenu>
+</composite:implementation>
+
+</html>

@@ -1,0 +1,45 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:sec="http://www.springframework.org/security/tags"
+    xmlns:arcam="http://java.sun.com/jsf/composite/components"
+    template="../layouts/mainLayout.xhtml">
+
+<ui:param name="backingBean" value="#{taxpayerListBean}"/>
+<ui:param name="titlePage" value="#{bundle['cyberadmin.taxpayerList.pageTitle']}" />
+<ui:param name="helperText" value="#{helpMsg['cyberadmin.taxpayerList.help']}"/>
+
+<ui:define name="content">
+    <h:form id="form">
+        <p:focus context="form"/>
+        <h:panelGrid width="100%">
+        
+            <!-- Criteria area -->
+            <arcam:searchCriteria id="criteria" backingBean="#{backingBean}" 
+                                  reRender=":form:table" 
+                                  freeTextLabel="#{bundle['cyberadmin.taxpayerList.searchTaxpayer']}"
+                                  tableResultId="form:taxpayerResult:taxpayerResult"/>
+            
+            <h:panelGrid columns="3" styleClass="float-right">
+                <p:commandButton value="#{bundle['cyberadmin.common.button.export']}" ajax="false" 
+                    action="#{backingBean.exportAssujettis}"
+                    onclick="CyberAdmin.Export.exportCA()"/>
+                <p:button value="#{bundle['cyberadmin.taxpayerList.button.newTaxpayer']}" outcome="taxpayerDetail.xhtml"/>
+            </h:panelGrid>
+            
+            <p:spacer height="10" />
+            
+            <!-- Data result table area -->
+            <h:panelGrid id="table" columns="1" cellspacing="0" cellpadding="0" style="width: 100%">
+                <arcam:taxpayerTable id="taxpayerResult" backingBean="#{backingBean}"/>
+                
+            </h:panelGrid>
+         <h:inputHidden id="screenUUID" value="#{backingBean.screenUUID}"/>
+        </h:panelGrid>
+    </h:form>
+
+</ui:define>
+
+</ui:composition>

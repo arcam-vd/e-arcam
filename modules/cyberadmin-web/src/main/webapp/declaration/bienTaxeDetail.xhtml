@@ -1,0 +1,282 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:arcam="http://java.sun.com/jsf/composite/components"
+    xmlns:sec="http://www.springframework.org/security/tags"
+    xmlns:c="http://java.sun.com/jsp/jstl/core"
+    template="layoutBienTaxe.xhtml">
+
+    <ui:param name="hasRoleASJ" value="#{sec:areAnyGranted('ASJ')}"/>
+    <ui:param name="hasRoleCOM" value="#{sec:areAnyGranted('COM')}"/>
+    <ui:param name="hasRoleGES" value="#{sec:areAnyGranted('GES')}"/>
+    <ui:param name="hasRoleADM" value="#{sec:areAnyGranted('ADM')}"/>
+    
+    <ui:param name="backingBean" value="#{bienTaxeDetailBean}"/>
+    <ui:param name="entity" value="#{backingBean.entity}"/>
+    <ui:param name="bienTaxe" value="#{backingBean.entity}"/>
+    <ui:param name="assujetti" value="#{bienTaxe.assujetti}"/>
+    <ui:param name="declaration" value="#{backingBean.declaration}"/>
+    <ui:param name="isUserValidated" value="#{userDataSessionBean.currentUser.validated}"/>
+    
+    <ui:param name="helperText" value="#{backingBean.helpText}"/>
+
+    <ui:define name="headerTitle">
+          <h:outputLabel value="#{bundle['cyberadmin.declarationGeneral.pageTitle']}" rendered="#{hasRoleASJ}"/>
+          <h:outputLabel value="#{bundle['cyberadmin.declarationDemand.pageTitle']}" rendered="#{!hasRoleASJ}"/>
+    </ui:define>
+    
+    <ui:define name="notification">
+        <h:panelGrid id="notification" columns="2" width="100%" columnClasses="" rendered="#{hasRoleASJ}">
+            <p:panel id="pnl" header="#{bundle['cyberadmin.declarationGeneral.msgTitle']}" toggleable="true"  toggleSpeed="200" widgetVar="panel" >
+                <h:panelGrid id="panelNotification" columns="1" styleClass="notification-declaration">
+                     <h:panelGroup>
+                        <h:outputText value="#{bundle['cyberadmin.declarationGeneral.categoryInstructionMsg']}" escape="false"/> 
+                     </h:panelGroup>
+                     <p:spacer height="10" />
+                     <h:panelGroup>
+                        <h:outputText value="#{bundle['cyberadmin.declarationGeneral.communeInstructionMsg']}" />
+                    </h:panelGroup>
+                </h:panelGrid>
+            </p:panel>
+        </h:panelGrid> 
+    </ui:define>
+    
+    <ui:remove><!-- Show infor taxpayer when request a declaration  --></ui:remove>
+    <ui:define name="infoTaxpayer">
+        <h:panelGrid id="infoTaxpayer" columns="2" cellpadding="0" cellspacing="0" width="100%" columnClasses="first-column-bienTaxe" 
+                rendered="#{hasRoleCOM or hasRoleGES or hasRoleADM}">
+         
+            <h:outputText value="#{bundle['cyberadmin.taxpayerDetail.taxpayer']}" styleClass="form-taxpayer-label"/>
+            <h:outputText value="#{assujetti.person.prenom} #{assujetti.person.nom}" styleClass="form-taxpayer-label"/>
+            <h:outputText/>
+            <h:outputText value="#{assujetti.person.organisation}" styleClass="form-taxpayer-label"/>
+            <p:spacer height="20px"/>
+            <p:spacer height="20px"/>
+            <h:outputText/>
+            <h:outputText value="#{assujetti.adresse.rue}" styleClass="form-taxpayer-label"/>
+            <h:outputText/>
+            <h:outputText value="#{assujetti.adresse.npa} #{assujetti.adresse.localite}" styleClass="form-taxpayer-label"/>
+        </h:panelGrid>
+        <p:spacer height="5px"/>
+    </ui:define>
+    
+    <ui:remove><!-- CATEGORY DECLARATION --></ui:remove>
+    <ui:define name="categoryDeclaration">
+            <h:panelGrid id="categoryDeclaration" columns="2" cellpadding="0" cellspacing="0" width="100%" columnClasses="first-column-bienTaxe align-top">
+                <h:outputLabel value="#{bundle['cyberadmin.common.label.category']}#{bundle['cyberadmin.common.mandatory']}" styleClass="form-bienTaxe-label"/>
+                <h:panelGroup>
+                    <p:selectOneRadio id="categoryDec" layout="custom" value="#{entity.declarationType}">
+                        <f:selectItems value="#{cyberAdminDataBean.declarationTypes}"/>
+                         <p:ajax event="change" listener="#{backingBean.setPeriodiciteCode}" update="bienTaxe,preiodcite" process="categoryDeclaration"/>
+                    </p:selectOneRadio>
+                    <ui:repeat value="#{cyberAdminDataBean.declarationTypes}" var="type" varStatus="status">
+                        <h:panelGrid columns="2" width="100%" columnClasses="second-column-bienTaxe">
+                             <h:panelGroup>
+                                  <h:panelGrid rendered="#{status.index==0}">
+                                     <p:spacer height="10" />
+                                     <h:outputLabel value="#{bundle['cyberadmin.declarationGeneral.category.stay']}" styleClass="form-bienTaxe-label"/>
+                                  </h:panelGrid>
+                                  <h:panelGrid rendered="#{status.index==5}">
+                                        <h:outputLabel value="#{bundle['cyberadmin.declarationGeneral.category.secondHome']}" styleClass="form-bienTaxe-label"/>
+                                  </h:panelGrid>
+                                  <h:panelGrid columns="2">
+                                     <p:radioButton for=":form:categoryDec" itemIndex="#{status.index}" id="typeDec#{status.index}"/>
+                                     <h:outputLabel value="#{type.label}" styleClass="form-bienTaxe-type-label"/>
+                                  </h:panelGrid> 
+                             </h:panelGroup>
+                             <h:outputLabel value="#{bundle['cyberadmin.common.declaration.type.HOTEL.art']}" styleClass="declaration-art" rendered="#{status.index == 0}"/>
+                             <h:outputLabel value="#{bundle['cyberadmin.common.declaration.type.INSTITUT.art']}" styleClass="declaration-art" rendered="#{status.index == 1}"/>
+                             <h:outputLabel value="#{bundle['cyberadmin.common.declaration.type.CAMPING.art']}" styleClass="declaration-art" rendered="#{status.index == 2}"/>
+                             <h:outputLabel value="#{bundle['cyberadmin.common.declaration.type.CHAMBRE.art']}" styleClass="declaration-art" rendered="#{status.index == 3}"/>
+                             <h:outputLabel value="#{bundle['cyberadmin.common.declaration.type.LOCATION.art']}" styleClass="declaration-art" rendered="#{status.index == 4}"/>
+                             <h:outputLabel value="#{bundle['cyberadmin.common.declaration.type.RESIDENCE_SECONDAIRE.art']}" styleClass="declaration-art" rendered="#{status.index == 5}"/>
+                        </h:panelGrid>
+                    </ui:repeat>
+                </h:panelGroup>
+            </h:panelGrid>
+    </ui:define>
+    
+    <ui:remove><!-- COMMUNE  --></ui:remove>
+    <ui:define name="commune">
+         <h:panelGrid id="commune" cellpadding="0" cellspacing="0" columns="2"  width="100%" columnClasses="first-column-bienTaxe" >
+            <h:outputLabel id="lblCommune" value="#{bundle['cyberadmin.common.label.commune']}#{bundle['cyberadmin.common.mandatory']}" styleClass="form-bienTaxe-label"/>
+            <h:panelGrid cellpadding="0" cellspacing="0">
+                <arcam:comboBox id="communeCombox" items="#{cyberAdminDataBean.communes}" value="#{entity.communeCode}" 
+                    required="true"
+                    requiredMessage="#{errorMsg['cyberadmin.declarationDetail.mandatory.commune']}"
+                    disabled="#{hasRoleCOM}" 
+                    styleClass="form-combobox"/>
+            </h:panelGrid>
+        </h:panelGrid>
+    </ui:define>
+    
+    <ui:remove><!-- PERIODCITE  --></ui:remove>
+    <ui:define name="preiodcite">
+         <h:panelGrid id="preiodcite" cellpadding="0" cellspacing="0"  columns="2"  width="100%" columnClasses="first-column-bienTaxe" rendered="#{!hasRoleASJ}">
+            <h:outputLabel id="lblPreiodcite" for="preiodciteCombox" value="#{bundle['cyberadmin.common.label.periodicity']}" styleClass="form-bienTaxe-label"/>
+            <h:panelGrid cellpadding="0" cellspacing="0">
+                <arcam:comboBox id="preiodciteCombox" items="#{cyberAdminDataBean.periodicites}" value="#{bienTaxe.periodiciteCode}" disabled="#{hasRoleCOM or (entity.declarationType == 'LOCATION')}" styleClass="form-combobox"
+                            backingBean="#{bienTaxeDetailBean}"
+                            disabledAjaxReLoadFiscaleDate="false"
+                            update=":form:dateFiscale"/>
+            </h:panelGrid>
+            <h:panelGroup/>
+
+         </h:panelGrid> 
+        
+     </ui:define>
+     
+    <ui:remove><!-- BIENTAXE  --></ui:remove>
+    <ui:define name="bienTaxe">
+        <ui:remove><!-- BIEN TAXE for user ASJ to create new bientaxe for new declaration --></ui:remove>
+        <h:panelGrid id="bienTaxe" width="100%" cellpadding="0" cellspacing="0">
+                <h:panelGrid id="dateFiscale" columns="2" width="100%" columnClasses="first-column-bienTaxe" cellpadding="0" cellspacing="0" rendered="#{entity.declarationType != 'LOCATION'}">
+                    <h:outputText value="#{bundle['cyberadmin.declarationDetail.dateFiscale']}#{bundle['cyberadmin.common.mandatory']}" 
+                            rendered="#{entity.declarationType != 'RESIDENCE_SECONDAIRE'}"
+                            styleClass="form-bienTaxe-label"/>
+                    <h:outputText value="#{bundle['cyberadmin.declarationDetail.dateFiscale.RESIDENCE_SECONDAIRE']}#{bundle['cyberadmin.common.mandatory']}" 
+                            rendered="#{entity.declarationType == 'RESIDENCE_SECONDAIRE'}"
+                            styleClass="form-bienTaxe-label"/>
+                    <h:panelGrid cellpadding="0"  cellspacing="0">
+                        <h:panelGroup>
+                            <arcam:comboBox
+                                value="#{backingBean.month}"
+                                styleClass="form-bienTaxe-month"
+                                rendered="#{entity.declarationType != 'RESIDENCE_SECONDAIRE' and bienTaxe.periodiciteCode != 'YEAR'}"
+                                items="#{cyberAdminDataBean.getMonths(bienTaxe.periodiciteCode)}"
+                                haveEmptyItem = "false"/>
+                            <p:spacer width="5px" rendered="#{entity.declarationType != 'RESIDENCE_SECONDAIRE' and bienTaxe.periodiciteCode != 'YEAR'}"/>    
+                            <arcam:comboBox 
+                                value="#{backingBean.year}"
+                                styleClass="form-bienTaxe-year"
+                                items="#{cyberAdminDataBean.years}"
+                                haveEmptyItem = "false"/>
+                         </h:panelGroup>  
+                    </h:panelGrid>
+                </h:panelGrid>
+                
+                <p:spacer height="10px"/>
+                 
+                <h:panelGrid columns="2" width="100%" columnClasses="first-column-bienTaxe" cellpadding="0"  cellspacing="0" rendered="#{!hasRoleASJ and (bienTaxe.declarationType == 'LOCATION' 
+                                                                                                                                   or bienTaxe.declarationType == 'RESIDENCE_SECONDAIRE')}">
+                    <h:outputLabel value="#{bundle['cyberadmin.declarationGeneral.houseId']}" styleClass="form-bienTaxe-label" />
+                    <h:panelGrid columns="4" cellpadding="0"  cellspacing="0" styleClass="form-child-table">
+                            <h:outputLabel value="#{bundle['cyberadmin.declarationDetail.taxCalculation.eGrid']}" styleClass="form-bienTaxe-label form-bienTaxe-child-label"/>
+                            <p:inputText value="#{entity.eGid}" styleClass="form-bienTaxe-eGrid" onkeypress="return CyberAdmin.Number.pressPositiveNumber(event)"/>
+                            <h:outputLabel value="#{bundle['cyberadmin.declarationDetail.taxCalculation.eWid']}" styleClass="form-bienTaxe-label form-bienTaxe-child-label"/>
+                            <p:inputText value="#{entity.eWid}" styleClass="form-bienTaxe-eGrid float-right" onkeypress="return CyberAdmin.Number.pressPositiveNumber(event)"/>
+                    </h:panelGrid>
+                </h:panelGrid>
+                
+                <h:panelGrid columns="2"  cellpadding="0"  cellspacing="0" width="100%" columnClasses="first-column-bienTaxe"   rendered="#{bienTaxe.declarationType != 'RESIDENCE_SECONDAIRE' and bienTaxe.declarationType != 'LOCATION'}">
+                        <h:outputLabel value="#{bundle['cyberadmin.declarationDemand.establishment']}#{bundle['cyberadmin.common.mandatory']}" styleClass="form-bienTaxe-label"/>
+                        <h:panelGrid cellpadding="0"  cellspacing="0">
+                            <p:inputText value="#{bienTaxe.etablissement}" styleClass="form-bienTaxe-input" maxlength="255" 
+                                    required="true" requiredMessage="#{errorMsg['cyberadmin.declarationDetail.mandatory.establishment']}"/>
+                        </h:panelGrid>
+                </h:panelGrid>
+                
+                <h:panelGrid columns="2" width="100%" columnClasses="first-column-bienTaxe"  cellpadding="0"  cellspacing="0">
+                    <h:outputLabel value="#{bundle['cyberadmin.declarationDetail.taxCalculation.address']}" styleClass="form-bienTaxe-label"/>
+                    <h:outputLabel/>
+                </h:panelGrid>
+                
+                 <p:spacer height="10px"/>
+                 
+                <h:panelGrid columns="2" width="100%" columnClasses="first-column-bienTaxe  align-top" cellpadding="0"  cellspacing="0">
+                    <h:outputLabel value="#{bundle['cyberadmin.common.label.additionalAddress']}" styleClass="form-bienTaxe-child-title"/>
+                    <h:panelGrid cellpadding="0"  cellspacing="0">
+                        <p:inputTextarea value="#{entity.adresse.adresse}" styleClass="form-bienTaxe-input" autoResize="false" rows="5" maxlength="255"/>
+                    </h:panelGrid>
+                </h:panelGrid>
+                
+                <p:spacer height="10px"/>
+                                  
+                <h:panelGrid columns="2" width="100%" columnClasses="first-column-bienTaxe" cellpadding="0"  cellspacing="0">
+                    <h:outputLabel value="#{bundle['cyberadmin.common.label.street']}" styleClass="form-bienTaxe-child-title"/>
+                    <h:panelGrid columns="3"  cellpadding="0" cellspacing="0" columnClasses="" styleClass="form-child-table">
+                        <p:inputText value="#{entity.adresse.rue}" styleClass="form-bienTaxe-rue float-left" maxlength="255"/>
+                        <h:outputLabel value="#{bundle['cyberadmin.common.label.number']}" styleClass="form-bienTaxe-child-label"/>
+                        <p:inputText value="#{entity.adresse.no}" styleClass="float-right" maxlength="20"/>
+                    </h:panelGrid>
+                </h:panelGrid>
+                
+                <p:spacer height="10px"/>
+                
+                <h:panelGrid columns="2" width="100%" columnClasses="first-column-bienTaxe" cellpadding="0"  cellspacing="0">
+                    <h:outputLabel value="#{bundle['cyberadmin.common.label.NPA']}#{bundle['cyberadmin.common.mandatory']}" styleClass="form-bienTaxe-child-title"/>
+                    <arcam:npaComplete 
+                            backingBean="#{backingBean}" 
+                            value="#{entity.localiteSuggestion}"
+                            styleClass="form-child-table"
+                            styleClassNpa="form-bienTaxe-npa"
+                            styleClassLocalite="form-bienTaxe-localite"
+                            address="#{entity.adresse}"/>
+                </h:panelGrid>
+                
+                <h:panelGrid columns="2" width="100%" columnClasses="first-column-bienTaxe"  cellpadding="0"  cellspacing="0" rendered="#{bienTaxe.declarationType == 'LOCATION'}">
+                    <h:outputLabel value="#{bundle['cyberadmin.declarationDetail.tenant']}" styleClass="form-bienTaxe-label"/>
+                    <h:outputLabel/>
+                </h:panelGrid>
+                
+                <h:panelGrid columns="2" width="100%" columnClasses="first-column-bienTaxe"  cellpadding="0"  cellspacing="0" rendered="#{bienTaxe.declarationType == 'LOCATION'}">
+                    <h:outputLabel value="#{bundle['cyberadmin.common.label.name']}" styleClass="form-bienTaxe-child-title"/>
+                    <h:panelGrid columns="1"  cellpadding="0"  cellspacing="0">
+                        <p:inputText value="#{declaration.nom}" styleClass="form-bienTaxe-input" maxlength="255"/>
+                    </h:panelGrid>
+                </h:panelGrid>
+                
+                <p:spacer height="10px"/>
+                
+                <h:panelGrid columns="2" width="100%" columnClasses="first-column-bienTaxe"  cellpadding="0"  cellspacing="0" rendered="#{bienTaxe.declarationType == 'LOCATION'}">
+                    <h:outputLabel value="#{bundle['cyberadmin.common.label.firstname']}" styleClass="form-bienTaxe-child-title"/>
+                    <h:panelGrid columns="1"  cellpadding="0"  cellspacing="0">
+                        <p:inputText value="#{declaration.prenom}" styleClass="form-bienTaxe-input" maxlength="255"/>
+                    </h:panelGrid>
+                 </h:panelGrid>
+                 
+                 <p:spacer height="10px"/>
+                 
+                 <h:panelGrid columns="2" width="100%" columnClasses="first-column-bienTaxe"  cellpadding="0"  cellspacing="0" rendered="#{bienTaxe.declarationType == 'LOCATION'}">
+                    <h:outputLabel value="#{bundle['cyberadmin.declarationDetail.tenant.from']}#{bundle['cyberadmin.common.mandatory']}" styleClass="form-bienTaxe-child-title"/>
+                     <h:panelGrid columns="3"  cellpadding="0"  cellspacing="0" styleClass="form-child-table">
+                        <p:calendar id="startDateCompId" locale="#{localeBean.lang}" showButtonPanel="true" 
+                             navigator="true" styleClass="" pattern="#{webConstants['DATE_PATTERN']}"
+                             size="30" required="true" value="#{declaration.fiscaleDate}"
+                            requiredMessage="#{errorMsg['cyberadmin.declarationDetail.mandatory.locationFrom']}"/>
+                        <h:outputLabel value="#{bundle['cyberadmin.declarationDetail.tenant.to']}" styleClass="form-bienTaxe-localite-to-label"/>
+                        <p:calendar locale="#{localeBean.lang}" showButtonPanel="true" navigator="true" styleClass="float-right" size="35" pattern="#{webConstants['DATE_PATTERN']}" value="#{declaration.departDate}">
+                             <f:validator validatorId="dateRangeValidator" />
+                             <f:attribute name="startDateCompId" value=":form:startDateCompId" />
+                        </p:calendar>
+                    </h:panelGrid>
+                </h:panelGrid>
+            
+        </h:panelGrid>
+    </ui:define>
+    
+    <ui:param name="fillMode" value="#{backingBean.fillMode}"/>
+    <ui:define name="button">
+        <h:panelGrid id="actionButtons" columns="2" cellpadding="0" cellspacing="0" width="655" columnClasses="first-column-bienTaxe" >
+              
+              <p:button id="btnCancel" value="#{bundle['cyberadmin.common.button.cancel']}" styleClass="form-button"
+                                     title="#{bundle['cyberadmin.common.button.cancel']}"
+                                     outcome="#{isUserValidated ? 'declarationList.xhtml' : '../firstAccess.xhtml'}"/>
+                                     
+              <p:commandButton id="btnCreate" value="#{bundle['cyberadmin.declarationGeneral.create']}" styleClass="form-button float-right"
+                                       update="form"
+                                       title="#{bundle['cyberadmin.declarationGeneral.create']}" action="#{backingBean.fillDeclaration}" 
+                                       rendered="#{hasRoleASJ}"/>
+              <p:commandButton id="btnFollow" value="#{bundle['cyberadmin.common.button.follow']}" styleClass="form-button float-right"
+                                       title="#{bundle['cyberadmin.common.button.follow']}" action="#{backingBean.save}"
+                                       update="form" rendered="#{(hasRoleCOM or hasRoleGES or hasRoleADM) and (!fillMode)}"/>
+                                       
+              <p:commandButton value="#{bundle['cyberadmin.declarationGeneral.create']}" styleClass="form-button float-right"
+                                       update="form"
+                                       title="#{bundle['cyberadmin.declarationGeneral.create']}" action="#{backingBean.fillDeclaration}"
+                                       rendered="#{(hasRoleCOM or hasRoleGES or hasRoleADM) and (fillMode)}"/>
+         </h:panelGrid> 
+    </ui:define>
+</ui:composition>

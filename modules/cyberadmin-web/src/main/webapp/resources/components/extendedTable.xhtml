@@ -1,0 +1,140 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:composite="http://java.sun.com/jsf/composite">
+
+<!-- INTERFACE -->
+<composite:interface>
+    <composite:attribute name="id" />
+    <composite:attribute name="backingBean" />
+    <composite:attribute name="dataModelTotal" />
+    <composite:attribute name="dataModelExoneration" />
+    <composite:attribute name="dataModelSubTotal" />
+    <composite:attribute name="istypeCamping"/>
+    <composite:attribute name="istypeInstitut"/>
+    <composite:attribute name="idUpdate"/>
+    <composite:attribute name="disabled"/>
+    
+</composite:interface>
+
+<!-- IMPLEMENTATION -->
+<composite:implementation>
+        <!-- Data table for header-->
+        <p:dataTable id="#{cc.attrs.id}Total" value="#{cc.attrs.dataModelTotal}" var="item" styleClass="form-declaration-exoneration-table first-table-exoneration">
+            <ui:param name="i18nTypeKey" value="cyberadmin.exonerations.type.#{item.exemptionType}"/>
+            <p:column>
+                <f:facet name="header"/>
+                     <h:outputText value="#{bundle[i18nTypeKey]}" styleClass="text-bold"/>
+            </p:column>
+            <p:column styleClass="form-declaration-exoneration-table-column text-align">
+                <f:facet name="header">
+                   <h:outputText value="#{bundle['cyberadmin.declarationDetail.arrivals']}" styleClass="text-bold"/>
+                </f:facet>
+                <p:inputText value="#{item.hotes}" styleClass="number-align form-declaration-exoneration-table-input" onkeypress="return CyberAdmin.Number.pressPositiveNumber(event)"
+                        disabled="#{cc.attrs.disabled}" validator="guestExemptionValidator"
+                        required="true"
+                        requiredMessage="#{errorMsg['cyberadmin.declarationDetail.mandatory.arrival']}">
+                    <p:ajax event="change" listener="#{cc.attrs.backingBean.reCalcuTaxeCalDoms}"
+                        process="@this"
+                        update=":form:taxCal:taxCalSubTotal,:form:amountToPaid,:form:montant"/>
+                </p:inputText>
+                
+            </p:column>
+            <p:column styleClass="form-declaration-exoneration-table-column text-align">
+                <f:facet name="header">
+                    <h:outputText value="#{bundle['cyberadmin.declarationDetail.nights']}" styleClass="text-bold"/>
+                </f:facet>
+                <p:inputText value="#{item.nuits}" styleClass="number-align form-declaration-exoneration-table-input" onkeypress="return CyberAdmin.Number.pressPositiveNumber(event)"
+                        disabled="#{cc.attrs.disabled}"  validator="guestExemptionValidator"
+                        required="true"
+                        requiredMessage="#{errorMsg['cyberadmin.declarationDetail.mandatory.night']}">
+                    <p:ajax event="change" listener="#{cc.attrs.backingBean.reCalcuTaxeCalDoms}"
+                        process="@this"
+                        update=":form:taxCal:taxCalSubTotal,:form:amountToPaid,:form:montant"/>
+                </p:inputText>
+            </p:column>
+            <p:column styleClass="form-declaration-exoneration-table-column" rendered="#{cc.attrs.istypeCamping or cc.attrs.istypeInstitut}">
+                <f:facet name="header">
+                   <h:outputText value="#{bundle['cyberadmin.declarationDetail.residentials']}" styleClass="text-bold"/>
+                </f:facet>
+                <p:inputText value="#{item.residentiel}" styleClass="number-align form-declaration-exoneration-table-input" onkeypress="return CyberAdmin.Number.pressPositiveNumber(event)"
+                        disabled="#{cc.attrs.disabled}" validator="guestExemptionValidator"
+                        required="true"
+                        requiredMessage="#{errorMsg['cyberadmin.declarationDetail.mandatory.residentiel']}">
+                     <p:ajax event="change" listener="#{cc.attrs.backingBean.reCalcuTaxeCalDoms}"
+                         process="@this"      
+                         update=":form:taxCal:taxCalSubTotal,:form:amountToPaid,:form:montant"/>
+                </p:inputText>
+            </p:column>
+        </p:dataTable>
+        <p:spacer height="5" />
+        
+        
+        <!-- Data table for content-->
+        <p:dataTable id="#{cc.attrs.id}Exoneration" value="#{cc.attrs.dataModelExoneration}" var="item" styleClass="form-declaration-exoneration-table">
+             <f:facet name="header">  
+               <h:outputText value="#{bundle['cyberadmin.declarationDetail.exemptions']}" styleClass="text-bold"/>
+            </f:facet>  
+            <p:columnGroup type="header"> 
+                 <p:column colspan="4"/>  
+            </p:columnGroup>
+           <ui:param name="i18nTypeKey" value="cyberadmin.exonerations.type.#{item.exemptionType}"/>
+           <p:column>
+               <h:outputText value="#{bundle[i18nTypeKey]}"/>
+            </p:column>
+            <p:column styleClass="form-declaration-exoneration-table-column">
+                <p:inputText value="#{item.hotes}" styleClass="number-align form-declaration-exoneration-table-input" onkeypress="return CyberAdmin.Number.pressPositiveNumber(event)"
+                    disabled="#{cc.attrs.disabled}" validator="guestExemptionValidator">
+                    <p:ajax event="change" listener="#{cc.attrs.backingBean.reCalcuTaxeCalDoms}"
+                        process="@this"
+                        update=":form:taxCal:taxCalSubTotal,:form:amountToPaid,:form:montant"/>
+                </p:inputText>
+            </p:column>
+            <p:column styleClass="form-declaration-exoneration-table-column">
+                <p:inputText value="#{item.nuits}" styleClass="number-align form-declaration-exoneration-table-input" onkeypress="return CyberAdmin.Number.pressPositiveNumber(event)"
+                    disabled="#{cc.attrs.disabled}" validator="guestExemptionValidator">
+                    <p:ajax event="change" listener="#{cc.attrs.backingBean.reCalcuTaxeCalDoms}"
+                         process="@this"
+                         update=":form:taxCal:taxCalSubTotal,:form:amountToPaid,:form:montant"/>
+                </p:inputText>
+            </p:column>
+            <p:column styleClass="form-declaration-exoneration-table-column" rendered="#{cc.attrs.istypeCamping or cc.attrs.istypeInstitut}">
+                <p:inputText value="#{item.residentiel}" styleClass="number-align form-declaration-exoneration-table-input" onkeypress="return CyberAdmin.Number.pressPositiveNumber(event)"
+                    disabled="#{cc.attrs.disabled}" validator="guestExemptionValidator">
+                    <p:ajax event="change" listener="#{cc.attrs.backingBean.reCalcuTaxeCalDoms}"
+                        process="@this"
+                        update=":form:taxCal:taxCalSubTotal,:form:amountToPaid,:form:montant"/>
+                </p:inputText>
+            </p:column>
+        </p:dataTable>
+        
+        <p:spacer height="10" />
+        <!-- Table total -->
+        <p:dataTable id="taxCalSubTotal" value="#{cc.attrs.dataModelSubTotal}" var="item" styleClass="form-exoneration-table-total form-declaration-exoneration-table noheader">
+            <p:column>
+                <h:outputLabel value="#{item.title}" styleClass="form-declaration-label"/>
+            </p:column>
+            <p:column styleClass="#{item.arrivees.toString() == 'CHF' ? 'form-exoneration-chf-cell' : 'table-exoneration-total-cell'} form-declaration-exoneration-table-column number-align form-declaration-label">
+                <h:outputLabel value="#{item.arrivees}" styleClass="form-declaration-label"/>
+            </p:column>
+            <p:column styleClass="table-exoneration-total-cell form-declaration-exoneration-table-column number-align form-declaration-label">
+                <h:outputText value="#{item.nuits}" styleClass="form-declaration-label" rendered="#{item.arrivees.toString() == 'CHF'}">
+                    <f:convertNumber pattern="#{webConstants['NUMBER_FORMAT']}" minFractionDigits="2" locale="fr_CH"/>
+                </h:outputText>
+                <h:outputText value="#{item.nuits}" styleClass="form-declaration-label" rendered="#{item.arrivees.toString() != 'CHF'}"/>
+            </p:column>
+            <p:column styleClass="table-exoneration-total-cell form-declaration-exoneration-table-column number-align form-declaration-label" rendered="#{cc.attrs.istypeCamping or cc.attrs.istypeInstitut}">
+                <h:outputText value="#{item.residentiel}" styleClass="form-declaration-label" rendered="#{item.arrivees.toString() == 'CHF'}">
+                     <f:convertNumber pattern="#{webConstants['NUMBER_FORMAT']}" minFractionDigits="2" locale="fr_CH"/>
+                </h:outputText>
+                <h:outputText value="#{item.residentiel}" styleClass="form-declaration-label" rendered="#{item.arrivees.toString() != 'CHF'}"/>
+            </p:column>
+        </p:dataTable>
+        <p:spacer height="5" />
+</composite:implementation>
+
+</html>

@@ -1,0 +1,120 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:c="http://java.sun.com/jsp/jstl/core"
+    xmlns:sec="http://www.springframework.org/security/tags"
+    xmlns:composite="http://java.sun.com/jsf/composite">
+
+<!-- INTERFACE -->
+<composite:interface>
+    <composite:attribute name="id" />
+    <composite:attribute name="backingBean" />
+    <composite:attribute name="canEdit" default="true" />
+    <composite:attribute name="detailUrl" required="true" />
+    <composite:attribute name="renderTypeColumn" default="true" />
+    <composite:attribute name="renderTaxpayerColumn" />
+</composite:interface>
+
+<!-- IMPLEMENTATION -->
+<composite:implementation>
+    <p:dataTable id="#{cc.attrs.id}" value="#{cc.attrs.backingBean.dataTable.dataModel}" var="dec" styleClass="dec-list-data-table"
+                    rows="#{webConstants['MAX_ROW']}" rowKey="#{dec.id}" paginator="true" paginatorPosition="bottom"
+                    paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                    rowsPerPageTemplate="#{webConstants['PAGE_SIZES']}" selectionMode="single"
+                    rowIndexVar="rowIndex"
+                    sortBy="#{dec.calculatedDate}" sortOrder="descending" emptyMessage="#{bundle['cyberadmin.common.table.noResult']}">
+                    
+        <p:column sortBy="#{dec.id}" styleClass="id-column">
+            <f:facet name="header">
+                #{bundle['cyberadmin.declarationList.id']}
+            </f:facet>
+            <h:outputLink rendered="#{cc.attrs.canEdit}" style="text-decoration: none;color: #000000" value="#{cc.attrs.detailUrl}" styleClass="data-table-row-link">
+                <h:outputText value="#{dec.id}" />
+                <f:param name="id" value="#{dec.id}" />  
+            </h:outputLink>
+            <h:outputText value="#{dec.id}" rendered="#{!cc.attrs.canEdit}"  />
+        </p:column>
+        
+        <p:column sortBy="#{dec.calculatedDate}" styleClass="small-column">
+            <f:facet name="header">
+                #{bundle['cyberadmin.declarationList.date']}
+            </f:facet>
+            <h:outputLink rendered="#{cc.attrs.canEdit}" style="text-decoration: none;color: #000000" value="#{cc.attrs.detailUrl}"
+                styleClass="data-table-row-link #{dec.overDue ? 'dec-list-cell-overdue' : ''}">
+                <h:outputText value="#{dec.calculatedDate}">
+                    <f:convertDateTime pattern="#{webConstants['DATE_PATTERN']}" timeZone="#{cc.attrs.backingBean.currentTimezone}"/>
+                </h:outputText>
+                 <f:param name="id" value="#{dec.id}" />  
+            </h:outputLink>
+            <h:outputText value="#{dec.calculatedDate}" rendered="#{!cc.attrs.canEdit}">
+                    <f:convertDateTime pattern="#{webConstants['DATE_PATTERN']}" timeZone="#{cc.attrs.backingBean.currentTimezone}"/>
+            </h:outputText>
+        </p:column>
+        
+        <p:column sortBy="#{dec.denomination}" styleClass="huge-column">
+            <f:facet name="header">
+                #{bundle['cyberadmin.declarationList.denomination']}
+            </f:facet>
+            <h:outputLink rendered="#{cc.attrs.canEdit}" style="text-decoration: none;color: #000000" value="#{cc.attrs.detailUrl}" styleClass="data-table-row-link">
+                <h:outputText value="#{dec.denomination}" />
+                <f:param name="id" value="#{dec.id}" />  
+            </h:outputLink>
+            <h:outputText value="#{dec.denomination}" rendered="#{!cc.attrs.canEdit}"/>
+        </p:column>
+        
+        <p:column sortBy="#{dec.assujetti}" rendered="#{cc.attrs.renderTaxpayerColumn}" styleClass="medium-column">
+            <f:facet name="header">
+                #{bundle['cyberadmin.declarationList.taxpayer']}
+            </f:facet>
+            <h:outputLink rendered="#{cc.attrs.canEdit}" style="text-decoration: none;color: #000000" value="#{cc.attrs.detailUrl}" styleClass="data-table-row-link">
+                <h:outputText value="#{dec.assujetti}" />
+                <f:param name="id" value="#{dec.id}" />  
+            </h:outputLink>
+             <h:outputText value="#{dec.assujetti}" rendered="#{!cc.attrs.canEdit}"/>
+        </p:column>
+        
+        <p:column sortBy="#{dec.bienTaxe.communeCodeDisplayText}" styleClass="medium-column">
+            <f:facet name="header">
+                #{bundle['cyberadmin.declarationList.commune']}
+            </f:facet>
+            <h:outputLink rendered="#{cc.attrs.canEdit}" style="text-decoration: none;color: #000000" value="#{cc.attrs.detailUrl}" styleClass="data-table-row-link">
+                <h:outputText value="#{dec.bienTaxe.communeCodeDisplayText}" />
+                <f:param name="id" value="#{dec.id}" />  
+            </h:outputLink>
+            <h:outputText value="#{dec.bienTaxe.communeCodeDisplayText}" rendered="#{!cc.attrs.canEdit}"/>
+        </p:column>
+        
+        <ui:param name="i18nTypeKey" value="cyberadmin.common.declaration.type.short.#{dec.bienTaxe.declarationType}"/>
+        <p:column sortBy="#{dec.bienTaxe.declarationType}" rendered="#{cc.attrs.renderTypeColumn}" styleClass="medium-column">
+            <f:facet name="header">
+                #{bundle['cyberadmin.declarationList.type']}
+            </f:facet>
+            <h:outputLink rendered="#{cc.attrs.canEdit}" style="text-decoration: none;color: #000000" value="#{cc.attrs.detailUrl}" styleClass="data-table-row-link">
+                <h:outputText value="#{bundle[i18nTypeKey]}" />
+                <f:param name="id" value="#{dec.id}" />  
+            </h:outputLink>
+            <h:outputText value="#{bundle[i18nTypeKey]}" rendered="#{!cc.attrs.canEdit}"/>
+        </p:column>
+        
+        <ui:param name="i18nStatusKey" value="cyberadmin.common.declaration.status.#{dec.status}"/>
+        <p:column sortBy="#{dec.status}" styleClass="medium-column dec-list-cell-#{dec.status}-#{userDataSessionBean.currentUser.userInfo.userType}">
+            <f:facet name="header">
+                #{bundle['cyberadmin.declarationList.status']}
+            </f:facet>
+            <h:outputLink rendered="#{cc.attrs.canEdit}" style="text-decoration: none;color: #000000" value="#{cc.attrs.detailUrl}" styleClass="data-table-row-link">
+                <h:outputText value="#{bundle[i18nStatusKey]}" />
+                <f:param name="id" value="#{dec.id}" />  
+            </h:outputLink>
+            <h:outputText value="#{bundle[i18nStatusKey]}" rendered="#{!cc.attrs.canEdit}"/>
+        </p:column>
+        
+        <composite:insertChildren/>
+        
+    </p:dataTable>
+</composite:implementation>
+
+</html>

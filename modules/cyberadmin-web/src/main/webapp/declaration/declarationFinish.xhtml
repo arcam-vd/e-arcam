@@ -1,0 +1,23 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:sec="http://www.springframework.org/security/tags"
+    xmlns:arcam="http://java.sun.com/jsf/composite/components"
+    xmlns:c="http://java.sun.com/jsp/jstl/core"
+    template="../layouts/mainLayout.xhtml">
+
+    <ui:define name="content">
+        <h:form id="form">
+            <ui:param name="isUserValidated" value="#{userDataSessionBean.currentUser.validated}"/>
+            <h:panelGrid id="content" width="100%" columns="3" cellpadding="20" cellspacing="0" columnClasses="first-column-declaration-finish,align-top,align-bottom">
+                <h:graphicImage name="merci_img.jpg" library="images" width="500" height="333"/>
+                <h:outputText value="#{bundle['cyberadmin.declarationDetail.confirmation']}" styleClass="float-left form-declaration-finish-text align-top" escape="false"/>
+                <p:button value="#{bundle['cyberadmin.declarationDetail.backToHome']}" 
+                          styleClass="float-right align-bottom"
+                          outcome="#{isUserValidated ? 'declarationList.xhtml' : '../firstAccess.xhtml'}"/>
+            </h:panelGrid>
+        </h:form>
+    </ui:define>
+</ui:composition>

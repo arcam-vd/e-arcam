@@ -1,0 +1,19 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="Cyber Admin service test suite">
+	<test name="All Cyber Admin service tests">
+		<!-- Run all test in all packages -->
+		<packages>
+			<package name=".*" />
+		</packages>
+
+		<groups>
+			<run>
+				<!-- But exclude test in broken groups -->
+				<exclude name="broken" />
+				
+				<!-- also exclude email group (which requires mail server configuration) -->
+				<exclude name="mail" />
+			</run>
+		</groups>
+	</test>
+</suite>

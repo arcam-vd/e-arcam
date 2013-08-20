@@ -1,0 +1,149 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:arcam="http://java.sun.com/jsf/composite/components"
+    xmlns:sec="http://www.springframework.org/security/tags"
+    template="../layouts/mainLayout.xhtml">
+
+<ui:param name="backingBean" value="#{declarationToValidateBean}"/>
+<ui:param name="titlePage" value="#{bundle['cyberadmin.billValidation.pageTitle']}" />
+<ui:param name="helperText" value="#{helpMsg['cyberadmin.billValidation.help']}"/>
+
+<ui:define name="content">
+    <h:form id="form">
+            <div class="content-header">
+            <h:panelGrid columns="2" styleClass="float-right">
+               <p:commandButton id="updateUserInfoBtn" styleClass="form-button" value="#{bundle['cyberadmin.common.button.save']}"
+                                     action="#{declarationToValidateBean.saveDeclarationValidated}"/> 
+                
+	           <p:commandButton id="exportListData" styleClass="float-right" value="#{bundle['cyberadmin.common.button.export']}"
+	                                     ajax="false"
+	                                     action="#{declarationToValidateBean.export}"
+                                         onclick="CyberAdmin.Export.exportCA()"/>
+	        </h:panelGrid>                             
+	        </div>          
+	        <p:spacer height="20"/>                   
+	        <h:panelGrid id="table" styleClass="billed-declaration-table" columns="1" cellspacing="0" cellpadding="0" style="width: 100%">
+                <p:dataTable id="decList" value="#{backingBean.dataTable.dataModel}" var="dec" styleClass="dec-list-data-table"
+                    rows="#{webConstants['MAX_ROW']}" rowKey="#{dec.id}" paginator="true" paginatorPosition="bottom"
+                    paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                    rowsPerPageTemplate="#{webConstants['PAGE_SIZES']}" selectionMode="single"
+                    rowIndexVar="rowIndex"
+                    sortBy="#{dec.calculatedDate}" sortOrder="descending" emptyMessage="#{bundle['cyberadmin.common.table.noResult']}">
+
+                    <p:column sortBy="#{dec.id}" styleClass="id-column">
+                        <f:facet name="header">
+                            #{bundle['cyberadmin.declarationList.id']}
+                        </f:facet>
+                        <h:outputText value="#{dec.id}" />
+                    </p:column>
+
+                    <p:column sortBy="#{dec.calculatedDate}" styleClass="small-column">
+                        <f:facet name="header">
+                            #{bundle['cyberadmin.declarationList.date']}
+                        </f:facet>
+                        <h:outputText value="#{dec.calculatedDate}">
+                            <f:convertDateTime pattern="#{webConstants['DATE_PATTERN']}" timeZone="#{cc.attrs.backingBean.currentTimezone}" />
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column sortBy="#{dec.denomination}" styleClass="huge-column">
+                        <f:facet name="header">
+                            #{bundle['cyberadmin.declarationList.denomination']}
+                        </f:facet>
+                        <h:outputText value="#{dec.denomination}" />
+                    </p:column>
+
+                    <p:column sortBy="#{dec.assujetti}" styleClass="medium-column">
+                        <f:facet name="header">
+                            #{bundle['cyberadmin.declarationList.taxpayer']}
+                        </f:facet>
+                        <h:outputText value="#{dec.assujetti}" />
+                    </p:column>
+
+                    <p:column sortBy="#{dec.bienTaxe.communeCodeDisplayText}" styleClass="medium-column">
+                        <f:facet name="header">
+                            #{bundle['cyberadmin.declarationList.commune']}
+                        </f:facet>
+                        <h:outputText value="#{dec.bienTaxe.communeCodeDisplayText}" />
+                    </p:column>
+
+                    <ui:param name="i18nStatusKey" value="cyberadmin.common.declaration.status.#{dec.status}" />
+                    <p:column sortBy="#{dec.status}"
+                        styleClass="medium-column dec-list-cell-#{dec.status}-#{userDataSessionBean.currentUser.userInfo.userType}">
+                        <f:facet name="header">
+                                #{bundle['cyberadmin.declarationList.status']}
+                            </f:facet>
+                        <h:outputText value="#{bundle[i18nStatusKey]}" />
+                    </p:column>
+
+                    <p:column id="billedId" styleClass="billed-declaration-radio-column">
+                        <f:facet name="header">
+                                #{bundle['cyberadmin.common.declaration.status.BILLED']}
+                            </f:facet>
+
+                        <h:panelGroup id="billedColumn">
+                            <p:selectOneRadio id="billedColumnRadio" value="#{dec.billed}" layout="custom">
+                                <f:selectItem itemLabel="" itemValue="true" />
+                                <p:ajax process="billedColumn" update="notPaidColumn,paidColumn,contestColumn,cancelColumn" />
+                            </p:selectOneRadio>
+                            <p:radioButton for="billedColumnRadio" itemIndex="0" />
+                        </h:panelGroup>
+                    </p:column>
+
+                    <p:column id="billedNotPaidId" styleClass="billed-declaration-radio-column">
+                        <f:facet name="header">
+                                #{bundle['cyberadmin.common.declaration.status.NOT_PAID']}
+                            </f:facet>
+
+                        <h:panelGroup id="notPaidColumn">
+                            <p:selectOneRadio id="notPaidColumnRadio"
+                                value="#{dec.notPaid}" layout="custom">
+                                <f:selectItem itemLabel="" itemValue="true" />
+                                <p:ajax process="notPaidColumn" update="billedColumn,paidColumn,contestColumn,cancelColumn" />
+                            </p:selectOneRadio>
+                            <p:radioButton for="notPaidColumnRadio" itemIndex="0" />
+                        </h:panelGroup>
+                    </p:column>
+
+                    <p:column id="billedPaidId" styleClass="billed-declaration-radio-column">
+                        <f:facet name="header">#{bundle['cyberadmin.common.declaration.status.PAID']}</f:facet>
+                        <h:panelGroup id="paidColumn">
+                            <p:selectOneRadio id="paidColumnRadio" value="#{dec.paid}" layout="custom">
+                                <f:selectItem itemLabel="" itemValue="true" />
+                                <p:ajax process="paidColumnRadio" update="billedColumn,notPaidColumn,contestColumn,cancelColumn" />
+                            </p:selectOneRadio>
+                            <p:radioButton for="paidColumnRadio" itemIndex="0" />
+                        </h:panelGroup>
+                    </p:column>
+
+                    <p:column id="billedCancelId" styleClass="billed-declaration-radio-column">
+                        <f:facet name="header">#{bundle['cyberadmin.common.declaration.status.CANCELLED']}</f:facet>
+                        <h:panelGroup id="cancelColumn">
+                            <p:selectOneRadio id="cancelColumnRadio" value="#{dec.cancelBilling}" layout="custom">
+                                <f:selectItem itemLabel="" itemValue="true" />
+                                <p:ajax process="cancelColumnRadio" update="billedColumn,contestColumn,paidColumn,notPaidColumn" />
+                            </p:selectOneRadio>
+                            <p:radioButton for="cancelColumnRadio" itemIndex="0" />
+                        </h:panelGroup>
+                    </p:column>
+
+                    <p:column id="billedRefuseId" styleClass="billed-declaration-radio-column">
+                        <f:facet name="header">#{bundle['cyberadmin.common.declaration.status.REFUSED']}</f:facet>
+                        <h:panelGroup id="contestColumn">
+                            <p:selectOneRadio id="contestColumnRadio" value="#{dec.refuseBilling}" layout="custom">
+                                <f:selectItem itemLabel="" itemValue="true" />
+                                <p:ajax process="contestColumnRadio" update="billedColumn,cancelColumn,paidColumn,notPaidColumn" />
+                            </p:selectOneRadio>
+                            <p:radioButton for="contestColumnRadio" itemIndex="0" />
+                        </h:panelGroup>
+                    </p:column>
+                </p:dataTable>
+                <h:inputHidden id="screenUUID" value="#{backingBean.screenUUID}"/>
+	        </h:panelGrid>
+    </h:form>
+</ui:define>
+
+</ui:composition>

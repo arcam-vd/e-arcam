@@ -1,0 +1,47 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:c="http://java.sun.com/jstl/core"
+    xmlns:arcam="http://java.sun.com/jsf/composite/components"
+    xmlns:sec="http://www.springframework.org/security/tags"
+    template="../layouts/mainLayout.xhtml">
+
+    <ui:param name="titlePage" value="#{bundle['cyberadmin.mailGeneration.pageTitle']}"/>
+    <ui:param name="backingBean" value="#{generateMailingBean}"/>
+    <ui:param name="helperText" value="#{helpMsg['cyberadmin.mailGeneration.help']}"/>
+    
+    <ui:define name="content">
+        <h:form id="form" styleClass="common-detail-form">
+            <p:focus context="form"/>
+            <h:panelGrid width="100%" columns="2" columnClasses="first-col-form-generate-mailing">
+                <h:outputLabel value="#{bundle['cyberadmin.mailGeneration.type']}"/>
+                <arcam:comboBox id="mailingTypeCombobox" items="#{cyberAdminDataBean.mailingTypes}" 
+                    haveEmptyItem="false"
+                    value="#{backingBean.mailingType}"
+                    required="true"
+                    requiredMessage="#{errorMsg['cyberadmin.declarationDetail.mandatory.mailing']}"
+                    styleClass="form-generate-mailing-typeGenerate"
+                    disabledAjaxMail="false"
+                    update=":form:canal"
+                    backingBean="#{generateMailingBean}"/>
+                <h:outputLabel value="#{bundle['cyberadmin.mailGeneration.channel']}"/>
+                <h:panelGrid id="canal" width="100%" columns="4" styleClass="form-generate-mailing-typeEmail">
+                    <p:selectBooleanCheckbox value="#{backingBean.email}" disabled="#{backingBean.invitationOrReminder}"/> 
+                    <h:outputLabel value="#{bundle['cyberadmin.mailGeneration.email']}" 
+                                styleClass="#{backingBean.invitationOrReminder ? 'generate-mailing-checkbox-email-lbl' : ''}"/>
+                    <p:selectBooleanCheckbox value="#{backingBean.courier}"/>  
+                    <h:outputLabel value="#{bundle['cyberadmin.mailGeneration.mail']}"/>
+                </h:panelGrid>
+                <h:panelGroup/>
+                <h:panelGrid width="100%" cellpadding="0" cellspacing="0" styleClass="form-generate-mailing-typeEmail" >
+                    <p:commandButton value="#{bundle['cyberadmin.common.button.generate']}" ajax="false"
+                        onclick="CyberAdmin.Export.exportCA()" 
+                        action="#{backingBean.export}" styleClass="float-right"/>
+                </h:panelGrid>
+                <h:inputHidden id="screenUUID" value="#{backingBean.screenUUID}"/>
+            </h:panelGrid>
+        </h:form>
+    </ui:define>
+</ui:composition>

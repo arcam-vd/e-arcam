@@ -1,0 +1,29 @@
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+      
+      <ui:composition>
+            <h:form>
+                <div id="headerImage">
+                    <div id="headerLogo" />
+                    <div id="headerInfo">
+                        <a class="logout-link" href="#{facesContext.externalContext.context.contextPath}/user/userProfile.xhtml?id=#{userDataSessionBean.currentUser.userInfo.id}">#{userDataSessionBean.currentUser.username}</a>
+                           |   
+                        <a class="logout-link" href="../logout">#{bundle['cyberadmin.panel.header.signOutLink']}</a>                        
+                    </div>
+                    <div id="headerTitle">
+                        <h:outputLabel value="#{titlePage}"/>
+                        <h:outputLabel value="#{titlePageNew}" rendered="#{isModeNew}"/>
+                        <h:outputLabel value="#{titlePageDetail}" rendered="#{isModeDetail}"/>
+                        <ui:insert name="headerTitle"/>
+                    </div>
+                    <div style="clear:both"/>
+                </div>
+            </h:form>
+        </ui:composition>
+</f:view>
+
+
+

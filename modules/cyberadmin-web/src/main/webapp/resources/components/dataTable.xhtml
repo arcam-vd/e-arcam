@@ -1,0 +1,45 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:c="http://java.sun.com/jsp/jstl/core"
+    xmlns:composite="http://java.sun.com/jsf/composite">
+
+<!-- INTERFACE -->
+<composite:interface>
+    <composite:attribute name="id" />
+    <composite:attribute name="backingBean" />
+    <composite:attribute name="rows" />
+    <composite:attribute name="styleClass" required="false" />
+    <composite:attribute name="selectionMode" default="single" />
+
+</composite:interface>
+
+<!-- IMPLEMENTATION -->
+<composite:implementation>
+    <!-- Data table -->
+    <p:dataTable id="#{cc.attrs.id}" value="#{cc.attrs.backingBean.dataTable.dataModel}" var="item"
+        rows="#{cc.attrs.rows}" rowKey="#{item.id}" paginator="true" paginatorPosition="bottom" styleClass="#{cc.attrs.styleClass}"
+        paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+        rowsPerPageTemplate="#{webConstants['PAGE_SIZES']}" selectionMode="#{cc.attrs.selectionMode}"
+        emptyMessage="#{bundle['cyberadmin.common.table.noResult']}">
+        
+        <p:columns value="#{cc.attrs.backingBean.dataTable.columns}" var="column" columnIndexVar="colIndex">
+        
+            <f:facet name="header">
+                #{bundle[column.header]}
+            </f:facet>
+            
+            <h:outputLink styleClass="table-cell" value="#">
+                 <h:outputText value="#{item[column.property]}" rendered="#{empty(column.resourceKeyPrefix)}"/>    
+                 <c:set var="resourceKey" value="#{column.resourceKeyPrefix}.#{item[column.property]}"/>
+                 <h:outputText value="#{bundle[resourceKey]}" rendered="#{!empty(column.resourceKeyPrefix)}"/>
+            </h:outputLink>
+        </p:columns>
+        
+    </p:dataTable>
+</composite:implementation>
+
+</html>

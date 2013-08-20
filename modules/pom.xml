@@ -1,0 +1,882 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>org.arcam</groupId>
+  <artifactId>cyberadmin</artifactId>
+  <version>1.1.2</version>
+  <packaging>pom</packaging>
+
+  <name>prj_arcam_cyberadministration CYBERADMIN :: (Root)</name>
+
+  <modules>
+    <module>cyberadmin-service</module>
+    <module>cyberadmin-web</module>
+  </modules>
+
+  <properties>
+
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+    <!-- JSF -->
+    <jsf.version>2.1.19</jsf.version> <!-- 2.0.9 -->
+    <jsfimpl.version>2.1.18</jsfimpl.version> <!-- 2.0.4-b05 -->
+
+    <!-- JSTL -->
+    <jstl.version>1.2</jstl.version>
+    <!-- PrimeFaces -->
+    <primefaces.version>3.2</primefaces.version>
+    <primefaces.theme.version>1.0.9</primefaces.theme.version>
+
+    <!-- Spring FW -->
+    <springframework.version>3.1.1.RELEASE</springframework.version>
+
+    <!-- Spring WebFlow -->
+    <springwebflow.version>2.3.1.RELEASE</springwebflow.version>
+
+    <!-- Spring Security -->
+    <springsecurity.version>3.1.0.RELEASE</springsecurity.version>
+
+    <!-- Servlet version -->
+    <servlet-api.version>2.5</servlet-api.version>
+
+    <!-- Hibernate -->
+    <hibernate.version>3.6.8.Final</hibernate.version>
+    <javassist.version>3.11.0.GA</javassist.version>
+
+    <!-- Hibernate validator -->
+    <hibernate.validator.version>4.1.0.Final</hibernate.validator.version>
+
+    <!-- other libraries' versions -->
+    <slf4j.version>1.5.8</slf4j.version>
+    <log4j.version>1.2.16</log4j.version>
+    <testng.version>5.12.1</testng.version>
+    <easymock.version>2.5.2</easymock.version>
+    <atinject.version>1.0.0-PRD</atinject.version>
+    <aspectj.version>1.6.1</aspectj.version>
+
+    <!-- Checkstyle configuration resolution -->
+    <!-- main.basedir has to be overridden in child java projects to point to this root parent basedir -->
+    <main.basedir>${project.basedir}</main.basedir>
+    <checkstyle.file.location>${main.basedir}${file.separator}..${file.separator}etc${file.separator}checkstyle${file.separator}checkstyle.xml</checkstyle.file.location>
+    <checkstyle.suppression.file.location>${main.basedir}${file.separator}..${file.separator}etc${file.separator}checkstyle${file.separator}checkstyle-suppressions.xml</checkstyle.suppression.file.location>
+
+
+  </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <!-- cyberadmin -->
+      <dependency>
+        <groupId>org.arcam.cyberadmin</groupId>
+        <artifactId>cyberadmin-service-api</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+ 
+      <dependency>
+        <groupId>org.arcam.cyberadmin</groupId>
+        <artifactId>cyberadmin-service-impl</artifactId>
+        <version>${project.version}</version>
+      </dependency>       
+      
+       <dependency>
+        <groupId>org.arcam</groupId>
+        <artifactId>cyberadmin-web</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+	  
+	  <!-- Url forward filter -->
+	  <dependency>
+		<groupId>org.tuckey</groupId>
+		<artifactId>urlrewritefilter</artifactId>
+		<version>4.0.3</version>
+	  </dependency>
+	  
+      <!-- Apache Commons -->
+      <dependency>
+        <groupId>commons-collections</groupId>
+        <artifactId>commons-collections</artifactId>
+        <version>3.2.1</version>
+      </dependency>
+      <dependency>
+        <groupId>commons-dbcp</groupId>
+        <artifactId>commons-dbcp</artifactId>
+        <version>1.4</version>
+      </dependency>
+      <dependency>
+        <groupId>commons-pool</groupId>
+        <artifactId>commons-pool</artifactId>
+        <version>1.5.5</version>
+      </dependency>
+      <dependency>
+        <groupId>commons-beanutils</groupId>
+        <artifactId>commons-beanutils</artifactId>
+        <version>1.8.2</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.commons</groupId>
+        <artifactId>commons-lang3</artifactId>
+        <version>3.1</version>
+      </dependency>
+      <dependency>
+        <groupId>commons-io</groupId>
+        <artifactId>commons-io</artifactId>
+        <version>1.4</version>
+      </dependency>
+      <dependency>
+        <groupId>commons-codec</groupId>
+        <artifactId>commons-codec</artifactId>
+        <version>1.4</version>
+      </dependency>
+  
+      <dependency>
+        <groupId>commons-fileupload</groupId>
+        <artifactId>commons-fileupload</artifactId>
+        <version>1.2.2</version>
+      </dependency>
+
+      <!-- JSF -->
+      <dependency>
+        <groupId>org.glassfish</groupId>
+        <artifactId>javax.faces</artifactId>
+        <version>${jsf.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>com.sun.faces</groupId>
+        <artifactId>jsf-impl</artifactId>
+        <version>${jsfimpl.version}</version>
+      </dependency>
+
+      <!-- JSTL -->
+      <dependency>
+        <groupId>jstl</groupId>
+        <artifactId>jstl</artifactId>
+        <version>${jstl.version}</version>
+      </dependency>
+
+      <!-- PrimeFaces -->
+      <dependency>
+        <groupId>org.primefaces</groupId>
+        <artifactId>primefaces</artifactId>
+        <version>${primefaces.version}</version>
+      </dependency>
+      
+      <dependency>  
+        <groupId>org.primefaces.themes</groupId>  
+        <artifactId>afterwork</artifactId>  
+        <version>${primefaces.theme.version}</version>  
+      </dependency> 
+
+      <!-- Logging -->
+      <dependency>
+        <groupId>log4j</groupId>
+        <artifactId>log4j</artifactId>
+        <version>${log4j.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-api</artifactId>
+        <version>${slf4j.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-log4j12</artifactId>
+        <version>${slf4j.version}</version>
+      </dependency>
+
+      <!-- Java Servlet API -->
+      <dependency>
+        <groupId>javax.servlet</groupId>
+        <artifactId>servlet-api</artifactId>
+        <version>${servlet-api.version}</version>
+      </dependency>
+
+      <!-- Spring framework -->
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-aop</artifactId>
+        <version>${springframework.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-asm</artifactId>
+        <version>${springframework.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-beans</artifactId>
+        <version>${springframework.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-context</artifactId>
+        <version>${springframework.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-core</artifactId>
+        <version>${springframework.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-jdbc</artifactId>
+        <version>${springframework.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-orm</artifactId>
+        <version>${springframework.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-tx</artifactId>
+        <version>${springframework.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-web</artifactId>
+        <version>${springframework.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-webmvc</artifactId>
+        <version>${springframework.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-test</artifactId>
+        <version>${springframework.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-context-support</artifactId>
+        <version>${springframework.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-expression</artifactId>
+        <version>${springframework.version}</version>
+      </dependency>
+      
+      <!-- Spring Webflow -->
+      <dependency>
+        <groupId>org.springframework.webflow</groupId>
+        <artifactId>spring-faces</artifactId>
+        <version>${springwebflow.version}</version>
+      </dependency>
+
+      <!-- Spring security -->
+      <dependency>
+        <groupId>org.springframework.security</groupId>
+        <artifactId>spring-security-remoting</artifactId>
+        <version>${springsecurity.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework.security</groupId>
+        <artifactId>spring-security-core</artifactId>
+        <version>${springsecurity.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework.security</groupId>
+        <artifactId>spring-security-config</artifactId>
+        <version>${springsecurity.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework.security</groupId>
+        <artifactId>spring-security-web</artifactId>
+        <version>${springsecurity.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework.security</groupId>
+        <artifactId>spring-security-taglibs</artifactId>
+        <version>${springsecurity.version}</version>
+      </dependency>
+
+      <!-- Hibernate -->
+      <dependency>
+        <groupId>org.hibernate</groupId>
+        <artifactId>hibernate-core</artifactId>
+        <version>${hibernate.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.hibernate</groupId>
+        <artifactId>hibernate-annotations</artifactId>
+        <version>${hibernate.annotations.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.hibernate</groupId>
+        <artifactId>hibernate-validator</artifactId>
+        <exclusions>
+          <exclusion>
+            <groupId>org.hibernate.javax.persistence</groupId>
+            <artifactId>hibernate-jpa-2.0-api</artifactId>
+          </exclusion>
+        </exclusions>
+        <version>${hibernate.validator.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>javassist</groupId>
+        <artifactId>javassist</artifactId>
+        <version>${javassist.version}</version>
+      </dependency>
+
+      <!-- For AOP -->
+      <dependency>
+        <groupId>aopalliance</groupId>
+        <artifactId>aopalliance</artifactId>
+        <version>1.0</version>
+      </dependency>
+      <dependency>
+        <groupId>cglib</groupId>
+        <artifactId>cglib</artifactId>
+        <version>2.2</version>
+      </dependency>
+      <dependency>
+        <groupId>cglib</groupId>
+        <artifactId>cglib-nodep</artifactId>
+        <version>2.2</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.aspectj</groupId>
+        <artifactId>aspectjrt</artifactId>
+        <version>${aspectj.version}</version>
+        <scope>runtime</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.aspectj</groupId>
+        <artifactId>aspectjweaver</artifactId>
+        <version>${aspectj.version}</version>
+      </dependency>
+
+      <!-- Mysql database driver -->
+      <dependency>
+        <groupId>mysql</groupId>
+        <artifactId>mysql-connector-java</artifactId>
+        <version>5.1.19</version>
+      </dependency>
+      
+      <!-- JAVA mail -->
+      <dependency>
+        <groupId>javax.mail</groupId>
+        <artifactId>javax.mail-api</artifactId>
+        <version>1.4.4</version>
+      </dependency>
+  
+      <dependency>
+         <groupId>javax.el</groupId>
+         <artifactId>el-api</artifactId>
+         <version>2.2</version>
+      </dependency>
+                
+      <dependency>
+        <groupId>javax.mail</groupId>
+        <artifactId>mail</artifactId>
+        <version>1.4.4</version>
+      </dependency>
+
+      <!-- for testing -->
+      <dependency>
+        <groupId>org.testng</groupId>
+        <artifactId>testng</artifactId>
+        <version>${testng.version}</version>
+        <scope>test</scope>
+        <exclusions>
+          <exclusion>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+          </exclusion>
+        </exclusions>
+      </dependency>
+      <dependency>
+        <groupId>org.easymock</groupId>
+        <artifactId>easymock</artifactId>
+        <version>${easymock.version}</version>
+        <type>jar</type>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.easymock</groupId>
+        <artifactId>easymockclassextension</artifactId>
+        <version>${easymock.version}</version>
+        <type>jar</type>
+        <scope>test</scope>
+      </dependency>
+      
+      <dependency>
+        <groupId>com.lowagie</groupId>
+        <artifactId>itext</artifactId>
+        <version>2.1.7</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.poi</groupId>
+        <artifactId>poi</artifactId>
+        <version>3.8</version>
+      </dependency>
+            
+    </dependencies>
+  </dependencyManagement>
+
+  <build>
+
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <filtering>true</filtering>
+      </resource>
+	  <resource>
+        <directory>src/main/webapp/resources</directory>
+		<includes>
+			<include>documents/*</include>
+		</includes>
+        <filtering>true</filtering>
+      </resource>
+    </resources>
+
+    <extensions>
+      <extension>
+        <groupId>org.apache.maven.wagon</groupId>
+        <artifactId>wagon-ssh</artifactId>
+        <version>1.0</version>
+      </extension>
+    </extensions>
+
+    <pluginManagement>
+      <plugins>
+
+        <!-- Plugin for compiler -->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>2.1</version>
+          <configuration>
+            <target>1.6</target>
+            <source>1.6</source>
+            <optimize>true</optimize>
+            <showWarnings>true</showWarnings>
+            <showDeprecation>true</showDeprecation>
+            <skip>false</skip>
+          </configuration>
+        </plugin>
+
+        <!-- Plugin to produce source JAR -->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-source-plugin</artifactId>
+          <version>2.1.2</version>
+          <executions>
+            <execution>
+              <id>attach-sources</id>
+              <goals>
+                <goal>jar-no-fork</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+
+        <!-- Plugin for Eclipse artifact construction -->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-eclipse-plugin</artifactId>
+          <version>2.8</version>
+          <executions>
+            <execution>
+              <phase>initialize</phase>
+              <id>clean-eclipse-artifacts</id>
+              <goals>
+                <goal>clean</goal>
+              </goals>
+            </execution>
+            <execution>
+              <phase>package</phase>
+              <id>rebuild-eclipse-artifacts</id>
+              <goals>
+                <goal>eclipse</goal>
+              </goals>
+            </execution>
+          </executions>
+          <configuration>
+            <downloadSources>true</downloadSources>
+            <downloadJavadocs>false</downloadJavadocs>
+
+            <additionalBuildcommands>
+              <buildcommand>net.sf.eclipsecs.core.CheckstyleBuilder
+              </buildcommand>
+            </additionalBuildcommands>
+            <additionalProjectnatures>
+              <projectnature>net.sf.eclipsecs.core.CheckstyleNature
+              </projectnature>
+            </additionalProjectnatures>
+
+            <classpathContainers>
+              <classpathContainer>org.eclipse.jdt.launching.JRE_CONTAINER
+              </classpathContainer>
+            </classpathContainers>
+
+            <additionalConfig>
+              <file>
+                <name>.checkstyle</name>
+                <content>
+                              <![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<fileset-config file-format-version="1.2.0" simple-config="true">
+  <local-check-config name="CYBERADMIN-JAVA" location="${checkstyle.file.location}" type="external" description="CYBERADMIN Checkstyle Configuration for Java modules">
+    <property name="checkstyle.suppressions.file" value="${checkstyle.suppression.file.location}"/>
+    <additional-data name="protect-config-file" value="true"/>
+  </local-check-config>
+  <fileset name="all" enabled="true" check-config-name="CYBERADMIN-JAVA" local="true">
+    <file-match-pattern match-pattern="." include-pattern="true"/>
+  </fileset>
+  <filter name="FileTypesFilter" enabled="true">
+    <filter-data value="java"/>
+  </filter>
+  <filter name="NonSrcDirs" enabled="true"/>
+</fileset-config>
+                              ]]>
+                </content>
+              </file>
+            </additionalConfig>
+			<wtpversion>2.0</wtpversion>
+			<additionalProjectFacets>
+				<jst.java>6.0</jst.java>
+				<jst.web>2.5</jst.web>
+				<jst.jsf>2.0</jst.jsf>
+			</additionalProjectFacets>
+          </configuration>
+        </plugin>
+
+        <!-- Plugin for Checkstyle -->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-checkstyle-plugin</artifactId>
+          <version>2.6</version>
+          <configuration>
+            <failOnViolation>false</failOnViolation>
+            <consoleOutput>true</consoleOutput>
+            <failsOnError>false</failsOnError>
+            <logViolationsToConsole>true</logViolationsToConsole>
+            <violationSeverity>warning</violationSeverity>
+            <configLocation>${checkstyle.file.location}</configLocation>
+            <!-- This is a workaround for a bug of maven checkstyle plugin. http://jira.codehaus.org/browse/MCHECKSTYLE-134 -->
+            <suppressionsLocation>${checkstyle.suppression.file.location}
+            </suppressionsLocation>
+            <suppressionsFileExpression>just.a.dummy
+            </suppressionsFileExpression>
+            <propertyExpansion>checkstyle.suppressions.file=${checkstyle.suppression.file.location}
+            </propertyExpansion>
+          </configuration>
+          <executions>
+            <execution>
+              <id>checkstyle</id>
+              <phase>verify</phase>
+              <goals>
+                <goal>check</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+		
+        <!-- Plugin to build WAR files -->
+        
+		<plugin>
+			<artifactId>maven-war-plugin</artifactId>
+			<version>2.2</version>
+			<configuration>
+				<filteringDeploymentDescriptors>true</filteringDeploymentDescriptors>
+				<archive>
+					<manifest>
+						<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+					</manifest>
+					<manifestEntries>
+						<Implementation-Build>${buildNumber}</Implementation-Build>
+						<Implementation-Build-Time>${timestamp}</Implementation-Build-Time>
+						<SCM-Revision>${scmBranch}</SCM-Revision>
+					</manifestEntries>
+				</archive>
+			</configuration>
+		</plugin>
+
+        <!-- Plugin to build JAR files -->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-jar-plugin</artifactId>
+          <version>2.3</version>
+
+          <!-- build both normal JARs and TEST JARs -->
+          <executions>
+            <execution>
+              <phase>package</phase>
+              <goals>
+                <goal>jar</goal>
+                <goal>test-jar</goal>
+              </goals>
+            </execution>
+          </executions>
+
+          <configuration>
+            <archive>
+              <addMavenDescriptor>true</addMavenDescriptor>
+              <compress>true</compress>
+              <forced>true</forced>
+              <index>false</index>
+              <manifest>
+                <addClasspath>false</addClasspath>
+                <addDefaultImplementationEntries>true
+                </addDefaultImplementationEntries>
+                <addDefaultSpecificationEntries>true
+                </addDefaultSpecificationEntries>
+                <addExtensions>false</addExtensions>
+                <classpathLayoutType>repository</classpathLayoutType>
+                <classpathMavenRepositoryLayout>false
+                </classpathMavenRepositoryLayout>
+                <classpathPrefix/>
+                <customClasspathLayout/>
+                <mainClass/>
+                <packageName/>
+              </manifest>
+              <!-- Add the version properties into the manifest file -->
+              <manifestEntries>
+                <iris-version-prefix>STAGE</iris-version-prefix>
+                <iris-version-number>${project.version}
+                </iris-version-number>
+                <iris-version-date>${maven.build.timestamp}
+                </iris-version-date>
+              </manifestEntries>
+            </archive>
+          </configuration>
+        </plugin>
+
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>exec-maven-plugin</artifactId>
+          <version>1.1.1</version>
+          <configuration>
+            <keepAlive>false</keepAlive>
+          </configuration>
+        </plugin>
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-resources-plugin</artifactId>
+          <version>2.3</version>
+          <configuration>
+            <encoding>ISO-8859-1</encoding>
+          </configuration>
+        </plugin>
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>2.8.1</version>
+          <configuration>
+            <excludedGroups>manual,devInProgress</excludedGroups>
+            <systemPropertyVariables>
+              <net.sourceforge.cobertura.datafile>target/cobertura/cobertura.ser
+              </net.sourceforge.cobertura.datafile>
+            </systemPropertyVariables>
+          </configuration>
+        </plugin>		
+		
+		<!-- Add plugin to generate Time stamp at build time (track release) -->
+		<plugin>
+			<groupId>org.codehaus.mojo</groupId>
+			<artifactId>buildnumber-maven-plugin</artifactId>
+			<version>1.1</version>
+			<executions>
+				<execution>
+					<phase>validate</phase>
+					<goals>
+						<goal>create</goal>
+					</goals>
+				</execution>
+			</executions>
+		</plugin>        
+		
+		<plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>versions-maven-plugin</artifactId>
+          <version>1.2</version>
+          <configuration>
+            <generateBackupPoms>false</generateBackupPoms>
+          </configuration>
+        </plugin>
+        
+        <plugin>
+	        <groupId>org.jvnet.jax-ws-commons</groupId>
+	        <artifactId>jaxws-maven-plugin</artifactId>
+	        <version>2.1</version>
+      	</plugin>
+      	
+      	<plugin>
+	        <groupId>org.jvnet.jax-ws-commons</groupId>
+	        <artifactId>jaxws-maven-plugin</artifactId>
+	        <version>2.1</version>
+	        <dependencies>
+	          <dependency>
+	            <groupId>javax.servlet</groupId>
+	            <artifactId>servlet-api</artifactId>
+	            <version>${servlet-api.version}</version>
+	          </dependency>
+	        </dependencies>
+	      </plugin>
+      	
+      </plugins>
+
+    </pluginManagement>
+  </build>
+
+  <pluginRepositories>
+    <!-- Central repo from Maven -->
+    <pluginRepository>
+      <id>Maven central 1</id>
+      <name>Maven Repository Switchboard</name>
+      <layout>default</layout>
+      <url>http://repo1.maven.org/maven2</url>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </pluginRepository>
+    <pluginRepository>
+      <id>Maven central 2</id>
+      <name>Maven Repository Switchboard</name>
+      <layout>default</layout>
+      <url>http://repo2.maven.org/maven2</url>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </pluginRepository>
+  </pluginRepositories>
+
+  <repositories>
+
+    <!-- Central repo from Maven -->
+    <repository>
+      <id>Maven central 1</id>
+      <name>Maven Repository Switchboard</name>
+      <layout>default</layout>
+      <url>http://repo1.maven.org/maven2</url>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+    <repository>
+      <id>Maven central 2</id>
+      <name>Maven Repository Switchboard</name>
+      <layout>default</layout>
+      <url>http://repo2.maven.org/maven2</url>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+
+    <!-- EL4J external repo -->
+    <repository>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <id>el4jReleaseRepositoryExternal</id>
+      <name>External release repository of the EL4J project</name>
+      <url>http://el4.elca-services.ch/el4j/maven2repository</url>
+    </repository>
+
+    <!-- Java.net -->
+    <repository>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <id>maven2-repository.dev.java.net</id>
+      <name>Java.net Repository for Maven</name>
+      <url>http://download.java.net/maven/2</url>
+    </repository>
+
+    <!-- For JBoss related artifacts -->
+    <repository>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+      <id>jboss-maven-repo</id>
+      <name>JBoss Maven Repository</name>
+      <url>https://repository.jboss.org/nexus/content/groups/public
+      </url>
+    </repository>
+
+    <repository>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+      <id>jboss-maven-repo-2</id>
+      <name>JBoss Maven Repository</name>
+      <url>http://repository.jboss.org/nexus/content/groups/public-jboss
+      </url>
+    </repository>
+
+    <repository>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+      <id>jboss</id>
+      <name>JBoss maven2 repository (deprecated)</name>
+      <url>http://repository.jboss.org/maven2</url>
+    </repository>
+
+    <repository>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+      <id>springsource-repository</id>
+      <name>Spring Maven Releases, Milestones, and Snapshots</name>
+      <url>http://repo.springsource.org/snapshot</url>
+    </repository>
+
+    <repository>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+      <id>jvnet-nexus-releases</id>
+      <name>jvnet-nexus-releases</name>
+      <url>https://maven.java.net/content/repositories/releases/</url>
+    </repository>
+
+    <repository>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+      <id>prime-repo</id>
+      <name>Prime Repo</name>
+      <url>http://repository.primefaces.org</url>
+    </repository>
+
+
+  </repositories>
+
+  <profiles>
+    <profile>
+      <id>dev</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <properties>
+        
+      </properties>
+    </profile>
+
+    <profile>
+      <id>vnintegration</id>
+      <activation>
+        <activeByDefault>false</activeByDefault>
+      </activation>
+      <properties>
+        
+      </properties>
+    </profile>
+  </profiles>
+
+
+</project>

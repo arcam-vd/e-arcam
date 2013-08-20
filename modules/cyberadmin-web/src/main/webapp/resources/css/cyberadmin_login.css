@@ -1,0 +1,182 @@
+/* CSS for authentication pages */
+
+.login-content {
+	margin: 0 auto !important;
+	min-height: 650px;
+	min-width: 49px;
+	max-height: 650px;
+	width: 890px;
+	z-index: 0;
+	
+}
+
+.login-body {
+	 background-color: #D2D8E6;
+}
+
+.login-content .ui-layout-unit,.login-content .ui-layout-unit .ui-layout-unit-content{
+	padding :0 0 0 0;
+	border-radius: 0 0 12px 12px;
+	
+}
+
+.login-form{
+    padding-left : 97px;
+    padding-top : 50px;
+}
+
+.login-first-column{
+	padding-right: 80px;
+}
+
+
+.login_button  {
+    background: #E5E5E5 !important;
+    margin:0 !important;
+    padding:0 !important;
+    overflow: visible;
+    cursor: default;
+    z-index:0;
+    vertical-align: middle;
+    height: 26px;
+    white-space: nowrap;
+    text-decoration: none !important;
+    font-weight: bold !important;
+}
+
+.login_button:hover {
+    color: #F0F3EC !important;
+    text-decoration: none !important;
+}
+
+.login_button:active {
+    color: #F5FAE5 !important;
+}
+
+.ui-button-text {
+	font-weight: bold !important;
+}
+
+.btn_col2 {
+	text-align: right;
+}
+
+.footer {
+    height: 35px !important;
+    background: none repeat scroll 0 0 #0B70B4;
+    position: absolute !important;
+    bottom: 0;
+    width: 100%;;
+}
+
+
+.art-warning {
+	height: 44px !important;
+    overflow: hidden;
+    position: absolute !important;   
+    width: 100%;
+    z-index: 0;    
+    bottom: 56px;
+}
+
+.art-warning .art-warning-inner {
+    height: 1%;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 10px;
+    position: relative;
+    text-align: center;
+    z-index: 0;
+}
+
+.art-warning .art-warning-text p {
+    margin: 0;
+}
+.art-warning .art-warning-text {
+    color: #000000;
+    display: inline-block;
+    font-family: "Century Gothic",Arial,Helvetica,Sans-Serif;
+    font-size: 11px;
+    letter-spacing: 1px;
+}
+.art-warning .art-warning-text a:link {
+    color: #000000;
+    font-family: "Century Gothic",Arial,Helvetica,Sans-Serif;
+    font-size: 11px;
+    text-decoration: underline;
+}
+.art-warning .art-warning-text a:visited {
+    color: #4F5247;
+    font-family: "Century Gothic",Arial,Helvetica,Sans-Serif;
+    font-size: 11px;
+    text-decoration: underline;
+}
+.art-warning .art-warning-text a:hover {
+    color: #053657;
+    font-family: "Century Gothic",Arial,Helvetica,Sans-Serif;
+    font-size: 11px;
+    text-decoration: none;
+}
+
+.art-Footer {
+    height: 56px !important;
+    overflow: hidden;
+    position: absolute !important;
+    width: 100%;
+    z-index: 0;
+    bottom: 0
+}
+
+.art-Footer .art-Footer-inner {
+    height: 1%;
+    padding: 5px;
+    position: relative;
+    text-align: center;
+    z-index: 0;
+}
+
+.art-Footer .art-Footer-background {
+    background-image: url("../resources/images/footer.png");
+    background-repeat: no-repeat;
+    bottom: 0;
+    height: 150px;
+    left: 0;
+    position: absolute;
+    width: 100%;
+    z-index: -1;
+}
+.art-Footer .art-Footer-text p {
+    margin: 0;
+}
+.art-Footer .art-Footer-text {
+    color: #FFFFFF;
+    display: inline-block;
+    font-family: "Century Gothic",Arial,Helvetica,Sans-Serif;
+    font-size: 11px;
+    letter-spacing: 1px;
+}
+.art-Footer .art-Footer-text a:link {
+    color: #FFFFFF;
+    font-family: "Century Gothic",Arial,Helvetica,Sans-Serif;
+    font-size: 11px;
+    text-decoration: underline;
+}
+.art-Footer .art-Footer-text a:visited {
+    color: #4F5247;
+    font-family: "Century Gothic",Arial,Helvetica,Sans-Serif;
+    font-size: 11px;
+    text-decoration: underline;
+}
+.art-Footer .art-Footer-text a:hover {
+    color: #053657;
+    font-family: "Century Gothic",Arial,Helvetica,Sans-Serif;
+    font-size: 11px;
+    text-decoration: none;
+}
+
+.art-page-footer {
+    color: #696D5F;
+    margin: 1em;
+    text-align: center;
+    text-decoration: none;
+}

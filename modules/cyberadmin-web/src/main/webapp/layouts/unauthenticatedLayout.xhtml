@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<f:view locale="#{localeBean.lang}">
+	<h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<h:outputStylesheet name="cyberadmin_login.css" library="css" />
+		<h:outputStylesheet name="cyberadmin.css" library="css" />
+		<h:outputStylesheet name="cyberadmin.skin.css" library="css" />
+		<h:outputScript name="js/cyberadmin.js"/>
+	
+		<!-- Message Resource bundle -->
+		<f:loadBundle basename="/i18n/messages" var="bundle" />
+		<f:loadBundle basename="/i18n/errors" var="errorMsg" />
+		<title>#{bundle['cyberadmin.title']}</title>
+	</h:head>
+	
+	<h:body styleClass="login-body">
+        <ui:include src="waitingDialog.xhtml"/>
+		<p:layout fullPage="false" id="content" styleClass="login-content art-Sheet">
+			  	<p:layoutUnit styleClass="content" position="center" >  
+			  	   <h:graphicImage name="header.jpg" library="images" width="100%" height="225"/>
+                   <p:messages autoUpdate="true" showSummary="false" showDetail="true"/>
+		           <ui:insert name="content" />
+                   <ui:insert name="footer">
+                        <ui:include src="footer.xhtml" />
+                    </ui:insert>
+		         </p:layoutUnit>  
+		</p:layout>
+        <!--<p class="art-page-footer"><h:outputText value="#{bundle['cyberadmin.copyright']}" escape="false"/></p>-->
+    </h:body>
+</f:view>
+</html>

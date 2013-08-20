@@ -1,0 +1,114 @@
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:sec="http://www.springframework.org/security/tags">
+      
+<ui:composition>
+    <h:form>
+        <div style="float:left;width:60%">
+            <p:menubar autoSubmenuDisplay="true" styleClass="menu-item-bar" rendered="#{userDataSessionBean.currentUser.validated}">
+                <p:submenu styleClass="cyber-menu-item" label="#{bundle['cyberadmin.menu.taxpayer']}"
+                    rendered="#{sec:areAnyGranted('VIEW_LIST_TAXPAYERS,NEW_TAXPAYER,VALIDATE_TAXPAYER') and sec:areNotGranted('ASJ')}">
+                       
+                    <p:menuitem styleClass="menu-item-child" value="#{bundle['cyberadmin.menu.taxpayer.list']}" 
+                        rendered="#{sec:areAnyGranted('VIEW_LIST_TAXPAYERS')}" url="/assujetti/taxpayerList.xhtml" />
+                    
+                    <p:menuitem styleClass="menu-item-child" value="#{bundle['cyberadmin.menu.taxpayer.new']}" 
+                        rendered="#{sec:areAnyGranted('NEW_TAXPAYER')}" url="/assujetti/taxpayerDetail.xhtml" />
+                
+                    <p:menuitem styleClass="menu-item-child" value="#{bundle['cyberadmin.menu.taxpayer.validate']}" 
+                        rendered="#{sec:areAnyGranted('VALIDATE_TAXPAYER')}" url="/assujetti/validateTaxpayer.xhtml" />
+                </p:submenu>
+                    
+                <p:submenu styleClass="cyber-menu-item" label="#{bundle['cyberadmin.menu.declaration']}"
+                    rendered="#{sec:areAnyGranted('CREATE_DECLARATION,REQUEST_DECLARATION,VIEW_LIST_DECLARATIONS,EXPORT_TO_BILLING') and sec:areNotGranted('ASJ')}">
+                  
+                    <p:menuitem styleClass="menu-item-child" value="#{bundle['cyberadmin.menu.declaration.new']}"
+                        rendered="#{sec:areAnyGranted('GES,ADM')}" url="/declaration/declarationList.xhtml?type=filled" />
+                
+                    <p:menuitem styleClass="menu-item-child" value="#{bundle['cyberadmin.menu.declaration.toFilled']}" 
+                        rendered="#{sec:areAnyGranted('GES,ADM')}" url="/declaration/declarationList.xhtml?type=toFill" />
+                
+                    <p:menuitem styleClass="menu-item-child" value="#{bundle['cyberadmin.menu.declaration.listDelay']}" 
+                        rendered="#{sec:areAnyGranted('GES,ADM')}" url="/declaration/declarationList.xhtml?type=late" />
+                
+                    <p:menuitem styleClass="menu-item-child" value="#{bundle['cyberadmin.menu.declaration.list']}" 
+                        rendered="#{sec:areAnyGranted('COM,GES,ADM')}" url="/declaration/declarationList.xhtml" />
+                
+                    <p:menuitem styleClass="menu-item-child" value="#{bundle['cyberadmin.menu.declaration.exportToBilling']}" 
+                        rendered="#{sec:areAnyGranted('EXPORT_TO_BILLING')}" url="/declaration/declarationsToBilling.xhtml" />
+                        
+                    <p:menuitem styleClass="menu-item-child" value="#{bundle['cyberadmin.menu.declaration.validateBilling']}" 
+                        rendered="#{sec:areAnyGranted('VALIDATE_BILLING')}" url="/declaration/billedDeclarationsToValidate.xhtml" />
+                    
+                </p:submenu>
+                
+                <p:submenu styleClass="cyber-menu-item" label="#{bundle['cyberadmin.menu.documents']}"
+                    rendered="#{sec:areAnyGranted('GENERATE_MAILING,GENERATE_STATISTIC') and sec:areNotGranted('ASJ')}">
+                    
+                    <p:menuitem  styleClass="menu-item-child" value="#{bundle['cyberadmin.menu.documents.generateMailings']}" 
+                        rendered="#{sec:areAnyGranted('GENERATE_MAILING')}" url="/document/generateMailing.xhtml" />
+                        
+                    <p:menuitem  styleClass="menu-item-child" value="#{bundle['cyberadmin.menu.documents.generateStatistics']}" 
+                        rendered="#{sec:areAnyGranted('GENERATE_STATISTIC')}" url="/document/generateStatistic.xhtml" />
+                </p:submenu>
+                
+                <p:submenu styleClass="cyber-menu-item" label="#{bundle['cyberadmin.menu.user']}"
+                    rendered="#{sec:areAnyGranted('VIEW_LIST_USERS,NEW_USER') and sec:areNotGranted('ASJ')}">
+                    
+                    <p:menuitem  styleClass="menu-item-child" value="#{bundle['cyberadmin.menu.user.list']}" 
+                        rendered="#{sec:areAnyGranted('VIEW_LIST_USERS')}" url="/user/userList.xhtml" />
+                    <p:menuitem  styleClass="menu-item-child" value="#{bundle['cyberadmin.menu.user.new']}" 
+                        rendered="#{sec:areAnyGranted('NEW_USER')}" url="/user/userDetail.xhtml" />
+                </p:submenu>
+                
+                <p:submenu styleClass="cyber-menu-item" label="#{bundle['cyberadmin.menu.journal']}"
+                    rendered="#{sec:areAnyGranted('VIEW_JOURNALS') and sec:areNotGranted('ASJ')}">
+                    
+                    <p:menuitem  styleClass="menu-item-child" value="#{bundle['cyberadmin.menu.journal.changelog']}"
+                        rendered="#{sec:areAnyGranted('VIEW_JOURNALS')}" url="/journal/journalList.xhtml" />
+                </p:submenu>
+                
+                <p:menuitem styleClass="cyber-menu-item" value="#{bundle['cyberadmin.menu.welcome']}"
+                    rendered="#{sec:areAnyGranted('ASJ')}" url="/welcome.xhtml" />
+            </p:menubar>
+        </div>
+        <div style="float:right;width:40%" class="cyber-language-bar">
+            <div class='cyber-language-item'>
+                <p:commandLink action="#{downloadDocumentBean.downloadFAQ}" styleClass="header_link" immediate="true" ajax="false">
+                    #{bundle['cyberadmin.panel.header.faqLink']}
+                </p:commandLink>
+                |
+                <h:commandLink styleClass="header_link" onclick="modalHelp.show(); return false;">
+                    #{bundle['cyberadmin.panel.header.supportLink']}
+                </h:commandLink>
+                |
+                <p:commandLink action="#{downloadDocumentBean.downloadArcamRules}" styleClass="header_link" immediate="true" ajax="false">
+                     #{bundle['cyberadmin.panel.header.ruleLink']}
+                </p:commandLink>
+                |
+                <h:commandLink rendered="#{localeBean.lang != 'fr'}" styleClass="header_link">
+                    <f:setPropertyActionListener target="#{localeBean.lang}" value="fr"/>
+                    #{bundle['cyberadmin.language.french']}
+                </h:commandLink>
+                <h:outputLabel styleClass="current-lang-selected" rendered="#{localeBean.lang == 'fr'}" value="#{bundle['cyberadmin.language.french']}"/>
+                |
+                <h:commandLink rendered="#{localeBean.lang != 'en'}" styleClass="header_link">
+                    <f:setPropertyActionListener target="#{localeBean.lang}" value="en"/>
+                    #{bundle['cyberadmin.language.english']}
+                </h:commandLink>
+                <h:outputLabel styleClass="current-lang-selected" style="padding-right: 9px;" 
+                    rendered="#{localeBean.lang == 'en'}" value="#{bundle['cyberadmin.language.english']}" />
+            </div>
+            <p:dialog id="modalHelp" widgetVar="modalHelp" modal="true" styleClass="ui-dialog-helpText" appendToBody="true" resizable="false">
+                 <h:outputText value="#{helperText}" escape="false" styleClass="ui-dialog-helpText"/>
+            </p:dialog>
+        </div>
+    </h:form>
+        
+</ui:composition>
+</f:view>
+
+

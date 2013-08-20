@@ -1,0 +1,104 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:composite="http://java.sun.com/jsf/composite">
+
+<!-- INTERFACE -->
+<composite:interface>
+    <composite:attribute name="id"/>
+    <composite:attribute name="backingBean"/>
+    <composite:attribute name="entity"/>
+    <composite:attribute name="bienTaxe"/>
+    <composite:attribute name="disabled"/>
+    <composite:attribute name="istypeResidence"/>
+    <composite:attribute name="istypeHotel"/>
+    <composite:attribute name="istypeInstitut"/>
+    <composite:attribute name="istypeCamping"/>
+    <composite:attribute name="istypeChambre"/>
+    <composite:attribute name="istypeLocation"/>
+    <composite:attribute name="hasRoleCOM"/>
+    <composite:attribute name="hasRoleGES"/>
+    <composite:attribute name="hasRoleADM"/>
+    <composite:attribute name="EGID_VALIDATED"/>
+</composite:interface>
+
+<!-- IMPLEMENTATION -->
+<composite:implementation>
+     <h:outputLabel value="#{bundle['cyberadmin.declarationDetail.editTaxCalculation']}" styleClass="form-declration-section-title"/>
+     <h:panelGrid id="adreeseDuBien" width="100%" columns="2" columnClasses="first-column-declaration-calcul, align-top"> 
+           <h:panelGrid width="100%" columns="2" columnClasses="first-column-declaration-child-calcul"> 
+               <ui:param name="modifierEGridEWid" value="#{cc.attrs.hasRoleCOM or ((cc.attrs.hasRoleGES or cc.attrs.hasRoleADM) and cc.attrs.EGID_VALIDATED)}"/>
+               <h:outputLabel value="#{bundle['cyberadmin.declarationGeneral.houseId']}" styleClass="" rendered="#{cc.attrs.istypeResidence or cc.attrs.istypeLocation}"/>
+               <h:panelGrid id="houseID" columns="2" cellpadding="0"  cellspacing="0" styleClass="#{modifierEGridEWid ? 'form-declaration-child-table-taxe-COM' :'form-declaration-child-table-taxe'}"
+                         rendered="#{cc.attrs.istypeResidence or cc.attrs.istypeLocation}">
+                      <h:panelGrid cellpadding="0" cellspacing="0" width="100%" columns="5" styleClass="#{modifierEGridEWid ? 'form-declaraion-adreeseDuBien-modifierEGridEWid' : 'form-declaraion-adreeseDuBien'}"> 
+                          <p:focus for="eGid" rendered="#{!cc.attrs.backingBean.modifiedHouseID}"/>
+                          <h:outputLabel value="#{bundle['cyberadmin.declarationDetail.taxCalculation.eGrid']}" styleClass="form-bienTaxe-child-label"/>
+                          <p:inputText id="eGid" value="#{cc.attrs.bienTaxe.eGid}"
+                                required="#{!cc.attrs.backingBean.modifiedHouseID}"
+                                requiredMessage="#{errorMsg['cyberadmin.declarationDetail.mandatory.eGid']}"
+                                styleClass="form-declaration-eGrid" disabled="#{cc.attrs.backingBean.modifiedHouseID}"
+                                onkeypress="return CyberAdmin.Number.pressPositiveNumber(event)"/>
+                          <h:outputLabel value="#{bundle['cyberadmin.declarationDetail.taxCalculation.eWid']}" styleClass="form-bienTaxe-child-label"/>
+                          <p:inputText value="#{cc.attrs.bienTaxe.eWid}" 
+                                required="#{!cc.attrs.backingBean.modifiedHouseID}"
+                                requiredMessage="#{errorMsg['cyberadmin.declarationDetail.mandatory.eWid']}"
+                                styleClass="float-right form-declaration-eWid" disabled="#{cc.attrs.backingBean.modifiedHouseID}"
+                                onkeypress="return CyberAdmin.Number.pressPositiveNumber(event)"/>
+                          <h:graphicImage id="helper" name="icon_question.png" library="icon" width="20" height="20" 
+                                    rendered="#{!modifierEGridEWid}"
+                                styleClass="form-declaration-pirnter">
+                                <p:tooltip for="helper" showEffect="clip" hideEffect="explode" styleClass="form-declaration-helper">
+                                         <h:outputText value="#{bundle['cyberadmin.declarationGeneral.houseId.tooltip']}" escape="false"/> 
+                                </p:tooltip>
+                          </h:graphicImage>
+                      </h:panelGrid>
+                      <h:panelGroup>
+                          <p:commandButton value="#{bundle['cyberadmin.common.button.modifyeGidWid']}" 
+                                update=":form:content" action="#{cc.attrs.backingBean.modifiereGidWid}"
+                                styleClass="float-right" 
+                                rendered="#{modifierEGridEWid and cc.attrs.backingBean.modifiedHouseID}"/>
+                                
+                          <p:commandButton value="#{bundle['cyberadmin.common.button.updateGidWid']}" 
+                                update=":form:content" action="#{cc.attrs.backingBean.updateEGidWid}"
+                                styleClass="float-right" rendered="#{modifierEGridEWid and !cc.attrs.backingBean.modifiedHouseID}"/>
+                      </h:panelGroup>      
+                      
+               </h:panelGrid>
+               
+               <h:outputLabel value="#{bundle['cyberadmin.declarationDetail.etablissement']}" styleClass="" rendered="#{not cc.attrs.istypeResidence and not cc.attrs.istypeLocation}"/>
+               <p:inputText value="#{cc.attrs.bienTaxe.etablissement}" styleClass="form-declaration-taxCalcul-input" disabled="true" rendered="#{not cc.attrs.istypeResidence and not cc.attrs.istypeLocation}"/>
+               
+               <h:outputLabel value="#{bundle['cyberadmin.declarationDetail.taxCalculation.address']}" styleClass="form-declaration-address"/>
+               <h:outputLabel/>
+               
+               <h:outputLabel value="#{bundle['cyberadmin.common.label.additionalAddress']}" styleClass="form-delcaration-child"/>
+               <p:inputTextarea value="#{cc.attrs.bienTaxe.adresse.adresse}" styleClass="form-declaration-taxCalcul-input" disabled="true"/>
+                   
+               <h:outputLabel value="#{bundle['cyberadmin.common.label.street']}" styleClass="form-delcaration-child"/>
+               <h:panelGrid columns="3"  styleClass="form-declaration-taxeCalcul-table" cellpadding="0" cellspacing="0" width="100%">
+                    <p:inputText value="#{cc.attrs.bienTaxe.adresse.rue}" styleClass="form-declaration-rue" disabled="true"/>
+                    <h:outputLabel value="#{bundle['cyberadmin.common.label.number']}" styleClass="form-delcaration-child"/>
+                    <p:inputText value="#{cc.attrs.bienTaxe.adresse.no}" styleClass="form-declaration-no float-right" disabled="true"/>
+               </h:panelGrid>
+               <h:outputLabel value="#{bundle['cyberadmin.common.label.NPA']}#{bundle['cyberadmin.common.mandatory']}" styleClass="form-delcaration-child"/>
+               <h:panelGrid columns="3"  styleClass="form-declaration-taxeCalcul-table" cellpadding="0" cellspacing="0">
+                    <p:inputText id="npaBienTaxe" value="#{cc.attrs.bienTaxe.adresse.npa}" styleClass="form-declaration-npa" disabled="true"/>
+                    <h:outputLabel value="#{bundle['cyberadmin.common.label.locality']}#{bundle['cyberadmin.common.mandatory']}" styleClass="form-delcaration-child"/>
+                    <p:inputText id="localiteBienTaxe" value="#{cc.attrs.bienTaxe.adresse.localite}" styleClass="form-declaration-localite float-right" disabled="true"/>
+               </h:panelGrid>
+            </h:panelGrid>
+            <h:panelGrid id="example" styleClass="align-top">
+                <h:outputLabel value="#{bundle['cyberadmin.declarationDetail.taxCalculation.example.title']}" styleClass="form-declaration-taxCalcul-example-header" escape="false" 
+                               rendered="#{cc.attrs.istypeHotel or cc.attrs.istypeCamping or cc.attrs.istypeChambre or cc.attrs.istypeInstitut}"/>
+                <h:outputLabel value="#{bundle['cyberadmin.declarationDetail.taxCalculation.example.hotel']}" styleClass="" escape="false" rendered="#{cc.attrs.istypeHotel or cc.attrs.istypeChambre}"/>
+                <h:outputLabel value="#{cc.attrs.backingBean.exampleCampingInstitut}" styleClass="" escape="false" rendered="#{cc.attrs.istypeCamping or cc.attrs.istypeInstitut}"/>
+            </h:panelGrid>
+     </h:panelGrid>
+</composite:implementation>
+
+</html>

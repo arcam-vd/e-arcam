@@ -1,0 +1,61 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:sec="http://www.springframework.org/security/tags"
+    xmlns:arcam="http://java.sun.com/jsf/composite/components"
+    xmlns:c="http://java.sun.com/jsp/jstl/core"
+    template="../layouts/mainLayout.xhtml">
+    <f:metadata>
+        <f:viewParam name="id" value="#{declarationContestBean.id}"/>
+        <f:event listener="#{declarationContestBean.populateEntity}" type="preRenderView"/>
+    </f:metadata>
+    
+    <ui:param name="helperText" value="#{helpMsg['cyberadmin.declarationRejection.help']}"/>
+    
+   <ui:define name="content">
+        <h:form id="form" styleClass="declaration-refuse-form" enctype="multipart/form-data">
+            <p:focus context="form"/>
+            <ui:param name="entity" value="#{declarationContestBean.entity}"/>
+            <ui:param name="contentWidth" value="50%"/>
+            <ui:param name="categoryKeyMsg" value="#{webConstants['PREFIX_SHORT_DECLARATION_KEY']}.#{entity.bienTaxe.declarationType}"/>
+            <h:panelGrid columns="2" width="#{contentWidth}">
+                    <h:outputText value="#{bundle['cyberadmin.common.label.category']}"/>
+                    <p:inputText styleClass="full-container-space-field" 
+                                 value="#{bundle[categoryKeyMsg]}"
+                                 disabled="true" autocomplete="off"/>
+                    
+                    <h:outputText value="#{bundle['cyberadmin.common.label.commune']}"/>
+                    <p:inputText styleClass="full-container-space-field"
+                                 value="#{declarationContestBean.communeDisplayText}" 
+                                 disabled="true" autocomplete="off"/>
+                                 
+            </h:panelGrid>
+            <h:panelGrid columns="2" width="#{contentWidth}" cellpadding="0" cellspacing="0">
+            <h:outputText value="#{bundle['cyberadmin.declarationRejection.motivation']}"/>
+            <h:panelGrid width="100%" columns="2" cellpadding="0" cellspacing="0" styleClass="float-right">
+                        <arcam:fileUploadDownload id="commentUploadDownload" 
+                                                  backingBeanHandler="#{declarationContestBean}" 
+                                                  labelUploadButton="#{bundle['cyberadmin.declarationRejection.button.attach']}"
+                                                  hasMessage="false"/>               
+            </h:panelGrid> 
+            </h:panelGrid>
+            <h:panelGrid columns="1" width="#{contentWidth}">
+                <p:inputTextarea styleClass="full-container-space-field"
+                                 required="true" 
+                                 requiredMessage="#{errorMsg['cyberadmin.comment.message']}"
+                                 value="#{declarationContestBean.message}"/>
+            </h:panelGrid>
+            <p:spacer height="10"/>
+            <h:panelGrid columns="2" width="#{contentWidth}" cellpadding="0" cellspacing="0">
+                <p:button value="#{bundle['cyberadmin.common.button.cancel']}" styleClass="form-button"
+                                     title="#{bundle['cyberadmin.common.button.cancel']}"
+                                     outcome="declarationList.xhtml"/>
+                <p:commandButton styleClass="float-right form-button" value="#{bundle['cyberadmin.common.button.reject']}"
+                                 update="form"
+                                 action="#{declarationContestBean.save}"/>
+            </h:panelGrid>
+        </h:form>
+    </ui:define>
+</ui:composition>

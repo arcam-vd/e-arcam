@@ -1,0 +1,374 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:sec="http://www.springframework.org/security/tags"
+    xmlns:arcam="http://java.sun.com/jsf/composite/components"
+    xmlns:c="http://java.sun.com/jsp/jstl/core"
+    template="layoutDeclaration.xhtml">
+
+    <ui:define name="headerDeclaration">
+         <h:panelGrid width="100%" cellpadding="0" cellspacing="0" styleClass="form-declaration-header">
+             <h:panelGrid width="100%" columns="2" columnClasses="first-column-declaration-header float-left,second-column-declaration-header float-right" rendered="#{hasRoleASJ}"> 
+                    <h:outputText id="title" value="#{backingBean.titleType}" styleClass="form-declaration-title" escape="false"/>
+                    <h:panelGroup>
+                        <h:outputLabel id="printerText" value="#{bundle['cyberadmin.common.printer']}" styleClass="align-bottom form-declaration-pirnter-lbl" onclick="JavaScript:window.print();"/>
+                        <h:graphicImage name="icon_printer.png" library="icon" width="20" height="20" styleClass="form-declaration-pirnter"
+                                 onclick="JavaScript:window.print();"/>
+                    </h:panelGroup>                    
+             </h:panelGrid>
+             <p:spacer height="5" rendered="#{hasRoleASJ and isEditMode}"/>
+             <h:panelGrid width="100%" columns="1" rendered="#{hasRoleASJ and isEditMode}"> 
+                <h:outputText id="attention" value="#{bundle['cyberadmin.declarationDetail.attention']}" escape="false" styleClass="form-declaration-attention"/>
+             </h:panelGrid>
+             <p:spacer height="5"/>
+         </h:panelGrid>
+        <h:panelGrid width="100%" columns="2" cellpadding="0" cellspacing="0" columnClasses="first-column-declaration-notification-header float-left,float-right" rendered="#{!(hasRoleASJ and isEditMode)}">
+            <p:panel id="notification" header="#{entity.description}" 
+                toggleable="true" toggleSpeed="200" styleClass="form-declaration-detail-header form-declaration-detail-header-padding">
+                <h:panelGrid id="panelNotification" width="100%" columns="2" columnClasses="first-column-declaration-detail-header,align-top" cellpadding="0" cellspacing="0">
+                   <h:panelGrid width="100%" cellpadding="2" cellspacing="0" columns="2" columnClasses="frist-column-declaration-adressFacturation">
+                        <h:outputLabel value="#{bundle['cyberadmin.declarationDetail.fillingDate']}"/>
+                        <h:panelGrid width="100%" cellpadding="0" cellspacing="0" columns="3" columnClasses=",,float-right" styleClass="form-declaration-table-header"> 
+                            <p:inputText type="text" value="#{entity.submissionDate}" disabled="true" styleClass="form-declaration-submissionDate float-left">
+                                <f:convertDateTime pattern="#{webConstants['DATE_PATTERN']}" timeZone="#{backingBean.currentTimezone}" />
+                            </p:inputText>
+                            <h:panelGroup>
+                                <p:spacer width="5px"/>
+                                <h:outputLabel value="#{bundle['cyberadmin.declarationList.id']}"/>
+                                <p:spacer width="5px"/>
+                            </h:panelGroup>
+                            <p:inputText value="#{entity.id}" disabled="true" styleClass="number-align form-declaration-id float-right"/>
+                        </h:panelGrid>  
+                        <h:outputLabel value="#{bundle['cyberadmin.common.label.category']}"/>
+                        <arcam:comboBox items="#{cyberAdminDataBean.shortDeclarationTypes}" value="#{bienTaxe.declarationType}" styleClass="form-declaration-detail-header-combo" disabled="true"/>
+                        <h:outputLabel id="lblCommune" value="#{bundle['cyberadmin.common.label.commune']}"/>
+                        <arcam:comboBox id="communeCombox" items="#{cyberAdminDataBean.communes}" value="#{bienTaxe.communeCode}" disabled="true" 
+                                        styleClass="form-declaration-detail-header-combo"/>
+                    </h:panelGrid>
+                    <h:panelGrid cellpadding="0" cellspacing="0" columns="1" columnClasses="" width="100%" styleClass="form-declaration-status-periodicite">  
+                        <h:panelGrid width="100%" cellpadding="0" cellspacing="0" columns="2" columnClasses="first-column-declaration-ajust-status,float-right">
+                            <h:outputLabel value="#{bundle['cyberadmin.declarationDetail.status']}" styleClass="form-declaration-label"/>
+                             <ui:param name="i18nStatusKey" value="cyberadmin.common.declaration.status.#{entity.status}"/>
+                            <p:inputText value="#{bundle[i18nStatusKey]}"  readonly="true" styleClass="dec-list-cell-#{entity.status}-#{userDataSessionBean.currentUser.userInfo.userType} form-declaration-label form-declaration-ajustComment"/>
+                        </h:panelGrid>
+                        <p:spacer height="4px"/>
+                        <h:panelGrid width="100%" cellpadding="0" cellspacing="0" columns="2" columnClasses="first-column-declaration-ajust-status,float-right">
+                            <h:outputLabel value="#{bundle['cyberadmin.declarationDetail.periodicity']}" styleClass="form-declaration-label"/>
+                            <arcam:comboBox id="preiodciteCombox" items="#{cyberAdminDataBean.periodicites}" 
+                                value="#{bienTaxe.periodiciteCode}" styleClass="form-declaration-currency-combobox" disabled="#{isViewMode or bienTaxe.declarationType == 'LOCATION'}"/>
+                         </h:panelGrid>
+                    </h:panelGrid>                
+                </h:panelGrid>
+            </p:panel>
+            <h:panelGroup rendered="#{!hasRoleASJ}">
+                    <h:outputLabel value="#{bundle['cyberadmin.common.printer']}" styleClass="align-bottom form-declaration-pirnter-lbl" onclick="JavaScript:window.print();"/>
+                    <h:graphicImage name="icon_printer.png" library="icon" width="20" height="20" styleClass="form-declaration-pirnter"
+                                onclick="JavaScript:window.print();"/>
+            </h:panelGroup>   
+        </h:panelGrid>
+    </ui:define>
+    
+    <ui:remove><!-- BELONG TO DECLARATION TYPE --></ui:remove>
+    <ui:define name="customRegionTaxCalculaton"/>
+                               
+    <ui:define name="customRegionAction">
+        <h:panelGrid id="amountToPaid" width="100%" columns="1" columnClasses="" cellpadding="0" cellspacing="0" styleClass="form-declaration-amountToPaid"> 
+                <h:panelGrid width="100%" cellpadding="0" cellspacing="0" columns="2" columnClasses="first-column-form-declaration-currency,float-right" 
+                    styleClass="form-declaration-amountToPaid">
+                     <ui:insert name="amountToPaidTitle"/>
+                     <h:panelGrid width="100%" cellpadding="5" cellspacing="0" columns="2" styleClass="form-declaration-table-currency">
+                        <h:outputLabel value="#{bundle['cyberadmin.common.chf']}" styleClass="form-declaration-label form-declaration-currency-label"/>
+                        <p:inputText value="#{entity.taxAmount}" disabled="true" styleClass="number-align float-right form-declaration-currency-input">
+                            <f:convertNumber pattern="#{webConstants['NUMBER_FORMAT']}" minFractionDigits="2" locale="fr_CH"/>
+                        </p:inputText>
+                     </h:panelGrid>
+                </h:panelGrid>
+        </h:panelGrid>
+
+         <ui:insert name="ajustRegion">
+            <ui:param name="submitedDeclaration" value="#{FILLED or VALIDATED or BILLED or BILL_REFUSED or CANCELLED or PAID or NOT_PAID}"/>
+            <h:panelGrid id="ajustRegion" width="100%" cellpadding="0" cellspacing="0" columns="2" styleClass="form-declaration-table-ajustRegion" 
+                columnClasses="first-column-form-declaration-ajust,float-right" rendered="#{(hasRoleGES or hasRoleADM) or (hasRoleASJ and entity.persisted and submitedDeclaration) or hasRoleCOM}">
+               <h:panelGrid width="100%" cellpadding="0" cellspacing="0" columns="2"
+                                columnClasses="first-column-declaration-ajust-status">
+                    <h:outputLabel value="#{bundle['cyberadmin.declarationDetail.taxCalculation.adjustmentAmount']}"/>
+                    <p:inputText value="#{entity.ajustComment}" disabled="#{isViewMode or (isEditMode and (hasRoleGES or hasRoleADM) and !FILLED and !VALIDATED) or (hasRoleASJ or hasRoleCOM)}" 
+                                 styleClass="float-left form-declaration-ajust-input-comment"/>
+                </h:panelGrid>
+                <h:panelGrid width="100%" cellpadding="5" cellspacing="0" columns="2">
+                    <h:outputLabel value="#{bundle['cyberadmin.common.chf']}" styleClass="form-declaration-label form-declaration-currency-label"/>
+                    <p:inputText value="#{entity.ajustValue}" disabled="#{isViewMode or (isEditMode and (hasRoleGES or hasRoleADM) and !FILLED and !VALIDATED) or (hasRoleASJ or hasRoleCOM)}" 
+                                styleClass="number-align float-right form-declaration-currency-input"
+                                onkeypress="return CyberAdmin.Number.pressNumber(event)">
+                        <f:convertNumber pattern="#{webConstants['NUMBER_FORMAT']}" minFractionDigits="2" locale="fr_CH"/>
+                        <p:ajax event="blur" update="montant"/>
+                    </p:inputText>
+                </h:panelGrid>
+            </h:panelGrid>
+            
+            <h:panelGrid width="100%" cellpadding="0" cellspacing="0" columns="2" styleClass="form-declaration-table-total"
+                    columnClasses="first-column-form-declaration-ajust,float-right">
+                 <h:panelGrid width="100%" cellpadding="0" cellspacing="0" columns="2" columnClasses=",float-right">
+                    <h:panelGroup/>
+                    <h:outputLabel value="#{bundle['cyberadmin.declarationDetail.taxCalculation.totalAmount']}" styleClass="form-declaration-label"/>                    
+                 </h:panelGrid>
+                 <h:panelGrid width="100%" cellpadding="5" cellspacing="0" columns="2">
+                    <h:outputLabel value="#{bundle['cyberadmin.common.chf']}" styleClass="form-declaration-label form-declaration-currency-label"/>
+                    <p:inputText id="montant" value="#{entity.montant}"  disabled="true" styleClass="number-align float-right form-declaration-currency-input">
+                        <f:convertNumber pattern="#{webConstants['NUMBER_FORMAT']}" minFractionDigits="2" locale="fr_CH"/>
+                    </p:inputText>
+                 </h:panelGrid>
+            </h:panelGrid>
+             <h:panelGrid width="100%" cellpadding="0" cellspacing="0" columns="2" columnClasses="first-column-form-declaration-ajust,float-right" rendered="#{isViewMode}">
+                  
+            </h:panelGrid>
+        </ui:insert>
+        
+        <h:panelGrid id="actionButtonsWithASJ" width="100%" columns="2"  styleClass="form-declaration-asj-buttons" columnClasses="first-column-declaration-amountToPaid" rendered="#{hasRoleASJ}">
+            <ui:param name="isUserValidated" value="#{userDataSessionBean.currentUser.validated}"/>
+            <p:button id="btnCancel" value="#{bundle['cyberadmin.common.button.cancel']}" styleClass="form-button" 
+                         outcome="#{isUserValidated ? 'declarationList.xhtml' : '../firstAccess.xhtml'}"
+                         title="#{bundle['cyberadmin.common.button.cancel']}"
+                         rendered="#{isEditMode}"/>
+            <h:panelGroup rendered="#{isViewMode}"/>
+            <h:panelGrid columns="4" columnClasses="form-button,form-button," cellpadding="5" cellspacing="0" styleClass="float-right">
+                                
+                 <p:button id="btnReturn" value="#{bundle['cyberadmin.common.button.return']}" styleClass="form-button float-right"
+                                 title="#{bundle['cyberadmin.common.button.return']}" outcome="declarationList.xhtml"
+                                 rendered="#{isViewMode}"/>
+                 <p:commandButton id="btnSave" value="#{bundle['cyberadmin.common.button.save']}" styleClass="form-button"
+                                 title="#{bundle['cyberadmin.common.button.save']}" action="#{backingBean.save}" 
+                                 update="form"
+                                 rendered="#{isEditMode and isUserValidated}"/>
+                 <p:button id="btnContester" value="#{bundle['cyberadmin.common.button.reject']}" styleClass="form-button" 
+                                 title="#{bundle['cyberadmin.common.button.reject']}"
+                                 outcome="/declaration/declarationRefuse.xhtml"
+                                 rendered="#{isEditMode and entity.persisted}">
+                             <f:param name="id" value="#{entity.id}"/>
+                 </p:button>
+                 <p:commandButton id="btnSends" value="#{bundle['cyberadmin.common.button.send']}" styleClass="form-button"
+                                 update="form"
+                                 action="#{backingBean.showConfirmSend(true)}"
+                                 title="#{bundle['cyberadmin.common.button.send']}"
+                                 oncomplete="showDialogConfirmSend();"
+                                 rendered="#{isEditMode}"/>                                 
+            </h:panelGrid>
+        </h:panelGrid>
+        
+        <h:panelGrid id="actionButtonsWithGES_ADM" width="100%" columns="2" styleClass="form-declaration-gesAdm-buttons" columnClasses="first-column-declaration-view-button,float-right" rendered="#{hasRoleGES or hasRoleADM}"> 
+                <h:panelGroup rendered="#{isEditMode}"/>         
+                <p:button value="#{bundle['cyberadmin.common.button.return']}" styleClass="form-button" 
+                         outcome="declarationList.xhtml}"
+                         title="#{bundle['cyberadmin.common.button.return']}"
+                         rendered="#{isViewMode}"/>
+                <h:panelGrid columns="6">
+                    
+                    <ui:remove><!-- Case declaration status is TO_FILLED and REFUSED--></ui:remove>
+                    <p:commandButton value="#{bundle['cyberadmin.common.button.cancel']}" styleClass="form-button"
+                                action="#{backingBean.cancel}" update="form" process="@this"
+                                title="#{bundle['cyberadmin.common.button.cancel']}"
+                                rendered="#{isEditMode and (TO_FILLED or FILLED or VALIDATED or EGID_VALIDATED)}"/>
+                    <p:commandButton value="#{bundle['cyberadmin.common.button.save']}" styleClass="form-button" 
+                                action="#{backingBean.saveOnPage}" update="form"
+                                title="#{bundle['cyberadmin.common.button.save']}"
+                                rendered="#{isEditMode and (TO_FILLED or FILLED or VALIDATED or EGID_VALIDATED)}"/>
+                    
+                    <p:button value="#{bundle['cyberadmin.common.button.reject']}" styleClass="form-button"
+                                title="#{bundle['cyberadmin.common.button.reject']}"
+                                outcome="/declaration/declarationRefuse.xhtml"
+                                rendered="#{entity.persisted and TO_FILLED }">
+                               <f:param name="id" value="#{entity.id}"/>
+                    </p:button> 
+                                
+                    <p:commandButton value="#{bundle['cyberadmin.common.button.send']}" styleClass="form-button" 
+                                 update="form"
+                                 action="#{backingBean.showConfirmSend(true)}"
+                                 title="#{bundle['cyberadmin.common.button.send']}"
+                                 oncomplete="showDialogConfirmSend();"
+                                 rendered="#{isEditMode and (TO_FILLED)}"/>              
+                                 
+                    <p:commandButton value="#{bundle['cyberadmin.declarationDetail.button.noSubject']}" styleClass="form-button" 
+                                action="#{backingBean.changeStatus('NOT_SUBJECTES')}"
+                                title="#{bundle['cyberadmin.declarationDetail.button.noSubject']}"
+                                rendered="#{isViewMode and (TO_FILLED or REFUSED or FILLED)}"/>
+                                
+                    <p:commandButton value="#{bundle['cyberadmin.common.button.edit']}" styleClass="form-button" update="form"
+                                title="#{bundle['cyberadmin.common.button.edit']}" actionListener="#{backingBean.modify}"
+                                rendered="#{sec:areAnyGranted('EDIT_DETAIL_DECLARATION') and isViewMode and (TO_FILLED or FILLED or VALIDATED or EGID_VALIDATED)}"/>
+                                
+                    <p:commandButton value="#{bundle['cyberadmin.declarationDetail.button.report']}" styleClass="" onclick="dlgComment.show();" 
+                                actionListener="#{backingBean.setFlagReport(true)}"
+                                title="#{bundle['cyberadmin.declarationDetail.button.report']}"
+                                rendered="#{isViewMode and (REFUSED or FILLED)}">
+                    </p:commandButton>            
+                                
+                    <p:commandButton value="#{bundle['cyberadmin.common.button.validate']}" styleClass="form-button" outcome="declarationList.xhtml"
+                                action="#{backingBean.changeStatus('VALIDATED')}"
+                                title="#{bundle['cyberadmin.common.button.validate']}"
+                                rendered="#{sec:areAnyGranted('VALIDATE_DECLARATION') and isViewMode and (FILLED)}"/>
+                                
+                    <ui:remove><!-- Case declaration status is other --></ui:remove> 
+                    <p:commandButton value="#{bundle['cyberadmin.common.button.errorCresus']}" styleClass="form-button" 
+                                update="form"
+                                action="#{backingBean.showConfirmErrorCresus(true)}"
+                                oncomplete="showConfirmErrorCresus();"
+                                title="#{bundle['cyberadmin.common.button.errorCresus']}"
+                                rendered="#{isViewMode and BILLED}"/>
+                    <p:commandButton value="#{bundle['cyberadmin.common.button.disputedInvoice']}" styleClass="" 
+                                action="#{backingBean.changeStatus('BILL_REFUSED')}"
+                                title="#{bundle['cyberadmin.common.button.disputedInvoice']}"
+                                rendered="#{isViewMode and (BILLED or CANCELLED or PAID or NOT_PAID)}"/>
+                    <p:commandButton value="#{bundle['cyberadmin.common.button.unpaid']}" styleClass="form-button"
+                                action="#{backingBean.changeStatus('NOT_PAID')}"
+                                title="#{bundle['cyberadmin.common.button.unpaid']}"
+                                rendered="#{isViewMode and (BILLED or BILL_REFUSED or CANCELLED)}"/>                          
+                    <p:commandButton value="#{bundle['cyberadmin.common.button.cancelInvoice']}" styleClass="form-button" 
+                                action="#{backingBean.changeStatus('CANCELLED')}"
+                                title="#{bundle['cyberadmin.common.button.cancelInvoice']}"
+                                rendered="#{isViewMode and (BILLED or BILL_REFUSED or PAID or NOT_PAID)}"/>  
+                    
+                    <p:commandButton value="#{bundle['cyberadmin.common.button.Paid']}" styleClass="form-button"
+                                action="#{backingBean.changeStatus('PAID')}"
+                                title="#{bundle['cyberadmin.common.button.Paid']}"
+                                rendered="#{isViewMode and (BILLED or BILL_REFUSED or CANCELLED or NOT_PAID)}"/>
+                                
+                    <ui:remove><!-- Case declaration status is REFUSED --></ui:remove>
+                    <p:commandButton value="#{bundle['cyberadmin.common.button.refuseContest']}"
+                                action="#{backingBean.changeStatus('TO_FILLED')}"
+                                title="#{bundle['cyberadmin.common.button.refuseContest']}"
+                                rendered="#{isViewMode and REFUSED}"/>
+                </h:panelGrid>
+        </h:panelGrid>
+        <script type="text/javascript">
+                function showDialogConfirmSend() {
+                    if(#{backingBean.showConfirmSend}) {
+                        dlgConfirm.show();
+                    }
+                }
+                function showConfirmErrorCresus() {
+                	if(#{backingBean.showConfirmErrorCresus}) {
+                		dlgErrorCresus.show();
+                    }
+                }
+        </script>
+        <h:panelGrid id="comment" styleClass="form-declaration-comment-table" rendered="#{hasRoleCOM or hasRoleGES or hasRoleADM}">
+             <ui:remove><!-- BUTTON DECLARATION --></ui:remove>
+                 <h:panelGrid width="100%" cellpadding="0" cellspacing="0" columns="2" columnClasses="float-left,float-right form-declaration-newcomment">
+                     <p:button value="#{bundle['cyberadmin.common.button.return']}" styleClass="form-button" 
+                                     outcome="declarationList.xhtml}"
+                                     title="#{bundle['cyberadmin.common.button.return']}"
+                                     rendered="#{isViewMode and hasRoleCOM}"/>
+                     <h:panelGroup rendered="#{!isViewMode or !hasRoleCOM}"/>
+                     <p:commandButton  value="#{bundle['cyberadmin.declarationDetail.button.newComment']}"
+                                styleClass="float-right" onclick="dlgComment.show();"
+                                actionListener="#{backingBean.setFlagReport(false)}"/>
+                 </h:panelGrid>
+             <ui:remove><!-- TABLE COMMENTS --></ui:remove>
+             <p:spacer height="2"/>
+             <p:dataTable id="comResult" value="#{commentaireListBean.dataTable.dataModel}" var="com"
+                    rows="#{webConstants['MAX_ROW']}" paginator="true" paginatorPosition="bottom" rowKey="#{item.id}"
+                    paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                    rowsPerPageTemplate="#{webConstants['PAGE_SIZES']}"
+                    sortBy="#{com.timestamp}" sortOrder="descending" emptyMessage="#{bundle['cyberadmin.common.table.noResult']}">
+                 
+                 <p:column sortBy="#{com.timestamp}" styleClass="align-left small-column">
+                        <f:facet name="header">
+                            <h:outputText value="#{bundle['cyberadmin.declarationDetail.comment.date']}" styleClass="text-bold"/>
+                       </f:facet>
+                         <h:outputText value="#{com.timestamp}">
+                                <f:convertDateTime pattern="#{webConstants['DATE_PATTERN']}" timeZone="#{commentaireListBean.currentTimezone}" />
+                         </h:outputText>
+                 </p:column>
+                 <p:column sortBy="#{com.fullnameUser}" styleClass="align-left medium-column">
+                       <f:facet name="header">
+                            <h:outputText value="#{bundle['cyberadmin.declarationDetail.comment.user']}" styleClass="text-bold"/>
+                       </f:facet>
+                       <h:outputText value="#{com.user.person.prenom} #{com.user.person.nom}" />
+                 </p:column>
+                 <p:column sortBy="#{com.message}" styleClass="align-left">
+                       <f:facet name="header">
+                             <h:outputText value="#{bundle['cyberadmin.declarationDetail.comment.message']}" styleClass="text-bold"/>
+                       </f:facet>
+                       <h:outputText value="#{com.message}" />
+                       
+                       <h:commandLink title="#{bundle['cyberadmin.common.button.document.download']}" 
+                                       immediate="true" rendered="#{com.attachment != null}" >   
+                            <h:graphicImage name="icon_attachment.png" library="icon" width="21" height="21" styleClass="float-right"/>
+                            <p:fileDownload value="#{backingBean.commentaireListBean.downloadAttachment(com.id)}" />
+                       </h:commandLink>
+                       
+                       
+                 </p:column>
+             </p:dataTable>
+        </h:panelGrid>
+        
+        <ui:remove><!-- Modal dialog using the main form --></ui:remove>
+            <p:dialog id="modalConfirm" widgetVar="dlgConfirm" modal="true" appendToBody="true" height="100" width="450" resizable="false" rendered="#{backingBean.showConfirmSend}"
+                    onHide="CyberAdmin.Modal.remove('form:modalConfirm')">
+                   <p:ajax event="close" listener="#{backingBean.showConfirmSend(false)}" process="@this"/>
+                   <h:panelGrid width="100%" cellpadding="0" cellspacing="0" columns="1">
+                         <h:outputText value="#{bundle['cyberadmin.declarationDetail.send.confirm']}" styleClass="text-bold" escape="false"/>
+                         <p:spacer width="20px"/>
+                         <h:panelGroup styleClass="float-right"> 
+                            <p:commandButton value="#{bundle['cyberadmin.common.button.cancel']}" type="button" styleClass="form-button"  onclick="dlgConfirm.hide();"/>
+                            <p:spacer width="5px"/>
+                            <p:commandButton id="btnEnvoyer" value="#{bundle['cyberadmin.common.button.send']}" styleClass="form-button" 
+                                 update="form"
+                                 title="#{bundle['cyberadmin.common.button.send']}" action="#{backingBean.send}"/>     
+                         </h:panelGroup> 
+                   </h:panelGrid>
+            </p:dialog>
+             <p:dialog id="modalConfirmErrorCresus" widgetVar="dlgErrorCresus" modal="true" height="100" width="450" appendToBody="true" resizable="false" rendered="#{backingBean.showConfirmErrorCresus}"
+                     onHide="CyberAdmin.Modal.remove('form:modalConfirmErrorCresus')">
+                     <p:ajax event="close" listener="#{backingBean.showConfirmErrorCresus(false)}" process="@this"/>
+                       <h:panelGrid width="100%" cellpadding="0" cellspacing="0" columns="1">
+                             <h:outputText value="#{bundle['cyberadmin.declarationDetail.errorCresus.confirm']}" styleClass="text-bold" escape="false"/>
+                             <p:spacer width="20px"/>
+                             <h:panelGroup styleClass="float-right"> 
+                                <p:commandButton value="#{bundle['cyberadmin.common.button.no']}" type="button" styleClass="form-button"  onclick="dlgErrorCresus.hide();"/>
+                                <p:spacer width="5px"/>
+                                <p:commandButton value="#{bundle['cyberadmin.common.button.yes']}" styleClass="form-button" 
+                                     title="#{bundle['cyberadmin.common.button.yes']}" action="#{backingBean.changeStatus('VALIDATED')}"/>     
+                             </h:panelGroup> 
+                       </h:panelGrid>
+             </p:dialog>
+        </ui:define>
+        <ui:define name="dialogModal">   
+            <p:dialog id="modalDialog" widgetVar="dlgComment" modal="true" width="650" appendToBody="true" 
+                    resizable="false">
+                <p:ajax event="close" listener="#{backingBean.commentaireDetailBean.resetFormAfterDialogHide}" update="modalDialog"/>
+                <h:form id="formAddComment" enctype="multipart/form-data">
+                    <p:focus context="formAddComment"/>
+                    <h:panelGrid id="messageRegion"/>
+                    <h:panelGrid id="comment" width="100%" cellpadding="5" cellspacing="0" columns="2" columnClasses="dec-commentaire-detail-col1">
+                        <h:outputLabel value="#{bundle['cyberadmin.declarationDetail.comment']}" styleClass="text-bold"/>
+                        <arcam:fileUploadDownload id="commentUploadDownload" 
+                                                  backingBeanHandler="#{backingBean.commentaireDetailBean}" 
+                                                  labelUploadButton="#{bundle['cyberadmin.common.button.document.upload']}"/>        
+                    </h:panelGrid>
+                    <h:panelGrid cellpadding="5" cellspacing="0" width="100%">
+                        <p:inputTextarea value="#{backingBean.commentaireDetailBean.entity.message}" required="true" label="#{bundle['cyberadmin.declarationDetail.comment']}"  
+                            autoResize="false" rows="10" styleClass="form-declaration-comment-textarea"/>
+                        <h:panelGroup styleClass="float-right">
+                            <p:commandButton value="#{bundle['cyberadmin.common.button.cancel']}" type="button" onclick="dlgComment.hide();"/>
+                            <p:spacer width="5px"/>
+                            <p:commandButton value="#{bundle['cyberadmin.common.button.send']}" actionListener="#{backingBean.addComment}" update="formAddComment,:form:comment"
+                                oncomplete="hideDialog();return true;" >
+                                <f:attribute name="tableResultId" value="form:comResult"/>
+                            </p:commandButton>
+                            <script type="text/javascript">
+				                function hideDialog() {
+				                    if(#{backingBean.addedCommentSuccessfully}) {
+				                    	dlgComment.hide();
+				                    	#{backingBean.setAddedCommentSuccessfully(false)};
+				                    }
+				                }
+				            </script>    
+                        </h:panelGroup>
+                    </h:panelGrid>
+                </h:form>
+            </p:dialog>
+    </ui:define>                    
+</ui:composition>

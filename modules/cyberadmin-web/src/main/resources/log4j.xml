@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/" debug="false">
+
+    <appender name="console" class="org.apache.log4j.ConsoleAppender">
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d %-5p [%-5t] %m%n" />
+        </layout>
+    </appender>
+
+    <appender name="appLogfile" class="org.apache.log4j.DailyRollingFileAppender">
+        <param name="File" value="${catalina.base}/logs/cyberadmin.log" />
+        <param name="DatePattern" value="'.'yyyy-MM-dd" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d %-5p [%t] [%c] %m%n" />
+        </layout>
+    </appender>
+    
+    <appender name="batchLogfile" class="org.apache.log4j.DailyRollingFileAppender">
+        <param name="File" value="${catalina.base}/logs/cyberadmin.log" />
+        <param name="DatePattern" value="'.'yyyy-MM-dd" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d %-5p [%t] [%c] %m%n" />
+        </layout>
+    </appender>
+    
+    <!--
+        Default Log Level is INFO
+        ALL > DEBUG > INFO > WARN > ERROR > FATAL
+    -->
+    
+    <logger name="org.arcam.cyberadmin" additivity="false">
+        <level value="INFO" />
+        <appender-ref ref="appLogfile" />
+        <appender-ref ref="console" />
+    </logger>
+    
+    <logger name="org.arcam.cyberadmin.service.job" additivity="false">
+        <level value="INFO" />
+        <appender-ref ref="batchLogfile" />
+        <appender-ref ref="console" />
+    </logger>
+    
+    <!-- Log just the SQL (equivalent to property hibernate.show_sql) -->
+    <!--  
+    <logger name="org.hibernate.SQL" additivity="false">
+        <level value="DEBUG" />
+        <appender-ref ref="appLogfile" />
+        <appender-ref ref="console" />
+    </logger>
+    -->
+     
+    <!--
+    <logger name="org.hibernate.engine.QueryParameters" additivity="false">
+        <level value="DEBUG" />
+        <appender-ref ref="appLogfile" />
+        <appender-ref ref="console" />
+    </logger>
+    -->
+    
+    <!--
+    <logger name="org.hibernate.engine.query.HQLQueryPlan" additivity="false">
+        <level value="DEBUG" />
+        <appender-ref ref="appLogfile"/>
+    </logger>
+    -->
+
+    <!-- Log JDBC bind parameters -->
+    <!-- 
+    <logger name="org.hibernate.type" additivity="false">
+        <level value="TRACE" />
+    </logger>
+     -->
+
+    <!-- Log schema export/update -->
+    <!--logger name="org.hibernate.tool.hbm2ddl">
+        <level value="DEBUG" />
+    </logger-->
+
+    <!-- Log HQL parse trees -->
+    <!--logger name="org.hibernate.hql">
+        <level value="DEBUG" />
+    </logger-->
+
+    <!-- Log cache activity -->
+    <!--logger name="org.hibernate.cache">
+        <level value="DEBUG" />
+    </logger-->
+
+    <!-- Log transaction activity -->
+    <!--logger name="org.hibernate.transaction">
+        <level value="DEBUG" />
+    </logger-->
+
+    <!-- Log JDBC resource acquisition -->
+    <!--
+    <logger name="org.hibernate.jdbc">
+        <level value="DEBUG" />
+    </logger>
+    -->
+
+    <!-- Enable the following line if you want to track down connection
+        leakages when using DriverManagerConnectionProvider -->
+    <!--logger name="org.hibernate.connection.DriverManagerConnectionProvider">
+        <level value="TRACE" />
+    </logger-->
+    
+    <root>
+        <level value="INFO" />
+        <appender-ref ref="console" />
+        <appender-ref ref="appLogfile" />
+    </root>
+</log4j:configuration>

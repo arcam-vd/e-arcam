@@ -1,0 +1,18 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	template="layouts/unauthenticatedLayout.xhtml">
+
+	<ui:define name="content">
+	   <h:panelGrid style="padding-left : 97px;">
+	       <h1>#{bundle['cyberadmin.authenticationError.title']}</h1>
+	       <h:outputText value="#{requestScope['javax.servlet.error.message']}" styleClass="error"></h:outputText>
+	       <h:outputLink value="#{facesContext.externalContext.context.contextPath}/welcome.xhtml">
+               <h:outputText value="#{bundle['cyberadmin.authenticationError.backToHomepageLink']}" />
+           </h:outputLink>
+	   </h:panelGrid>
+	</ui:define>
+</ui:composition>

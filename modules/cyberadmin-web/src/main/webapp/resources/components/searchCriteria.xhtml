@@ -1,0 +1,45 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:c="http://java.sun.com/jsp/jstl/core"
+    xmlns:composite="http://java.sun.com/jsf/composite">
+
+<!-- INTERFACE -->
+<composite:interface>
+    <composite:attribute name="id"/>
+    <composite:attribute name="backingBean"/>
+    <composite:attribute name="reRender"/>
+    <composite:attribute name="freeTextLabel"/>
+    <composite:attribute name="haveDefaultActionOnSearch" default="true"/>
+    <composite:attribute name="tableResultId" default=""/>
+</composite:interface>
+
+<!-- IMPLEMENTATION -->
+<composite:implementation>
+    <p:panel id="#{cc.attrs.id}">
+                <h:panelGrid columns="3" cellspacing="0" cellpadding="0" width="100%" 
+                    columnClasses="taxpayer-list-label-col, taxpayer-list-input-col, taxpayer-list-button-col">
+                    
+                    <h:outputLabel for="freetext" value="#{cc.attrs.freeTextLabel}" 
+                        styleClass="large-content-title" />
+                    <p:inputText id="freetext" value="#{cc.attrs.backingBean.criteria.freetext}"
+                                 converter="stringTrimmer" 
+                                 style="width: 255px;" maxlength="50" />
+                    <h:panelGrid columns="2" styleClass="float-right">
+                        <p:commandButton process="@this" value="#{bundle['cyberadmin.common.button.reset']}" update="freetext,#{cc.attrs.reRender}" action="#{cc.attrs.backingBean.resetSearchCriteriaToOriginal}"/>
+                        <p:commandButton id="researchBtnId#{cc.attrs.id}" value="#{bundle['cyberadmin.common.button.search']}" 
+                            actionListener="#{cc.attrs.backingBean.search}" update="#{cc.attrs.reRender}">
+                            <f:attribute name="tableResultId" value="#{cc.attrs.tableResultId}"/>
+                        </p:commandButton>
+                        <p:defaultCommand rendered="#{cc.attrs.haveDefaultActionOnSearch}" target="researchBtnId#{cc.attrs.id}"/>
+                    </h:panelGrid>
+                </h:panelGrid>
+                 
+    </p:panel>
+</composite:implementation>
+
+</html>

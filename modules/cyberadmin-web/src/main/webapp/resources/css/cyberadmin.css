@@ -1,0 +1,1529 @@
+html,body {
+    margin: 0 auto;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    margin: 0 auto !important;
+    font-size: 12px !important;
+    background-color: #F1F1F1;
+    font-family: "Century Gothic", Arial, Helvetica, Sans-Serif !important;
+    font-style: normal;
+    font-weight: normal !important;
+    color: #2A2C26;
+}
+
+#main {
+    width: 1000px;
+}
+
+.logout-link {
+    color: white !important;
+    font-weight: normal !important;
+    text-decoration: none !important;
+}
+
+#header div.ui-layout-unit-content {
+    /*Prevent display scroll bar at header title bar default value is auto by primefaces.*/
+    overflow-y: hidden !important;
+}
+
+#headerImage {
+    background-image: url(../resources/images/header_bg.png);
+    background-repeat: repeat-x;
+    width: 100%;
+    min-width: 900px;
+    height: 64px;
+    position: relative;
+    top: 0px;
+    left: 0px;
+}
+
+#headerLogo {
+    background-image: url(../resources/images/logo.png);
+    width: 200px;
+    height: 64px;
+    float: left;
+    vertical-align: top;
+}
+
+#headerInfo {
+    color: #FFFFFF !important;
+    float: right;
+    font-size: 9pt;
+    margin: 0;
+    padding-right: 30px;
+    padding-top: 10px;
+    text-decoration: none;
+}
+
+#headerTitle {
+    color: #FFFFFF;
+    font-size: 18pt;
+    font-weight: normal;
+    left: 220px;
+    padding: 0;
+    position: absolute;
+    text-align: right;
+    text-decoration: none;
+    top: 24px;
+}
+
+#headerLink {
+    float: right;
+    width: 500px;
+    margin-top: 20px;
+}
+
+#menuLink {
+    float: right;
+}
+
+.menuItem {
+    padding: 5px;
+}
+
+.header-bar-form,.header-bar-form .ui-layout-unit-content {
+    padding: 0 !important;
+}
+
+.header-bar-form {
+    border: none;
+}
+
+.center-content {
+    top: 92px !important;
+}
+
+/*STYLE FOR MENU BAR*/
+#menuBar,#menuBar form {
+    height: 29px;
+    background-color: #31859B;
+}
+
+#menuBar *,#menuBar .ui-menuitem-text {
+    color: white;
+    font-weight: bold;
+}
+
+#menuBar .menu-item-child .ui-menuitem-text {
+    color: #00B53A;
+}
+
+#menuBar .ui-menu-list {
+    background-color: #F2F2F2;
+}
+
+#menuBar .ui-menu {
+    background: none repeat scroll 0 0 transparent;
+    padding: 0 0 0 0;
+}
+
+#menuBar .ui-menu .ui-menuitem {
+    margin: 0 0 0 0;
+}
+
+#menuBar .ui-widget-content {
+    border: none;
+}
+
+#menuBar .ui-menu .ui-menu-parent .ui-menu-child {
+    width: 200px;
+}
+
+#menuBar .ui-widget-content .ui-icon {
+    background-image: url(../resources/images/menu-arrow.png);
+    height: 16px;
+    width: 16px;
+}
+
+#menuBar .ui-icon-triangle-1-s {
+    background-position: 0 0;
+    margin-left: 8px;
+    padding-right: 15px;
+}
+
+a.header_link {
+    color: #FFFFFF;
+    font-weight: normal !important;
+    text-decoration: underline;
+}
+
+.current-lang-selected{
+    font-weight: normal !important;
+}
+
+a.header_link:hover {
+    color: #575A4E;
+    text-decoration: none;
+}
+
+/*STYLE FOR LANGUAGE BAR*/
+.cyber-language-bar,.cyber-language-bar .cyber-language-item {
+    height: 100%;
+}
+
+.cyber-language-bar .cyber-language-item {
+    float: right;
+    padding: 5px 0 5px 0;
+}
+
+.cyber-language-bar .cyber-language-item a {
+    padding-right: 9px;
+    padding-left: 8px;
+}
+
+/* STYLE FOR ERROR */
+.error {
+    color: red;
+}
+/* STYLE FOR COMMON FORM */
+.common-detail-form {
+    padding: 20px 0 0 20px;	
+}
+
+.form-input {
+    width: 400px;
+}
+
+.form-label {
+}
+
+.form-button {
+   width: 120px !important;
+}
+
+.form-table {
+    
+}
+
+.data-table-row-link {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.large-content-title {
+    font-weight: bold;
+    font-size: 14px;
+}
+
+/* STYLE FOR LAYOUT AND ALIGN */
+.float-right {
+    float: right;
+}
+
+.float-left {
+    float: left;
+}
+
+.align-bottom {
+    vertical-align: bottom;
+}
+
+.align-top {
+    vertical-align: top;
+}
+
+.align-middle {
+    vertical-align: middle;
+}
+
+.number-align {
+    text-align: right;
+}
+
+.text-align {
+    text-align: left !important;
+}
+
+.text-bold {
+    font-weight: bold !important;
+}
+
+/* COMMON STYLES */
+.ui-widget-content .table-cell{
+    text-decoration: none;
+    color: #000000
+}
+
+/* STYLE FOR NEW BIEN TAXE */
+.first-column-bienTaxe {
+  width: 200px;  
+}
+
+.second-column-bienTaxe {
+  width: 640px;   
+}
+
+.second-column-bienTaxe-infor{
+    width: 400px;
+}
+
+.second-column-button-bienTaxe {
+    width: 454px;
+}
+
+.third-column-bienTaxe {
+    width: 100px;  
+}
+.form-bienTaxe-input {
+    width: 445px !important;
+}
+
+.form-bienTaxe-month {
+    width: 100px;
+}
+
+.form-bienTaxe-year {
+    width: 100px;
+}
+
+.form-bienTaxe-label {
+    font-weight: bold;
+}
+
+.form-bienTaxe-commune-label {
+    font-weight: bold;
+    padding-left: 2px;
+}
+.form-bienTaxe-child-title {
+     padding-left: 15px;
+}
+
+.form-bienTaxe-child-label {
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.form-bienTaxe-localite-to-label{
+    padding-left: 5px;
+    padding-right: 2px;
+}
+
+/* CSS common for using find by Jquery npa localite*/
+.form-localite {
+}
+
+.form-bienTaxe-child-input {
+    
+}
+
+.form-bienTaxe-eGrid {
+    width: 150px;
+}
+
+.form-bienTaxe-eWid {
+     width: 50px;
+}
+
+.form-bienTaxe-rue {
+    width: 270px;
+}
+
+.form-bienTaxe-no {
+    width: 100px;
+}
+
+.form-bienTaxe-npa input{
+    width: 150px !important;
+}
+
+.form-bienTaxe-localite {
+     width: 180px;
+}
+
+.form-bienTaxe-localite-from {
+    width:100px;
+}
+
+.form-bienTaxe-localite-to {
+    width:100px;
+}
+.form-combobox {
+    width: 453px !important;
+}
+
+.form-child-table {
+    width: 455px;
+}
+
+.form-bienTaxe-type-label {
+     padding-left: 10px;
+}
+
+table.declaration-art {
+    vertical-align: bottom;
+}
+
+.combobox-size {
+    width:  416px !important;
+}
+
+/* STYLE FOR DECLARATION */
+.first-column-declaration-header {
+    min-width: 900px;
+}
+
+.second-column-declaration-header {
+    min-width: 60px;
+}
+
+.form-declaration-pirnter {
+    padding-left : 5px;
+}
+
+.form-declaration-attendtion {
+    font-size: 13px;
+    font-weight: bold;  
+}
+
+.first-column-declaration-adresse-comment {
+    width: 530px !important;
+}
+
+.second-column-declaration-adresse-comment {
+    
+}
+
+.frist-column-declaration-adressFacturation {
+    width: 150px !important;
+}
+
+.second-column-declaration-adressFacturation {
+    width: 445px !important;
+}
+
+.first-column-declaration-calcul {
+    width: 900px;
+}
+
+.second-column-declaration-calcul {
+    width: 300px;
+}
+
+.first-column-declaration-child-calcul {
+    width: 200px !important;
+}
+
+.second-column-declaration-second-calcul {
+    
+}
+
+.form-declaration-taxCalcul-input {
+    width: 400px;
+}
+
+.first-column-declaration-periode {
+    width: 200px !important;
+}
+
+.first-column-declaration-amountToPaid {
+    width: 700px; 
+}
+
+.first-column-declaration-amountToPaid-title {
+    width: 400px;
+}
+
+.second-column-declaration-amountToPaid-currency {
+    width: 100px;
+}
+
+
+.form-declaration-taxCalcul-example-header {
+    font-weight: bold;
+}
+
+.form-declaration-comment {
+    width: 625px !important;
+    height: 200px !important;
+}
+.form-declaration-input {
+    width: 300px;   
+}
+
+.form-declaration-cb-adresse {
+    width : 150px;
+}
+
+.form-declaration-peAdress-buton {
+    width: 150px;
+    height: 30px;
+}
+
+.form-declaration-taxeCalcul-table {
+    width : 410px;
+}
+
+.form-declaration-label {
+     font-weight: bold;
+}
+
+.form-declaration-currency-label {
+    font-size: 20px;
+}
+
+.form-declaration-localite {
+    width: 180px;    
+}
+
+.form-declaration-rue-facturation {
+    width: 200px;
+}
+
+.form-declaration-no-facturation {
+    width: 50px;
+}
+
+.form-declaration-rue {
+    width: 220px;
+}
+
+.form-declaration-eGrid {
+    width: 160px;
+}
+
+.form-declaration-eWid {
+     width: 80px;
+}
+
+.form-declaration-child-label {
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.form-declaration-child-table-taxe {
+    width: 440px;    
+}
+
+.form-declaration-child-table-taxe-COM {
+    width: 560px;    
+}
+
+.form-declaration-child-table {
+    width: 310px;
+}
+
+.form-declaration-no {
+    width: 100px;
+}
+
+.form-declaration-npa{
+    width : 100px !important; 
+}
+
+.form-declaration-npa input{
+    width : 100px !important;
+}
+
+.form-declaration-pays {
+    width : 120px !important;
+}
+
+.form-declaration-pays input {
+    width : 120px !important;
+}
+
+.form-declration-section-title {
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.form-declaration-title {
+    font-size: 17px;
+    font-weight: bold;
+}
+
+.form-declaration-attention {
+    font-size: 15px;
+}
+
+
+.form-declaration-exoneration-table{
+    width: 950px;
+}
+
+.first-table-exoneration .ui-state-default{
+	background: none;
+}
+
+.first-table-exoneration table th:first-child{
+    border-top: none;
+    border-left: none;
+}
+
+.ui-datatable .ui-datatable-data td.form-exoneration-chf-cell{
+	border-width : 0px;
+    border-bottom: none;
+}
+
+.form-exoneration-table-total .ui-widget-content{
+	border : 0px solid #8C8C8C;
+}
+
+.table-exoneration-total-cell{
+	background-color: #E7E7E7;
+}
+
+.form-taxpayer-label {
+    font-weight: bold;
+}
+
+.form-delcaration-child {
+    padding-left: 30px;
+    padding-right: 10px;
+}
+
+.notification-declaration {
+    font-size: 12px;
+    padding-left: 30px;
+}
+
+.form-declaration-exoneration-table-column {
+    width: 140px;
+}
+
+.form-declaration-exoneration-table-input {
+    width: 130px;
+}
+
+.form-declaration-address {
+    font-size: 1.15em;
+    font-weight: bold;
+}
+
+.form-declaraion-adreeseDuBien {
+    width: 440px !important;
+}
+
+.form-declaraion-adreeseDuBien-modifierEGridEWid {
+     width: 410px !important;
+}
+
+.form-declaration-address-residence {
+   width: 618px !important;
+}
+
+.first-column-declaration-residence {
+    width: 405px;
+}
+
+.second-column-declaration-residence {
+    width: 200px;
+}
+
+.form-declaration-residence-calendar {
+    width: 188px !important;
+}
+
+.first-column-declaration-residence-estimation {
+     width: 337px;
+}
+
+.second-column-declaration-residence-estimation {
+     width: 70px;
+}
+
+.form-declaration-residece-input-estimation {
+    width: 180px !important;
+}
+
+.first-column-declaration-location {
+    width: 150px !important;
+}
+
+.form-declaration-location-lable {
+    font-weight: bold;
+}
+
+.form-declaration-location-lable-child {
+    padding-left: 20px;
+}
+
+.ui-inputfield.form-declaration-currency-input {
+    width: 200px;
+    font-size: 18px !important;
+    font-weight: bold !important;
+}
+
+.first-column-form-declaration-currency {
+    width: 900px;
+}
+
+.first-column-form-declaration-ajust {
+    width: 900px
+}
+
+.form-declaration-ajust-input-comment {
+    width:  500px;  
+}
+.second-column-form-declaration-ajust {
+    width: 700px;
+}
+
+.form-declaration-currency-combobox {
+    width: 358px !important;
+}
+
+.form-declaration-ajustComment {
+    width: 350px !important;
+}
+
+.form-declaration-status-periodicite {
+    width: 566px !important;
+}
+
+.first-column-declaration-ajust-status {
+    width: 200px;
+}
+
+.first-column-declaration-view-button {
+    width: 400px;
+}
+
+.first-column-declaration-notification-header {
+    width: 92%;
+}
+
+.first-column-declaration-location-roomNumber {
+    width: 210px;
+}
+
+.form-declaration-location-radio-numberRomm {
+    width: 300px;    
+}
+
+.first-column-declaration-location-info {
+    width: 155px;
+}
+
+.form-declaration-location-input {
+    width: 300px;
+}
+
+.form-declaration-location-table {
+    width: 310px;
+}
+
+.form-declaration-location-combobox-exo {
+    width: 303px;
+}
+
+.form-declaration-location-week-input {
+    width: 250px;
+}
+
+.form-declaration-location-week-padding {
+    padding-right: 15px !important;
+}
+
+.first-column-declaration-detail-header {
+    width: 530px;
+}
+
+.form-declaration-detail-header {
+    border: none;
+    padding-left: 0px;
+}
+
+.form-declaration-detail-header-combo {
+    width: 308px !important;
+}
+
+.form-declaration-detail-header-padding {
+    padding: 0px !important;
+}
+
+.form-declaration-id {
+    width: 100px;
+}
+
+.form-declaration-table-header {
+    width: 310px;
+}
+
+.form-declaration-newcomment {
+     border: none;    
+}
+
+.form-declaration-comment-table {
+    width: 100%;
+}
+
+.form-declaration-comment-textarea {
+    width: 100%
+}
+
+.form-declaration-amountToPaidZoneMsges {
+    padding-left: 450px;
+    width: 100%
+}
+
+.form-declaration-zoneMsges-residence {
+    padding-left: 200px;
+    max-width: 900px !important;
+    word-wrap: break-word;
+}
+
+.form-declaration-zoneMsges-hotel {
+    padding-left: 400px;
+    max-width: 400px !important;
+    word-wrap: break-word;
+}
+
+.form-declaration-zoneMsges-camping {
+    padding-left: 400px;
+    max-width: 400px !important;
+    word-wrap: break-word;
+}
+
+.form-declaration-zoneMsges-institut {
+    padding-left: 400px;
+    max-width: 400px !important;
+    word-wrap: break-word;
+}
+
+.form-declaration-zoneMsges-chambre {
+    padding-left: 400px;
+    max-width: 400px !important;
+    word-wrap: break-word;
+}
+
+.form-declaration-zoneMsges-location {
+    padding-left: 300px;
+    max-width: 600px !important;
+    word-wrap: break-word;
+}
+
+.form-declaration-helper {
+    max-width: 550px !important;
+    width: 550px !important;
+    word-wrap: break-word !important;
+}
+/* END STYLE FOR DECLARATION */
+
+/* STYLE FOR DECLCATATION FINISH*/
+.first-column-declaration-finish {
+    width: 400px;
+}
+
+.form-declaration-finish-text {
+    font-weight: bolder;
+    font-size: 15px;
+}
+
+
+/* END STYLE FOR DECLCATATION FINISH*/
+
+/* STYLE FOR DECLARATION LIST */
+.dec-list-label-col {
+    width: 160px;
+}
+
+.dec-list-input-col {
+    width: 350px;
+}
+
+.dec-list-button-col {
+    text-align: right;
+}
+
+.dec-list-field-size {
+    width: 255px;
+}
+
+.dec-list-date-field input {
+    width: 102px;
+}
+
+.dec-list-child-field {
+    padding-left: 20px;
+    padding-right: 10px;
+}
+
+.dec-list-combobox-field {
+    width: 258px;
+}
+
+.dec-list-cell-TO_FILLED-ASJ {
+    background-color: #FFFF00 !important;
+}
+
+.dec-list-cell-REFUSED-ASJ {
+    
+}
+
+.dec-list-cell-EGID_VALIDATED-ASJ {
+    
+}
+
+.dec-list-cell-FILLED-ASJ {
+    
+}
+
+.dec-list-cell-VALIDATED-ASJ {
+    
+}
+
+.dec-list-cell-BILLED-ASJ {
+    
+}
+
+.dec-list-cell-NOT_PAID-ASJ {
+    
+}
+
+.dec-list-cell-BILL_REFUSED-ASJ {
+    
+}
+
+.dec-list-cell-PAID-ASJ {
+    
+}
+
+.dec-list-cell-NOT_SUBJECTES-ASJ {
+    
+}
+
+.dec-list-cell-CANCELLED-ASJ {
+    
+}
+
+.dec-list-cell-TO_FILLED-COM {
+    
+}
+
+.dec-list-cell-REFUSED-COM {
+    background-color: #FF0000 !important;
+}
+
+.dec-list-cell-EGID_VALIDATED-COM {
+    background-color: #FFFF00 !important;
+}
+
+.dec-list-cell-FILLED-COM {
+    
+}
+
+.dec-list-cell-VALIDATED-COM {
+    
+}
+
+.dec-list-cell-BILLED-COM {
+    
+}
+
+.dec-list-cell-NOT_PAID-COM {
+    
+}
+
+.dec-list-cell-BILL_REFUSED-COM {
+    background-color: #FF0000 !important;
+}
+
+.dec-list-cell-PAID-COM {
+    
+}
+
+.dec-list-cell-NOT_SUBJECTES-COM {
+    
+}
+
+.dec-list-cell-CANCELLED-COM {
+    
+}
+
+.dec-list-cell-TO_FILLED-GES {
+    background-color: #FFFF00 !important;
+}
+
+.dec-list-cell-REFUSED-GES {
+    background-color: #FF0000 !important;
+}
+
+.dec-list-cell-EGID_VALIDATED-GES {
+    background-color: #D0D0D0 !important;
+}
+
+.dec-list-cell-FILLED-GES {
+    background-color: #FFFF00 !important;
+}
+
+.dec-list-cell-VALIDATED-GES {
+    
+}
+
+.dec-list-cell-BILLED-GES {
+    background-color: #7CFC00 !important;
+}
+
+.dec-list-cell-NOT_PAID-GES {
+    
+}
+
+.dec-list-cell-BILL_REFUSED-GES {
+    background-color: #FF0000 !important;
+}
+
+.dec-list-cell-PAID-GES {
+    
+}
+
+.dec-list-cell-NOT_SUBJECTES-GES {
+    
+}
+
+.dec-list-cell-CANCELLED-GES {
+    
+}
+
+.dec-list-cell-TO_FILLED-ADM {
+    background-color: #FFFF00 !important;
+}
+
+.dec-list-cell-REFUSED-ADM {
+    background-color: #FF0000 !important;
+}
+
+.dec-list-cell-EGID_VALIDATED-ADM {
+    background-color: #D0D0D0 !important;
+}
+
+.dec-list-cell-FILLED-ADM {
+    background-color: #FFFF00 !important;
+}
+
+.dec-list-cell-VALIDATED-ADM {
+    
+}
+
+.dec-list-cell-BILLED-ADM {
+    background-color: #7CFC00 !important;
+}
+
+.dec-list-cell-NOT_PAID-ADM {
+    
+}
+
+.dec-list-cell-BILL_REFUSED-ADM {
+    background-color: #FF0000 !important;
+}
+
+.dec-list-cell-PAID-ADM {
+    
+}
+
+.dec-list-cell-NOT_SUBJECTES-ADM {
+    
+}
+
+.dec-list-cell-CANCELLED-ADM {
+    
+}
+
+.dec-list-cell-overdue {
+    color: red !important; 
+    font-weight: bold;
+}
+
+.dec-list-button-new {
+    padding-right: 10px !important;
+}
+
+.dec-commentaire-detail-col1{
+	width : 100px !important;
+}
+
+/* END STYLE FOR DECLARATION LIST */
+
+/* STYLE FOR TAXPAYER LIST */
+
+.taxpayer-list-data-table td:nth-child(1) {
+    width: 75px;
+}
+
+.taxpayer-list-data-table td:nth-child(2) {
+    width: 200px;
+}
+
+.taxpayer-list-data-table td:nth-child(3) {
+    width: 200px;
+}
+
+.taxpayer-list-data-table td:nth-child(4) {
+    width: 200px;
+}
+
+.taxpayer-list-data-table td:nth-child(6) {
+    width: 200px;
+}
+
+.taxpayer-list-label-col {
+    width: 150px;
+}
+
+.taxpayer-list-input-col {
+    width: 350px;
+}
+
+.taxpayer-list-button-col {
+    text-align: right;
+}
+
+/* END STYLE FOR TAXPAYER LIST */
+
+/* STYLES FOR TAXPAYER REGISTRATION FORM */
+.unauthenticated-content-form {
+    padding : 10px 0 0 30px;
+}
+
+.unauthenticated-content-detail{
+    padding : 10px 0 0 30px;
+}
+
+.txp-registration-firstcolumn{
+	max-width : 170px;
+    width : 170px;
+}
+
+.txp-registration-thirdcolumn {
+	max-width : 132px;
+    width: 132px;
+}
+
+.form-register-taxpayer-table {
+    width: 315px !important;
+}
+
+.form-register-taxpayer-address {
+    font-size: 1.15em;
+}
+
+.form-register-taxpayer-npa input {
+    width: 80px !important;
+}
+
+.form-register-taxpayer-localite {
+    width: 113px !important;
+}
+
+.form-register-taxpayer-combo-pays {
+    width: 313px !important;
+}
+
+.form-register-taxpayer-rue {
+    width: 170px !important;
+}
+
+.form-register-taxpayer-no {
+     width: 70px !important;
+}
+
+.form-register-taxpayer-input {
+    width: 305px !important;
+}
+
+.txt-registration-street-col1{
+	width: 150px !important;
+}
+.txt-registration-street-col2{
+	padding-left: 10px !important;
+}
+
+
+.first-col-user-child-table {
+    width: 228px !important;
+}
+
+.second-col-user-child-table {
+    width: 88px !important;
+}
+
+.form-user-input-combobox-user, .form-user-input-combobox-user input {
+    width: 258px !important;
+}
+
+.form-user-input-combobox-pay, .form-user-input-combobox-pay input {
+    width: 150px !important;
+}
+
+.form-user-input-adresse {
+    width: 577px !important;
+}
+
+.form-user-input-localite {
+    width: 348px !important;
+}
+
+.form-user-input {
+    width: 250px !important;
+}
+
+.form-user-input-rue {
+    width: 250px !important;    
+}
+
+.form-user-input-prenom, .form-user-input-status {
+    width: 230px !important;
+}
+
+.form-user-input-no {
+    width: 80px !important;
+}
+
+.form-user-npa-complete {
+    width: 100% !important;
+}
+
+.form-user-input-email {
+    width: 250px !important;
+}
+
+.form-user-input-telephone {
+    width: 230px !important;
+}
+
+.form-user-buttons {
+    width : 748px !important;
+}
+
+.full-container-space-field,.full-container-space-combo-field{
+    width: 100% !important;
+}
+
+.taxpayer-registration-detail-top {
+    width: 650px !important;
+}
+
+.taxpayer-registration-detail {
+    width: 510px !important;
+}
+
+.full-container-space-combo-field input{
+	width : 100% !important;
+}
+
+.full-container-space-combo-edit-field, .full-container-space-combo-edit-field input {
+    width : 250px !important;
+}
+
+.ui-inputfield.full-container-space-field{
+    padding : 4px;
+}
+/* STYLE FOR TAXPAYER DETAIL*/
+
+.first-column-taxpayer {
+    width:  150px !important;
+}
+
+.form-taxpayer-input-table {
+    width: 500px;
+}
+
+.form-taxpayer-combobox {
+    width: 100px !important;
+}
+
+.form-taxpayer-address-label {
+    padding-left: 3px;
+    font-weight: bold;
+    font-size: 1.15em;
+}
+
+.form-taxpayer-nom {
+    width: 200px;
+}
+
+.form-taxpayer-prenom {
+    width: 200px;
+}
+
+.form-taxpayer-organisation {
+    width: 200px;
+}
+
+.form-taxpayer-addition-address {
+    width: 490px;
+}
+
+.form-taxpayer-rue {
+    width: 200px;
+}
+
+.form-taxpayer-no {
+    width: 100px;
+}
+
+.form-taxpayer-npa input {
+    width: 130px;
+}
+
+.form-taxpayer-localite {
+    width: 250px;
+}
+
+.form-taxpayer-email {
+    width: 250px;
+}
+
+.form-taxpayer-telephone {
+    width: 100px;
+}
+
+.form-taxpayer-declaration-table-blurred {
+    background-color: blue;
+}
+
+/* USER LIST STYLES */
+.ui-datatable .ui-datatable-data td .user-list-status-DISABLED,
+.ui-datatable .ui-datatable-data td .user-list-status-INVALIDATED{
+	float:right;
+	clear : right;
+}
+.ui-datatable .ui-datatable-data td .user-list-status-DISABLED{
+	background: url(../resources/images/disabled.png) no-repeat right;
+}
+
+.ui-datatable .ui-datatable-data td .user-list-status-INVALIDATED{
+    background: url(../resources/images/invalidated.png) no-repeat right ;
+}
+
+/* USER DETAIL STYLES */
+.user-detail-address-label {
+    font-size: 1.15em; 
+}
+
+.user-detail-col3{
+	padding-left : 44px;
+}
+
+.user-detail-col1, .user-detail-adress-col1 {
+	width: 150px !important;
+}
+
+.user-detail-adress-col1{
+	vertical-align: top;
+}
+
+.user-detail-col2{
+	width:250px !important;
+}
+
+.npa-complete-col1{
+	width:180px;
+}
+
+.npa-complete-col2{
+	width : 60px;
+	/*padding-left : 30px;*/
+}
+
+.user-detail-secondcol-table-col1{
+	width:75px;
+}
+
+.user-detail-streetnumber-table-col1{
+	width:21px;
+}
+
+.user-detail-panel{
+	padding : 20px 0 0 20px;
+	width : 750px;
+    height : 100%;
+}
+
+.ui-state-disabled.user-detail-status-field-active, 
+.ui-widget-content .ui-state-disabled.user-detail-status-field-active, 
+.ui-widget-header .ui-state-disabled.user-detail-status-field-active {
+	background-color: #9DBB61 !important;
+}
+
+.ui-state-disabled.user-detail-status-field-inactive, 
+.ui-widget-content .ui-state-disabled.user-detail-status-field-inactive, 
+.ui-widget-header .ui-state-disabled.user-detail-status-field-inactive {
+    background-color: red !important;
+}
+
+.ui-state-disabled.user-detail-status-field-not-validated, 
+.ui-widget-content .ui-state-disabled.user-detail-status-field-not-validated, 
+.ui-widget-header .ui-state-disabled.user-detail-status-field-not-validated {
+    background-color: yellow !important;
+}
+
+/* GENERATE MAILING */
+.first-col-form-generate-mailing {
+    width: 200px;
+}
+.form-generate-mailing-typeEmail {
+    width: 300px;
+}
+.form-generate-mailing-typeGenerate {
+    width: 292px;
+}
+
+/* GENERATE STATISTIC */
+.first-col-form-generate-statistic {
+    width: 200px;
+}
+
+.form-generate-statistic-category {
+    width: 300px;
+}
+
+.form-generate-statistic-commune {
+    width: 300px;
+}
+
+.generate-mailing-checkbox-email-lbl {
+    color: gray;    
+}
+
+.form-generate-statistic-period-table {
+    width: 307px;
+}
+/* TAXPAYER VALIDATION LIST */
+.content-header{
+    padding : 10px 0 20px 5px;
+}
+
+.taxpayer-validation-detail-header{
+	padding: 10px 0 20px 15px; 
+}
+
+
+/* STYLE FOR JOURNAL LIST */
+.journal-list-search-label-col {
+    width: 180px;
+}
+
+.journal-list-label-col {
+    width: 120px;
+}
+
+.journal-list-input-col {
+    width: 350px;
+}
+
+.journal-list-button-col {
+    text-align: right;
+}
+
+.journal-list-field-size {
+    width: 255px;
+}
+
+.journal-list-date-field input {
+    width: 102px;
+}
+
+.journal-list-data-table td:nth-child(1) {
+    width: 100px;
+}
+
+.journal-list-data-table td:nth-child(2) {
+    width: 150px;
+}
+
+.journal-list-data-table td:nth-child(3) {
+    width: 150px;
+}
+
+.journal-result-first-col {
+    width: 60%;
+    vertical-align: top; 
+}
+
+.journal-result-second-col {
+    vertical-align: top; 
+}
+
+.journal-input-area {
+    width: 100%;
+}
+
+/* END STYLE FOR JOURNAL LIST */
+/* STYLES FOR VALIDATE FACTURES SCREEN */
+.billed-declaration-table .ui-datatable .ui-datatable-data td.billed-declaration-radio-column .ui-dt-c{
+	width:20px;
+	margin-left :auto;
+    margin-right:auto;
+}
+
+.billed-declaration-radio-column {
+    width: 75px;
+}
+
+/* DECLARATION REFUSE */
+.declaration-refuse-form{
+	padding: 20px 0 0 20px;
+	min-width: 800px;
+}
+
+/* COMMON WIDTH FOR COLUMNS IN TABLES */
+.id-column{
+	width : 60px !important;
+}
+
+.small-column{
+	width : 75px !important;
+}
+
+.medium-column {
+	width : 150px !important;
+}
+
+.large-column {
+    width : 250px !important;
+}
+
+.huge-column {
+    width : 350px !important;
+}
+
+/* END COMMON WIDTH FOR COLUMNS IN TABLES */
+
+.forgetpass-detail-col1{
+	width : 150px !important;
+}	
+
+.form-forgotPassword-table {
+    width: 550px !important;
+}
+
+.form-forgotPassword-email {
+    width: 400px !important;
+}
+
+/* WAITING DIALOG STYLES */
+.waiting-dialog-container{
+	border: none;
+}
+
+.ui-shadow.waiting-dialog-container{
+	box-shadow : none;
+	-moz-box-shadow: none;
+}
+
+.ui-widget-content.waiting-dialog-container ,.ui-dialog.waiting-dialog-container .ui-dialog-content{
+	background: transparent; 
+	border: none;
+}
+/* END OF WAITING DIALOG STYLES */
+
+.mash-show {
+    opacity: 1;
+    background: transparent;
+    background-color: transparent;
+}
+
+/* STYLE FOR DIALOG HELP TEXT */
+.ui-dialog-helpText {
+    max-width: 800px;
+    width: auto !important;
+    min-width: 600px;
+    min-height: 150px;
+    height: auto !important;
+}

@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<faces-config version="2.0" xmlns="http://java.sun.com/xml/ns/javaee"
+    xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd">
+    
+    <application>
+        <el-resolver>org.springframework.web.jsf.el.SpringBeanFacesELResolver</el-resolver>
+        <locale-config>
+            <default-locale>fr_CH</default-locale>
+            <supported-locale>fr_CH</supported-locale>
+            <supported-locale>en</supported-locale>
+        </locale-config>
+        <resource-bundle>
+            <base-name>org.arcam.cyberadmin.ui.i18n.MessagesBundle</base-name>
+            <var>bundle</var>            
+        </resource-bundle>
+        <resource-bundle>
+            <base-name>org.arcam.cyberadmin.ui.i18n.ErrorsBundle</base-name>
+            <var>errorMsg</var>
+        </resource-bundle>
+    </application>
+    
+    <factory>
+        <exception-handler-factory>org.arcam.cyberadmin.ui.core.exception.CyberadminExceptionHandlerFactory</exception-handler-factory>
+    </factory>
+    
+    <lifecycle>
+        <phase-listener>org.arcam.cyberadmin.ui.core.listener.CyberAdminFilterHeaderListener</phase-listener>
+    </lifecycle>
+    
+</faces-config>

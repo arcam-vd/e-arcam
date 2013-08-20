@@ -1,0 +1,196 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:arcam="http://java.sun.com/jsf/composite/components"
+    xmlns:sec="http://www.springframework.org/security/tags"
+    template="../layouts/mainLayout.xhtml">
+
+<f:metadata>
+    <f:event listener="#{declarationListBean.countNotificationInfo}" type="preRenderView" />
+</f:metadata>
+
+<ui:param name="backingBean" value="#{declarationListBean}"/>
+<ui:param name="titlePage" value="#{bundle['cyberadmin.declarationList.pageTitle']}" />
+<ui:param name="helperText" value="#{helpMsg['cyberadmin.declarationList.help']}"/>
+
+<ui:define name="content">
+    <h:form id="form">
+        <p:focus context="form"/>
+        <h:panelGrid width="100%">
+        
+            <!-- Notification area -->
+            <p:panel id="notification" header="#{backingBean.notificationHeader}" 
+                toggleable="true" toggleSpeed="200" rendered="#{sec:areAnyGranted('ADM, GES, ASJ')}">
+                <h:panelGrid columns="1" styleClass="notification-declaration" rendered="#{sec:areAnyGranted('ASJ')}">
+                    <h:panelGroup>
+                        <h:outputText style="font-weight:bold" value="#{bundle['cyberadmin.declarationList.caution']}:" escape="false" />
+                    </h:panelGroup>
+                    <h:panelGroup>
+                        <h:outputText value="#{backingBean.asjNotificationPart1}" escape="false" />
+                        <p:commandLink actionListener="#{backingBean.showAsjToFilledDeclarations}" update="criteria, table">
+                            <h:outputFormat value="#{bundle['cyberadmin.declarationList.declarationParam']}" escape="false">
+                                <f:param value="#{backingBean.asjToFilledDecCount}" />
+                            </h:outputFormat>
+                        </p:commandLink>
+                        <h:outputText value="#{backingBean.asjNotificationPart2}" escape="false" />
+                        <p:commandLink actionListener="#{backingBean.showAsjCurrentToFilledDeclarations}" update="criteria, table">
+                            <h:outputFormat value="#{bundle['cyberadmin.declarationList.declarationParam']}" escape="false">
+                                <f:param value="#{backingBean.asjCurrentToFilledDecCount}" />
+                            </h:outputFormat>
+                        </p:commandLink>
+                        <h:outputText value="#{backingBean.asjNotificationPart3}" escape="false" />
+                    </h:panelGroup>
+                    <p:spacer height="5" />
+                    <h:panelGroup>
+                        <h:outputText value="#{bundle['cyberadmin.declarationList.listDescriptionMsg']}" escape="false" />
+                    </h:panelGroup>
+                    <p:spacer height="5" />
+                    <h:panelGroup>
+                        <h:outputText value="#{bundle['cyberadmin.declarationList.newDeclarationMsg']}" escape="false" />
+                    </h:panelGroup>
+                </h:panelGrid>
+                
+                <h:panelGrid columns="1" styleClass="notification-declaration" rendered="#{sec:areAnyGranted('ADM, GES')}">
+                    <h:panelGroup>
+                        <h:outputText style="font-weight:bold" value="#{bundle['cyberadmin.declarationList.notification']}:" escape="false" />
+                    </h:panelGroup>
+                    <h:panelGroup>
+                        <ul>
+                            <li>
+                                <p:commandLink actionListener="#{backingBean.showFilledDeclarations}" update="fullCriteria, table">
+                                    <h:outputFormat value="#{bundle['cyberadmin.declarationList.filledDeclarationLink']}" escape="false">
+                                        <f:param value="#{backingBean.filledDeclarationCount}" />
+                                    </h:outputFormat>
+                                </p:commandLink>
+                            </li>
+                            <li>
+                                <p:commandLink actionListener="#{backingBean.showToFilledDeclarations}" update="fullCriteria, table">
+                                    <h:outputFormat value="#{bundle['cyberadmin.declarationList.toFilledDeclarationLink']}" escape="false">
+                                        <f:param value="#{backingBean.toFilledDeclarationCount}" />
+                                    </h:outputFormat>
+                                </p:commandLink>
+                            </li>
+                            <h:panelGroup rendered="#{backingBean.newTaxpayerCount > 0}">
+                            <li>
+                                <h:outputLink value="../assujetti/validateTaxpayer.xhtml">
+                                    <h:outputFormat value="#{bundle['cyberadmin.declarationList.newTaxpayerAccountLink']}" escape="false">
+                                        <f:param value="#{backingBean.newTaxpayerCount}" />
+                                    </h:outputFormat>
+                                </h:outputLink>
+                            </li>
+                            </h:panelGroup>
+                        </ul>
+                    </h:panelGroup>
+                </h:panelGrid>
+                
+            </p:panel>
+            <p:spacer height="10" />
+
+            <!-- Criteria area -->
+            <p:panel id="fullCriteria" header="#{bundle['cyberadmin.declarationList.searchDeclaration']}" 
+                toggleable="true" toggleSpeed="200" rendered="#{sec:areAnyGranted('GES, ADM')}">
+                <h:panelGrid columns="5" cellspacing="5" width="100%" 
+                    columnClasses="dec-list-label-col, dec-list-input-col, dec-list-label-col, dec-list-input-col, dec-list-button-col">
+                
+                    <h:outputLabel for="commune" value="#{bundle['cyberadmin.common.label.commune']}" />
+                    <arcam:comboBox id="commune" items="#{cyberAdminDataBean.communes}" value="#{backingBean.criteria.commune}" styleClass="dec-list-combobox-field" />
+                    <h:outputLabel for="type" value="#{bundle['cyberadmin.declarationList.type']}" />
+                    <arcam:comboBox id="type" items="#{backingBean.types}" value="#{backingBean.criteria.type}" styleClass="dec-list-combobox-field" />
+                    <h:panelGroup />
+                    
+                    <h:outputLabel for="from" value="#{bundle['cyberadmin.declarationList.from']}" />
+                    <h:panelGroup cellpadding="0" cellspacing="0">
+                        <p:calendar id="from" showButtonPanel="true" navigator="true" pattern="#{webConstants['DATE_PATTERN']}" 
+                            value="#{backingBean.criteria.from}" styleClass="dec-list-date-field" />
+                        <h:outputLabel for="to" value="#{bundle['cyberadmin.declarationList.to']}" styleClass="dec-list-child-field" />
+                        <p:calendar id="to" showButtonPanel="true" navigator="true" pattern="#{webConstants['DATE_PATTERN']}" 
+                            value="#{backingBean.criteria.to}" styleClass="dec-list-date-field" />
+                    </h:panelGroup>
+                    <h:outputLabel for="status" value="#{bundle['cyberadmin.declarationList.status']}" />
+                    <arcam:comboBox id="status" items="#{backingBean.statuses}" value="#{backingBean.criteria.status}" styleClass="dec-list-combobox-field" />
+                    <h:panelGroup />
+                    
+                    <h:outputLabel for="denomination" value="#{bundle['cyberadmin.declarationList.denomination']}" />
+                    <p:inputText id="denomination" value="#{backingBean.criteria.denomination}" styleClass="dec-list-field-size" />
+                    <h:outputLabel for="decId" value="#{bundle['cyberadmin.declarationList.id']}" />
+                    <p:inputText id="decId" value="#{backingBean.criteria.id}" styleClass="dec-list-field-size" 
+                        onkeypress="return CyberAdmin.Number.pressPositiveNumber(event)" />
+                    <h:panelGroup />
+                    
+                    <h:outputLabel value="#{bundle['cyberadmin.declarationList.taxpayer']}" styleClass="form-declaration-label" />
+                    <h:panelGroup />
+                    <h:panelGroup />
+                    <h:panelGroup />
+                    <h:panelGroup />
+                    
+                    <h:outputLabel for="name" value="#{bundle['cyberadmin.common.label.name']}" />
+                    <p:inputText id="name" value="#{backingBean.criteria.name}" styleClass="dec-list-field-size" />
+                    <h:outputLabel for="firstname" value="#{bundle['cyberadmin.common.label.firstname']}" />
+                    <p:inputText id="firstname" value="#{backingBean.criteria.firstname}" styleClass="dec-list-field-size" />
+                    <h:panelGroup />
+                    
+                    <h:outputLabel for="organisation" value="#{bundle['cyberadmin.common.label.organisation']}" />
+                    <p:inputText id="organisation" value="#{backingBean.criteria.organisation}" styleClass="dec-list-field-size" />
+                    <h:panelGroup />
+                    <h:panelGroup />
+                    
+                    <h:panelGrid columns="2" style="float: right;">
+                        <p:commandButton process="@this" value="#{bundle['cyberadmin.common.button.reset']}" update="fullCriteria,table" action="#{backingBean.resetSearchCriteriaToOriginal}"/>
+                        <p:commandButton id="searchBtnIdForAdmin" value="#{bundle['cyberadmin.common.button.search']}" actionListener="#{backingBean.search}" update="table" >
+                                <f:attribute name="tableResultId" value="form:decResult:decResult"/>
+                        </p:commandButton>
+                        <p:defaultCommand target="searchBtnIdForAdmin"/>
+                    </h:panelGrid>
+                </h:panelGrid>
+            </p:panel>
+            
+            <p:panel id="criteria" rendered="#{sec:areAnyGranted('ASJ, COM')}">
+                <h:panelGrid columns="5" cellspacing="5" width="100%" 
+                    columnClasses="dec-list-label-col, dec-list-input-col, dec-list-label-col, dec-list-input-col, dec-list-button-col">
+                    
+                    <h:outputLabel for="freetext" value="#{bundle['cyberadmin.declarationList.searchDeclaration']}" 
+                        styleClass="large-content-title" />
+                    <p:inputText id="freetext" value="#{backingBean.criteria.freetext}" styleClass="dec-list-field-size" />
+                    
+                    <h:outputLabel for="decFrom" value="#{bundle['cyberadmin.declarationList.from']}" />
+                    <h:panelGroup cellpadding="0" cellspacing="0">
+                        <p:calendar id="decFrom" showButtonPanel="true" navigator="true" pattern="#{webConstants['DATE_PATTERN']}" 
+                            value="#{backingBean.criteria.from}" styleClass="dec-list-date-field" />
+                        <h:outputLabel for="decTo" value="#{bundle['cyberadmin.declarationList.to']}" styleClass="dec-list-child-field" />
+                        <p:calendar id="decTo" showButtonPanel="true" navigator="true" pattern="#{webConstants['DATE_PATTERN']}" 
+                            value="#{backingBean.criteria.to}" styleClass="dec-list-date-field" />
+                    </h:panelGroup>
+                    
+                    <h:panelGrid columns="2" styleClass="float-right">
+                        <p:commandButton process="@this" value="#{bundle['cyberadmin.common.button.reset']}" update="criteria,table" action="#{backingBean.resetSearchCriteriaToOriginal}"/>
+                        <p:commandButton id="searchBtnId" value="#{bundle['cyberadmin.common.button.search']}" actionListener="#{backingBean.search}" update="table" >
+                            <f:attribute name="tableResultId" value="form:decResult:decResult"/>
+                        </p:commandButton>
+                        <p:defaultCommand target="searchBtnId"/>
+                    </h:panelGrid>
+                </h:panelGrid>
+            </p:panel>
+            
+            <h:panelGrid columns="2" styleClass="float-right">
+                <p:commandButton id="btnExport" value="#{bundle['cyberadmin.common.button.export']}" ajax="false"
+                        onclick="CyberAdmin.Export.exportCA()"
+                        rendered="#{sec:areAnyGranted('COM, GES, ADM')}" action="#{backingBean.exportDeclaration}"/>
+                           
+                <p:button value="#{bundle['cyberadmin.declarationList.button.newDeclaration']}" styleClass="float-right dec-list-button-new" 
+                    rendered="#{sec:areAnyGranted('ASJ')}" outcome="bienTaxeDetail.xhtml"/>
+            </h:panelGrid>
+            
+            <p:spacer height="10" />
+            
+            <!-- Data result table area -->
+            <h:panelGrid id="table" columns="1" cellspacing="0" cellpadding="0" style="width: 100%">
+                <arcam:declarationTable id="decResult" backingBean="#{backingBean}" detailUrl="declarationDetail.xhtml" 
+                    renderTaxpayerColumn="#{sec:areAnyGranted('ADM, GES, COM')}" />
+            </h:panelGrid>
+            <h:inputHidden id="screenUUID" value="#{backingBean.screenUUID}"/>
+        </h:panelGrid>
+    </h:form>
+</ui:define>
+</ui:composition>

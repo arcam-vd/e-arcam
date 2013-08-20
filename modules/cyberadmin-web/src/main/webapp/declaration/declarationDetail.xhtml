@@ -1,0 +1,211 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:sec="http://www.springframework.org/security/tags"
+    xmlns:arcam="http://java.sun.com/jsf/composite/components"
+    xmlns:c="http://java.sun.com/jsp/jstl/core"
+    template="layoutDeclarationDetail.xhtml">
+
+    <f:metadata>
+        <f:viewParam name="id" value="#{declarationDetailBean.id}"/>
+        <f:event listener="#{declarationDetailBean.populateEntity}" type="preRenderView" />
+    </f:metadata>
+    
+    <ui:param name="hasRoleASJ" value="#{sec:areAnyGranted('ASJ')}"/>
+    <ui:param name="hasRoleCOM" value="#{sec:areAnyGranted('COM')}"/>
+    <ui:param name="hasRoleGES" value="#{sec:areAnyGranted('GES')}"/>
+    <ui:param name="hasRoleADM" value="#{sec:areAnyGranted('ADM')}"/>
+    
+    <ui:param name="titlePage" value="#{bundle['cyberadmin.declarationDetail.pageTitle']}"/>
+    <ui:param name="backingBean" value="#{declarationDetailBean}"/>
+    <ui:param name="commentaireListBean" value="#{backingBean.commentaireListBean}"/>
+    <ui:param name="entity" value="#{declarationDetailBean.entity}"/>
+    <ui:param name="bienTaxe" value="#{entity.bienTaxe}"/>
+    
+    <ui:param name="istypeResidence" value="#{bienTaxe.declarationType == 'RESIDENCE_SECONDAIRE'}"/>
+    <ui:param name="istypeHotel" value="#{bienTaxe.declarationType == 'HOTEL'}"/>
+    <ui:param name="istypeInstitut" value="#{bienTaxe.declarationType == 'INSTITUT'}"/>
+    <ui:param name="istypeCamping" value="#{bienTaxe.declarationType == 'CAMPING'}"/>
+    <ui:param name="istypeChambre" value="#{bienTaxe.declarationType == 'CHAMBRE'}"/>
+    <ui:param name="istypeLocation" value="#{bienTaxe.declarationType == 'LOCATION'}"/>
+    
+    <ui:param name="TO_FILLED" value="#{entity.status == 'TO_FILLED'}"/>
+    <ui:param name="REFUSED" value="#{entity.status == 'REFUSED'}"/>
+    <ui:param name="EGID_VALIDATED" value="#{entity.status == 'EGID_VALIDATED'}"/>
+    <ui:param name="FILLED" value="#{entity.status == 'FILLED'}"/>
+    <ui:param name="VALIDATED" value="#{entity.status == 'VALIDATED'}"/>
+    <ui:param name="BILLED" value="#{entity.status == 'BILLED'}"/>
+    <ui:param name="NOT_PAID" value="#{entity.status == 'NOT_PAID'}"/>
+    <ui:param name="BILL_REFUSED" value="#{entity.status == 'BILL_REFUSED'}"/>
+    <ui:param name="PAID" value="#{entity.status == 'PAID'}"/>
+    <ui:param name="NOT_SUBJECTES" value="#{entity.status == 'NOT_SUBJECTES'}"/>
+    <ui:param name="CANCELLED" value="#{entity.status == 'CANCELLED'}"/>
+    
+    <ui:param name="isViewMode" value="#{backingBean.viewMode}"/>
+    <ui:param name="isEditMode" value="#{backingBean.editMode}"/>
+    
+    <ui:param name="helperText" value="#{backingBean.helpText}"/>
+    
+    <ui:define name="customRegionTaxCalculaton">
+              <ui:remove><!-- TYPE RESIDENCE - SCREEN 5A --></ui:remove>
+              <h:panelGrid width="100%" cellpadding="2" cellspacing="0" rendered="#{istypeResidence}" styleClass="align-top"> 
+                    <h:panelGrid width="100%" columns="2"  cellpadding="0" cellspacing="0" styleClass="form-declaration-address-residence"
+                                columnClasses="first-column-declaration-residence,float-right">
+                        <h:outputLabel value="#{bundle['cyberadmin.declarationDetail.taxCalculation.fiscalYear']}#{bundle['cyberadmin.common.mandatory']}"/>
+                        <arcam:comboBox 
+                                id="anneeFiscale"
+                                value="#{backingBean.year}"
+                                styleClass="form-declaration-residence-calendar"
+                                items="#{cyberAdminDataBean.years}" 
+                                disabled="#{isViewMode}"
+                                required="true"
+                                requiredMessage="#{errorMsg['cyberadmin.declarationDetail.mandatory.fiscaleDate']}"
+                                haveEmptyItem = "false"/>   
+                    </h:panelGrid>
+                    <h:panelGrid width="100%" cellpadding="0" cellspacing="0" columns="3" styleClass="form-declaration-address-residence"
+                            columnClasses="first-column-declaration-residence-estimation,second-column-declaration-residence-estimation, float-right">
+                        <h:outputLabel value="#{bundle['cyberadmin.declarationDetail.taxCalculation.taxValue']}#{bundle['cyberadmin.common.mandatory']}"/>
+                        <h:outputLabel value="#{bundle['cyberadmin.common.chf']}"/>
+                        <p:inputText id="estimation" styleClass="number-align form-declaration-residece-input-estimation"
+                                    required="true"
+                                    requiredMessage="#{errorMsg['cyberadmin.declarationDetail.mandatory.estimation']}" 
+                                    value="#{entity.estimation}" maxlength="20" 
+                                    disabled="#{isViewMode}" onkeypress="return CyberAdmin.Number.pressPositiveNumber(event)">
+                            <f:convertNumber locale="fr_CH"/>
+                            <p:ajax event="change" listener="#{declarationDetailBean.reCalcuTaxeCalDoms}" update="estimation,amountToPaid,montant"/>
+                        </p:inputText>
+                     </h:panelGrid>
+                     <h:panelGrid width="100%" columns="2" cellpadding="0" cellspacing="0"
+                            columnClasses="first-column-declaration-residence, float-right" styleClass="form-declaration-address-residence align-top">
+                        <h:outputLabel value="#{bundle['cyberadmin.declarationDetail.taxCalculation.otherLocation']}"/>
+                        <h:panelGrid columns="1" width="100%"  cellpadding="0" cellspacing="0" styleClass="form-declaration-residece-input-estimation">
+                            <p:selectOneRadio id="otherLocation" value="#{entity.location}" disabled="#{isViewMode}" layout="custom">
+                                <f:selectItem itemLabel="#{bundle['cyberadmin.common.button.yes']}" itemValue="true"/>
+                                <f:selectItem itemLabel="#{bundle['cyberadmin.common.button.no']}" itemValue="false" />  
+                            </p:selectOneRadio>
+                            <h:panelGrid columns="5" width="100%"  cellpadding="0" cellspacing="0" >
+                                <p:radioButton for="otherLocation" itemIndex="0"/>  
+                                <h:outputLabel value="#{bundle['cyberadmin.common.button.yes']}" />
+                                <p:spacer width="5px"/>
+                                <p:radioButton for="otherLocation" itemIndex="1"/>  
+                                <h:outputLabel value="#{bundle['cyberadmin.common.button.no']}" />    
+                            </h:panelGrid>
+                        </h:panelGrid>
+                    </h:panelGrid>
+              </h:panelGrid>
+              <ui:remove><!-- TYPE LOCATION - SCREEN 5B --></ui:remove> 
+              <h:panelGrid width="100%"  cellpadding="0" cellspacing="0" rendered="#{istypeLocation}" styleClass="form-declaration-location-info">
+                     <h:panelGrid width="100%" columns="2" columnClasses="first-column-declaration-location-roomNumber" cellpadding="0" cellspacing="0">
+                        <h:outputLabel value="#{bundle['cyberadmin.declarationDetail.taxCalculation.roomNumber']}"/>
+                        <h:panelGrid columns="1" width="100%"  cellpadding="0" cellspacing="0" styleClass="">
+                            <p:selectOneRadio id="roomNumber" value="#{entity.taille}" disabled="#{isViewMode}" layout="custom">
+                                <f:selectItem itemLabel="#{bundle['cyberadmin.declarationDetail.taxCalculation.twoBeds']}" itemValue="false" />
+                                <f:selectItem itemLabel="#{bundle['cyberadmin.declarationDetail.taxCalculation.threeBeds']}" itemValue="true" />
+                                <p:ajax event="change" process="@this" listener="#{declarationDetailBean.reCalcuTaxeCalDoms}" update="amountToPaidZoneMsges,amountToPaid,montant"/>  
+                            </p:selectOneRadio>
+                            <h:panelGrid columns="7" width="100%"  cellpadding="0" cellspacing="0" styleClass="form-declaration-location-radio-numberRomm">
+                                <p:radioButton for="roomNumber" itemIndex="0"/>  
+                                <p:spacer width="5px"/>
+                                <h:outputLabel value="#{bundle['cyberadmin.declarationDetail.taxCalculation.twoBeds']}" />
+                                <p:spacer width="15px"/>
+                                <p:radioButton for="roomNumber" itemIndex="1"/>  
+                                <p:spacer width="5px"/>
+                                <h:outputLabel value="#{bundle['cyberadmin.declarationDetail.taxCalculation.threeBeds']}" />    
+                            </h:panelGrid>
+                        </h:panelGrid>
+                     </h:panelGrid>
+                     <p:spacer width="5px"/>
+                     <h:panelGrid width="100%" columns="1" cellpadding="0" cellspacing="0"  columnClasses="first-column-declaration-location ">
+                        <h:outputLabel value="#{bundle['cyberadmin.declarationDetail.tenant']}" styleClass="form-declaration-location-lable"/>
+                        <h:panelGrid width="100%" columns="2"  cellpadding="2" cellspacing="0"  columnClasses="first-column-declaration-location-info">
+                                <h:outputLabel value="#{bundle['cyberadmin.common.label.name']}#{bundle['cyberadmin.common.mandatory']}" styleClass="form-declaration-location-lable-child"/>
+                                <p:inputText value="#{entity.nom}" maxlength="255"
+                                        required="true"
+                                        requiredMessage="#{errorMsg['cyberadmin.declarationDetail.mandatory.nom']}"
+                                        styleClass="form-declaration-location-input" disabled="#{isViewMode}"/>
+                                <h:outputLabel value="#{bundle['cyberadmin.common.label.firstname']}#{bundle['cyberadmin.common.mandatory']}" styleClass="form-declaration-location-lable-child"/>
+                                <p:inputText value="#{entity.prenom}" maxlength="255"
+                                        required="true"
+                                        requiredMessage="#{errorMsg['cyberadmin.declarationDetail.mandatory.prenom']}"
+                                        styleClass="form-declaration-location-input" disabled="#{isViewMode}"/>
+                                <h:outputLabel value="#{bundle['cyberadmin.declarationDetail.tenant.from']}#{bundle['cyberadmin.common.mandatory']}" styleClass="form-declaration-location-lable-child"/>
+                                <h:panelGrid width="100%" columns="2"  cellpadding="0"  cellspacing="0" styleClass="form-declaration-location-time" columnClasses="first-column-locate-time,float-right">
+                                      <h:panelGrid id="locationDateFromTo" columns="3"  cellpadding="0"  cellspacing="0" styleClass="form-declaration-location-table" columnClasses=",,float-right">   
+                                        <p:calendar id="startDateCompId" locale="#{localeBean.lang}" showButtonPanel="true" navigator="true" styleClass="" pattern="#{webConstants['DATE_PATTERN']}"
+                                             size="18" required="true" value="#{entity.fiscaleDate}"  disabled="#{isViewMode}"
+                                            requiredMessage="#{errorMsg['cyberadmin.declarationDetail.mandatory.locationFrom']}">
+                                             <p:ajax event="dateSelect" listener="#{declarationDetailBean.handleFromDateSelect}" update="weeks,amountToPaid,montant"/>
+                                         </p:calendar>
+                                        <h:outputLabel value="#{bundle['cyberadmin.declarationDetail.tenant.to']}#{bundle['cyberadmin.common.mandatory']}" styleClass="form-declaration-location-lable-child"/>
+                                        <p:calendar locale="#{localeBean.lang}" showButtonPanel="true" navigator="true"  disabled="#{isViewMode}"
+                                             required="true" requiredMessage="#{errorMsg['cyberadmin.declarationDetail.mandatory.locationTo']}"
+                                             styleClass="float-right" size="18" pattern="#{webConstants['DATE_PATTERN']}" value="#{entity.departDate}">
+                                             <p:ajax event="dateSelect" listener="#{declarationDetailBean.handleToDateSelect}" update="locationDateFromTo,weeks,amountToPaid,montant"/>
+                                             <f:validator validatorId="dateRangeValidator" />
+                                             <f:attribute name="startDateCompId" value=":form:startDateCompId" />
+                                        </p:calendar>
+                                      </h:panelGrid>
+                                      <h:panelGrid id="weeks" width="100%" cellpadding="0" cellspacing="0" columns="2" styleClass="form-declaration-location-table-week">
+                                            <h:outputLabel value="#{bundle['cyberadmin.declarationDetail.tenant.weeks']}" styleClass="form-declaration-location-week-padding"/>
+                                            <p:inputText styleClass="form-declaration-location-week-input form-declaration-location-week-padding number-align" 
+                                                value="#{entity.weeks}" disabled="true" />
+                                      </h:panelGrid>
+                                </h:panelGrid>
+                                <h:outputLabel value="#{bundle['cyberadmin.declarationDetail.exemptions']}" styleClass="form-declaration-location-lable-child"/>
+                                <arcam:comboBox id="exonerationCombox" items="#{cyberAdminDataBean.exonerationTypes}"  disabled="#{isViewMode}"
+                                    value="#{entity.exoneration}" styleClass="form-declaration-location-combobox-exo"
+                                    update=":form:amountToPaid,:form:montant"
+                                    backingBean="#{declarationDetailBean}"
+                                    disabledAjaxCal="false"/>
+                        </h:panelGrid>
+                     </h:panelGrid>
+              </h:panelGrid>
+              <ui:remove><!-- TYPE CAMPING AND HOTEL SCREEN 5C AND 5D --></ui:remove>
+              <h:panelGrid width="100%" rendered="#{istypeHotel or istypeChambre or istypeInstitut or istypeCamping}"> 
+                    <h:panelGrid width="100%" columns="2" columnClasses="first-column-declaration-periode">
+                        <h:outputLabel value="#{bundle['cyberadmin.declarationDetail.period']}#{bundle['cyberadmin.common.mandatory']}"/>
+                        <h:panelGroup>
+                            <ui:param name="monthPrefixKeyMsg" value="cyberadmin.month.#{entity.fiscaleDate.month}"/>
+                            <p:inputText disabled="true" value="#{bundle[monthPrefixKeyMsg]} #{entity.year}"/>
+                         </h:panelGroup>  
+                          
+                    </h:panelGrid>
+              </h:panelGrid>
+              <h:panelGrid id="tableExemption" columns="1" cellspacing="0" cellpadding="0" styleClass="form-declaration-tableExemption"
+                    rendered="#{istypeHotel or istypeChambre or istypeInstitut or istypeCamping}">
+                  <arcam:extendedTable id="taxCal" backingBean="#{backingBean}" 
+                         dataModelTotal="#{entity.totalExemption}"
+                         dataModelExoneration="#{entity.exemptions}" 
+                         dataModelSubTotal="#{backingBean.taxeCalDoms}"
+                         istypeCamping="#{istypeCamping}"
+                         istypeInstitut="#{istypeInstitut}"
+                         disabled="#{isViewMode}"/>
+              </h:panelGrid>
+    </ui:define>
+    
+    <ui:define name="amountToPaidTitle">
+        <h:panelGroup id="amountToPaidZoneMsges">
+            <div class="form-declaration-zoneMsges-residence">
+                <h:outputLabel value="#{backingBean.amountToPaidResidenceMsg}" rendered="#{istypeResidence}" escape="false"/>
+            </div>
+            <div class="form-declaration-zoneMsges-hotel">
+                <h:outputLabel value="#{bundle['cyberadmin.declarationDetail.amountToPaidHotel']}" rendered="#{istypeHotel}" escape="false"/>
+            </div>
+            <div class="form-declaration-zoneMsges-camping">
+                <h:outputLabel value="#{bundle['cyberadmin.declarationDetail.amountToPaidCamping']}" rendered="#{istypeCamping}" escape="false"/>
+            </div>
+            <div class="form-declaration-zoneMsges-institut">
+                <h:outputLabel value="#{bundle['cyberadmin.declarationDetail.amountToPaidInstitut']}" rendered="#{istypeInstitut}" escape="false"/>
+            </div>
+            <div class="form-declaration-zoneMsges-chambre">
+                <h:outputLabel value="#{bundle['cyberadmin.declarationDetail.amountToPaidChambre']}" rendered="#{istypeChambre}" escape="false"/>
+            </div>
+            <div class="form-declaration-zoneMsges-location">
+                <h:outputLabel value="#{backingBean.amountToPaidLocationMsg}" rendered="#{istypeLocation}" escape="false"/>
+            </div>
+        </h:panelGroup>    
+    </ui:define>
+    
+</ui:composition>
