@@ -91,7 +91,7 @@ public class GenerateStatisticBean extends AbstractCyberAdminBean implements Ser
 
     private String communeCode;
 
-    private Date fromDate = DateHelper.getFisrDateOfCurrentYear();
+    private Date fromDate = DateHelper.getFirstDateOfCurrentYear();
     private Date toDate = DateHelper.now();
 
     public GenerateStatisticBean() {

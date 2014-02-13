@@ -37,7 +37,7 @@ package org.arcam.cyberadmin.service.core.impl;
 
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.time.DateUtils;
@@ -202,7 +202,7 @@ public class DeclarationServiceTest extends AbstractCyberAdminServiceTest {
         bienTaxe.getDeclarations().add(declaration);
         declaration.setBienTaxe(bienTaxe);
         
-        declarationService.demand(declaration);
+        declarationService.demand(declaration, true);
         
         Assert.assertEquals(declaration.getStatus(), StatusTypeEnum.TO_FILLED);
         Assert.assertEquals(DateHelper.getDateStart(declaration.getLastModificationDate()), DateHelper.today());
@@ -214,7 +214,7 @@ public class DeclarationServiceTest extends AbstractCyberAdminServiceTest {
         
         
         bienTaxe.setDeclarationType(DeclarationTypeEnum.LOCATION);
-        declarationService.demand(declaration);
+        declarationService.demand(declaration, true);
         
         // LOCATION && departDate == null
         // DueDate = 10th January of the next year (year fiscale date + 1)
@@ -222,7 +222,7 @@ public class DeclarationServiceTest extends AbstractCyberAdminServiceTest {
                 DateHelper.getDate(10, Calendar.JANUARY, 2013)) == 0);
         
         declaration.setDepartDate(DateHelper.getDate(28, Calendar.FEBRUARY, 2013));
-        declarationService.demand(declaration);
+        declarationService.demand(declaration, true);
         
         // LOCATION && departDate != null
         // DueDate = DepartDate + 10 days
@@ -230,7 +230,7 @@ public class DeclarationServiceTest extends AbstractCyberAdminServiceTest {
                 DateHelper.getDate(10, Calendar.MARCH, 2013)) == 0);
         
         bienTaxe.setDeclarationType(DeclarationTypeEnum.HOTEL);
-        declarationService.demand(declaration);
+        declarationService.demand(declaration, true);
         
         // other cases
         // DueDate = FiscaleDate + periodicity[months] + 9 days   
@@ -361,32 +361,6 @@ public class DeclarationServiceTest extends AbstractCyberAdminServiceTest {
         return declaration;
     }
     
-    public void testGetOverdueDeclarations() throws Exception {
-        Declaration declaration1 = prepareDeclaration();
-        declaration1.setDueDate(DateHelper.today());
-        declarationService.saveOrUpdate(declaration1);
-        
-        Declaration declaration2 = prepareDeclaration();
-        declaration2.setDueDate(DateUtils.addDays(DateHelper.today(), -14));
-        declarationService.saveOrUpdate(declaration2);
-        
-        Declaration declaration3 = prepareDeclaration();
-        declaration3.setDueDate(DateUtils.addDays(DateHelper.today(), 1));
-        declarationService.saveOrUpdate(declaration3);
-        
-        List<Long> ids = declarationService.getOverdueDeclarationIds(0);
-        Assert.assertEquals(ids.size(), 1);
-        Assert.assertEquals(new Long(declaration1.getId()), ids.get(0));
-        
-        ids = declarationService.getOverdueDeclarationIds(14);
-        Assert.assertEquals(ids.size(), 1);
-        Assert.assertEquals(new Long(declaration2.getId()), ids.get(0));
-        
-        ids = declarationService.getOverdueDeclarationIds(-1);
-        Assert.assertEquals(ids.size(), 1);
-        Assert.assertEquals(new Long(declaration3.getId()), ids.get(0));
-    }
-
     public void testCalculateTaxAmountForResidenceSecondaire() throws Exception {
         prepareTarif();
         

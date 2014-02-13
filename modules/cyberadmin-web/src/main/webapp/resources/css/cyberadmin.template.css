@@ -1,0 +1,208 @@
+.art-contentLayout {
+    margin-bottom: 1px;
+    position: relative;
+    width: 890px;
+}
+
+.art-contentLayout .art-content {
+    border: 0 none;
+    float: left;
+    margin: 0;
+    overflow: hidden;
+    padding: 0;
+    position: relative;
+    width: 666px;
+}
+.art-contentLayout .art-content-wide {
+    border: 0 none;
+    float: left;
+    margin: 0;
+    overflow: hidden;
+    padding: 0;
+    position: relative;
+    width: 888px;
+}
+.art-contentLayout .art-sidebar1 {
+    border: 0 none;
+    float: left;
+    margin: 0;
+    overflow: hidden;
+    padding: 0;
+    position: relative;
+    width: 222px;
+}
+.art-Block {
+    margin: 0 auto;
+    min-height: 23px;
+    min-width: 23px;
+    position: relative;
+    z-index: 0;
+}
+.art-Block-body {
+    padding: 10px;
+    position: relative;
+    z-index: 1;
+}
+.art-Block-tr, .art-Block-tl, .art-Block-br, .art-Block-bl, .art-Block-tc, .art-Block-bc, .art-Block-cr, .art-Block-cl {
+    position: absolute;
+    z-index: -1;
+}
+.art-Block-tr, .art-Block-tl, .art-Block-br, .art-Block-bl {
+    background-image: url("../resources/images/Block-s.png");
+    height: 22px;
+    width: 22px;
+}
+.art-Block-tl {
+    clip: rect(auto, 11px, 11px, auto);
+    left: 0;
+    top: 0;
+}
+.art-Block-tr {
+    clip: rect(auto, auto, 11px, 11px);
+    right: 0;
+    top: 0;
+}
+.art-Block-bl {
+    bottom: 0;
+    clip: rect(11px, 11px, auto, auto);
+    left: 0;
+}
+.art-Block-br {
+    bottom: 0;
+    clip: rect(11px, auto, auto, 11px);
+    right: 0;
+}
+.art-Block-tc, .art-Block-bc {
+    background-image: url("../resources/images/Block-h.png");
+    height: 22px;
+    left: 11px;
+    right: 11px;
+}
+.art-Block-tc {
+    clip: rect(auto, auto, 11px, auto);
+    top: 0;
+}
+.art-Block-bc {
+    bottom: 0;
+    clip: rect(11px, auto, auto, auto);
+}
+.art-Block-cr, .art-Block-cl {
+    background-image: url("../resources/images/Block-v.png");
+    bottom: 11px;
+    top: 11px;
+    width: 22px;
+}
+.art-Block-cr {
+    clip: rect(auto, auto, auto, 11px);
+    right: 0;
+}
+.art-Block-cl {
+    clip: rect(auto, 11px, auto, auto);
+    left: 0;
+}
+.art-Block-cc {
+    background-color: #F2F2F2;
+    bottom: 11px;
+    left: 11px;
+    position: absolute;
+    right: 11px;
+    top: 11px;
+    z-index: -1;
+}
+.art-Block {
+    margin: 10px;
+}
+.art-BlockContent {
+    margin: 0 auto;
+    min-height: 1px;
+    min-width: 1px;
+    position: relative;
+    z-index: 0;
+}
+.art-BlockContent-body {
+    padding: 8px;
+    position: relative;
+    z-index: 1;
+}
+.art-BlockContent-body {
+    color: #272924;
+    font-family: "Century Gothic",Arial,Helvetica,Sans-Serif;
+    font-size: 12px;
+}
+.art-BlockContent-body a:link {
+    color: #0A71B4;
+    font-family: "Century Gothic",Arial,Helvetica,Sans-Serif;
+    text-decoration: underline;
+}
+.art-BlockContent-body a:visited, .art-BlockContent-body a.visited {
+    color: #575A4E;
+    font-family: "Century Gothic",Arial,Helvetica,Sans-Serif;
+    text-decoration: underline;
+}
+.art-BlockContent-body a:hover, .art-BlockContent-body a.hover {
+    color: #575A4E;
+    font-family: "Century Gothic",Arial,Helvetica,Sans-Serif;
+    text-decoration: none;
+}
+.art-BlockContent-body ul {
+    color: #4F5247;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+.art-BlockContent-body ul li {
+    background-image: url("../resources/images/BlockContentBullets.png");
+    background-repeat: no-repeat;
+    font-family: "Century Gothic",Arial,Helvetica,Sans-Serif;
+    font-size: 12px;
+    line-height: 1.25em;
+    padding: 0 0 0 13px;
+}
+
+.top-text {
+    padding: 10px 0 10px 10px;
+    position: relative;
+    z-index: 1;
+}
+
+.formulaires-spacing {
+    padding: 5px;
+    position: relative;
+    z-index: 1;
+}
+
+.formulaires-spacing-double {
+    padding: 5px 0 0 15px;
+    position: relative;
+    z-index: 1;
+}
+
+.formulaires-link {
+    background-image: url("../resources/images/BlockContentBullets.png");
+    background-repeat: no-repeat;
+    font-family: "Century Gothic",Arial,Helvetica,Sans-Serif;
+    font-size: 12px;
+    line-height: 1.25em;
+    padding: 0 0 5px 18px;
+}
+
+.formulaires-title {
+	padding: 0 0 0 13px;
+	font-size: 14px;
+}
+
+.formulaires-main-title {
+	padding: 0 0 0 13px;
+	font-size: 16px;
+}
+
+.formulaires-content{
+                margin: 0 auto !important;
+                min-height: 985px;
+                min-width: 49px;
+                max-height: 985px;
+                width: 890px;
+                z-index: 0;
+}
+
+

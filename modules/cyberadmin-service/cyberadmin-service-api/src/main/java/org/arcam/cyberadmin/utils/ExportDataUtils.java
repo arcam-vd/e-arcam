@@ -59,13 +59,13 @@ public final class ExportDataUtils {
      * @return the encoded string value.
      */
     public static String encodeStringValue(String value) {
-    	if (value == null){
-    		return value;    	
-    	}
-    	
-    	String temp = value.trim();
+        if (value == null) {
+            return value;
+        }
+    
+        String temp = value.trim();
         
-//    	if (StringUtils.isBlank(value)) {
+//        if (StringUtils.isBlank(value)) {
 //            return value.trim(); //return CresusExportConstant.QUOTE_CHAR + CresusExportConstant.QUOTE_CHAR;
 //        }
 

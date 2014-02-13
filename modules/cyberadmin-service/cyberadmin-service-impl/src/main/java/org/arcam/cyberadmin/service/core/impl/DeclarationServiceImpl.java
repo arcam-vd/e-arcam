@@ -40,6 +40,7 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -329,7 +330,7 @@ public class DeclarationServiceImpl extends GenericDataServiceDefaultImpl<Declar
     }
 
     @Override
-    public void demand(Declaration declaration) {
+    public void demand(Declaration declaration, boolean sendReminder) {
         declaration.setStatus(StatusTypeEnum.TO_FILLED);
         
         // calculate due date
@@ -348,23 +349,25 @@ public class DeclarationServiceImpl extends GenericDataServiceDefaultImpl<Declar
         // save the bien taxe and it's declaration into DB
         saveAndLog(declaration);
         
-        // sent an email informing the taxpayer about the declaration.
-        User sysUser = userService.getSystemUser();
-        String from = Utility.getEmailFromUserDefaultIfEmpty(sysUser);
-        
-        String message = mailService.demandDeclaration(declaration, from);
-        if (StringUtils.isNotBlank(message)) {
-            // log the mail content in the comments for the declaration
-            Commentaire comment = new Commentaire();
-            comment.setDeclaration(declaration);
-            comment.setMessage(message);
-            comment.setTimestamp(DateHelper.now());
-            comment.setUser(sysUser);
-            declaration.getCommentaires().add(comment);
+        if (sendReminder) {
+            // sent an email informing the taxpayer about the declaration.
+            User sysUser = userService.getSystemUser();
+            String from = Utility.getEmailFromUserDefaultIfEmpty(sysUser);
+            
+            String message = mailService.demandDeclaration(declaration, from);
+            if (StringUtils.isNotBlank(message)) {
+                // log the mail content in the comments for the declaration
+                Commentaire comment = new Commentaire();
+                comment.setDeclaration(declaration);
+                comment.setMessage(message);
+                comment.setTimestamp(DateHelper.now());
+                comment.setUser(sysUser);
+                declaration.getCommentaires().add(comment);
+            }
+            
+            // save the comment
+            daoFor(Declaration.class).merge(declaration);
         }
-        
-        // save the comment
-        daoFor(Declaration.class).merge(declaration);
     }
 
     private Date calculateDueDate(Declaration declaration) {
@@ -729,19 +732,18 @@ public class DeclarationServiceImpl extends GenericDataServiceDefaultImpl<Declar
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
-    public List<Long> getOverdueDeclarationIds(int period) {
+    public Set<Long> getToFillDeclarationIds() {
         DetachedCriteria criteria = DetachedCriteria.forClass(Declaration.class);
         
-        Date queryDate = DateUtils.addDays(DateHelper.today(), -period);
-        criteria.add(DaoUtils.equalIgnoreTime("dueDate", queryDate));
         criteria.add(Restrictions.eq("status", StatusTypeEnum.TO_FILLED));
         ProjectionList proList = Projections.projectionList().add(Projections.property("id"));
         criteria.setProjection(proList);
         
         List ids = daoFor(Declaration.class).findByCriteria(criteria);
-        return new ArrayList<Long>(ids);
+        return new HashSet<Long>(ids);
     }
 
+    
     @Override
     public Declaration saveAndLog(Declaration declaration) {
         // load the old one from database
@@ -838,5 +840,5 @@ public class DeclarationServiceImpl extends GenericDataServiceDefaultImpl<Declar
             saveAndLog(dec);
         }
     }
-    
+
 }

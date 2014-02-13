@@ -37,6 +37,7 @@ package org.arcam.cyberadmin.service.core;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.arcam.cyberadmin.criteria.business.CommentaireCriteria;
 import org.arcam.cyberadmin.criteria.business.DeclarationCriteria;
@@ -99,8 +100,11 @@ public interface DeclarationService extends GenericDataService<Declaration> {
      * 
      * @param declaration
      *            the declaration.
+     * @param sendReminder
+     *            a flag indicates if reminder 'declaration.onDemand' is sent. 
+     *            It's usually true for 'Demand' function on GUI and false for auto-creation for batch job.
      */
-    void demand(Declaration declaration);
+    void demand(Declaration declaration, boolean sendReminder);
 
     /**
      * Saves the given declaration into DB. This method is usually call by a ASJ.
@@ -218,12 +222,10 @@ public interface DeclarationService extends GenericDataService<Declaration> {
     int countTaxpayerDeclarationByCriteria(DeclarationCriteria criteria, Assujetti assujetti);
 
     /**
-     * Gets the list of declaration's ids which have due date = today - period.
-     * 
-     * @param period
+     * Gets the list of <{@link Declaration}'s ids which are in status 'TO_FILLED'.
      * @return
      */
-    List<Long> getOverdueDeclarationIds(int period);
+    Set<Long> getToFillDeclarationIds();
     
     /**
      * Saves or updates the given declaration into database and then log the changes into LOG table.

@@ -7,7 +7,7 @@
         <groupId>org.arcam.cyberadmin</groupId>
         <artifactId>cyberadmin-service</artifactId>
         <relativePath>../</relativePath>
-        <version>1.1.2</version>
+        <version>1.2.0</version>
     </parent>
 
     <artifactId>cyberadmin-service-impl</artifactId>
@@ -178,7 +178,7 @@
                                 <lineRate>80</lineRate>
                             </regex>
                             <regex>
-                                <pattern>org.arcam.cyberadmin.service.job.DueDateReminderJob</pattern>
+                                <pattern>org.arcam.cyberadmin.service.job.ReminderJob</pattern>
                                 <branchRate>80</branchRate>
                                 <lineRate>80</lineRate>
                             </regex>

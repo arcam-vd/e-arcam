@@ -5,10 +5,12 @@
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:sec="http://www.springframework.org/security/tags"
 	xmlns:c="http://java.sun.com/jsp/jstl/core"
-	template="layouts/unauthenticatedLayout.xhtml">
+	template="layouts/unauthenticatedLayoutHomePage.xhtml">
 	<ui:define name="content">
 		<form id="login-form" class="login-form"
 			action="j_spring_security_check" method="post" autocomplete='off'>
+			<div class="login-message">
+				Pour remplir votre déclaration sur la plateforme e-arcam, vous devez vous inscrire ci-dessous. <br/> Si c’est la première fois, créez votre utilisateur. Sinon, entrez vos coordonnées :			</div>
 			<div class="error">
 				#{sessionScope.SPRING_SECURITY_LAST_EXCEPTION.message}</div>
 			<h:panelGrid columns="2" width="%" columnClasses="login-first-column">

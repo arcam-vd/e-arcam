@@ -218,7 +218,7 @@ public final class DateHelper {
      * 
      * @return
      */
-    public static Date getFisrDateOfCurrentYear() {
+    public static Date getFirstDateOfCurrentYear() {
         return getDate(FIRST_DAY_OF_YEAR, FIRST_MONTH_OF_YEAR, getYear(now()));
     }
     

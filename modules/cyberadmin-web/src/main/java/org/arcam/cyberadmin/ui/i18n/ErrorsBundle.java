@@ -32,8 +32,8 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * 
  */
-
-package org.arcam.cyberadmin.ui.i18n;
+ 
+ package org.arcam.cyberadmin.ui.i18n;
 
 
 import java.util.Enumeration;

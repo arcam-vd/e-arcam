@@ -733,4 +733,9 @@ public class Declaration extends AbstractCyberAdminEntity implements Auditable, 
 	public void setDescription(String description) {
 		this.description = description;
 	}
+	
+	@Transient
+	public DeclarationTypeEnum getDeclarationType() {
+	    return bienTaxe.getDeclarationType();
+	}
 }

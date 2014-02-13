@@ -142,7 +142,7 @@ public class PublipostagesServiceTest extends AbstractCyberAdminServiceTest {
         criteria.setEmail(true);
         criteria.setCourier(false);
         List<Assujetti> assujettis = publipostagesService.getMailingPeriodicInvitation(criteria);
-        Assert.assertEquals(assujettis.isEmpty(),true);
+        Assert.assertEquals(assujettis.isEmpty(), false);
     }
 
     @Test

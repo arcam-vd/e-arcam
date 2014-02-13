@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>org.arcam</groupId>
 		<artifactId>cyberadmin</artifactId>
-		<version>1.1.2</version>
+		<version>1.2.0</version>
 		<relativePath>../</relativePath>
 	</parent>
 
@@ -14,6 +14,11 @@
 	<artifactId>cyberadmin-web</artifactId>
 	<packaging>war</packaging>
 	<name>prj_arcam_cyberadministration CYBERADMIN :: WEB</name>
+	
+	<scm>
+		<connection>scm:svn:https://svn.elca.ch/subversion/arcam-cyberadministration/trunk/modules/cyberadmin-web</connection>
+		<developerConnection>scm:svn:https://svn.elca.ch/subversion/arcam-cyberadministration/trunk/modules/cyberadmin-web</developerConnection>
+	</scm>
 	
 	<organization>
 		<name>ELCA Informatique SA</name>

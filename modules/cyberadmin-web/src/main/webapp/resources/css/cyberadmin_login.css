@@ -6,8 +6,54 @@
 	min-width: 49px;
 	max-height: 650px;
 	width: 890px;
-	z-index: 0;
-	
+	z-index: 0;	
+}
+
+.login-right{
+	margin: 0 auto !important;
+/*	border: thin solid #000000;*/
+	min-height: 300px;
+	min-width: 200px;
+	max-height: 300px;
+	width: 200px;
+	z-index: 0;	
+	float:right;
+}
+
+.login-header{
+	margin: 0 auto !important;
+	border-bottom: 25px solid #008A2C;
+	z-index: 0;		
+}
+
+.login-message{
+	margin: 0 auto !important;
+	padding-top:5px;
+	padding-bottom:5px;
+	padding-right:30px;
+	z-index: 0;		
+}
+
+.login-left{
+	margin: 0 auto !important;
+	min-width: 249px;
+	width: 680px;
+	z-index: 0;	
+	float:left;
+}
+
+.login-left-top{
+	margin: 0 auto !important;
+/*	border: thin solid #000000;*/
+	min-height: 150px;
+	max-height: 150px;
+}
+
+.login-left-bottom{
+	margin: 0 auto !important;
+/*	border: thin solid #000000;*/
+	min-height: 150px;
+	max-height: 150px;
 }
 
 .login-body {
@@ -21,8 +67,7 @@
 }
 
 .login-form{
-    padding-left : 97px;
-    padding-top : 50px;
+    padding-left : 40px;
 }
 
 .login-first-column{

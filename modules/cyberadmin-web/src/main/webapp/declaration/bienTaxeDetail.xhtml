@@ -55,7 +55,8 @@
             <p:spacer height="20px"/>
             <p:spacer height="20px"/>
             <h:outputText/>
-            <h:outputText value="#{assujetti.adresse.rue}" styleClass="form-taxpayer-label"/>
+            <!--  add adresse.no after rue -->
+            <h:outputText value="#{assujetti.adresse.rue} #{assujetti.adresse.no}" styleClass="form-taxpayer-label"/>
             <h:outputText/>
             <h:outputText value="#{assujetti.adresse.npa} #{assujetti.adresse.localite}" styleClass="form-taxpayer-label"/>
         </h:panelGrid>

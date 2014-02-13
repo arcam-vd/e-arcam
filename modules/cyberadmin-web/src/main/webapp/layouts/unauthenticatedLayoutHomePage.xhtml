@@ -25,14 +25,29 @@
         <ui:include src="waitingDialog.xhtml"/>
 		<p:layout fullPage="false" id="content" styleClass="login-content art-Sheet">
 			  	<p:layoutUnit styleClass="content" position="center" >  
-				
-				 <ui:insert name="header">
-						<ui:include src="../external/graphicHeader.xhtml" />
-	                    </ui:insert>			  	   
 
-                   <p:messages autoUpdate="true" showSummary="false" showDetail="true"/>
-		           <ui:insert name="content" />
-                   <ui:insert name="footer">
+				    <ui:insert name="header">
+						<ui:include src="../external/graphicHeader.xhtml" />
+	                    </ui:insert>
+					
+                    <p:messages autoUpdate="true" showSummary="false" showDetail="true"/>
+					
+					<div>		
+						<div name="left" class="login-left">
+							<div name="top left" class="login-left-top">
+								<ui:include src="../external/topText.xhtml" />
+							</div>
+							<div name="bottom left" class="login-left-bottom">
+								<ui:insert name="content" />
+							</div>							
+						</div>
+							
+						<div name="right" class="login-right">
+							<ui:include src="../external/rightMenu.xhtml" />
+						</div>
+					</div>
+					
+                    <ui:insert name="footer">
                         <ui:include src="footer.xhtml" />
                     </ui:insert>
 		         </p:layoutUnit>  

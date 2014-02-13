@@ -33,7 +33,7 @@
  * 
  */
  
- package org.arcam.cyberadmin.i18n;
+package org.arcam.cyberadmin.i18n;
 
 import java.io.IOException;
 import java.io.InputStream;

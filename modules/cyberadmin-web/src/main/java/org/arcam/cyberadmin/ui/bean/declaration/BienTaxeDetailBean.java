@@ -236,7 +236,7 @@ public class BienTaxeDetailBean extends AbstractDetailBean<BienTaxe> {
             return null;
         }
         setNpaForAdresseBienTaxe();
-        declarationService.demand(declaration);
+        declarationService.demand(declaration, true);
         return TAXPAYER_DETAIL;
     }
 

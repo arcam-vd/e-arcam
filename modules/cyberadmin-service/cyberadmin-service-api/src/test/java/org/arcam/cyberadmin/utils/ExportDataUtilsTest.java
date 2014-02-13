@@ -47,7 +47,7 @@ import org.testng.annotations.Test;
 public class ExportDataUtilsTest {
     
     public void testEncodeStringValue() throws Exception {
-    	Assert.assertNull(ExportDataUtils.encodeStringValue(null));
+        Assert.assertNull(ExportDataUtils.encodeStringValue(null));
         Assert.assertEquals("", ExportDataUtils.encodeStringValue(""));
         Assert.assertEquals("", ExportDataUtils.encodeStringValue("  "));
         

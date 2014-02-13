@@ -85,7 +85,7 @@ public class DeclarationGenerationJob implements ApplicationEventPublisherAware 
      */
     @Scheduled(cron = "${job.declarationGeneration.cron}")
     public void generateDeclarations() {
-        LOGGER.debug("Start DeclarationGenerationJob");
+        LOGGER.debug("Start DeclarationGenerationJob.");
         eventPublisher.publishEvent(new ScheduleTaskStartEvent(this));
         
         Set<Long> ids = bienTaxeService.getPeriodicityBientaxeIds();
@@ -94,26 +94,26 @@ public class DeclarationGenerationJob implements ApplicationEventPublisherAware 
         Set<Long> failedIds = new HashSet<Long>(ids.size());
         for (Long id : ids) {
             try {
-                LOGGER.debug("Processing BienTaxe [id=" + id + "]: ");
+                LOGGER.debug(String.format("Processing BienTaxe [id=%s]: ", id));
                 
                 BienTaxe bienTaxe = bienTaxeService.findByIdWithDeclarationList(id);
                 if (CollectionUtils.isEmpty(bienTaxe.getDeclarations())) {
-                    LOGGER.error("The BienTaxe [id=" + id + "] contains no declaration.");
+                    LOGGER.error(String.format("The BienTaxe [id=%s] contains no declaration.", id));
                     continue;
                 }
                 
                 Declaration lastDec = bienTaxe.getDeclarations().get(0);
                 if (DateHelper.compareIgnoreTime(DateHelper.today(),
                         DateUtils.addMonths(lastDec.getFiscaleDate(), lastDec.getPeriodiciteCode().getMonths())) >= 0) {
-                    LOGGER.debug("Automatically generate a declaration for BienTaxe [id=" + id + "]");
+                    LOGGER.debug(String.format("Automatically generate a declaration for BienTaxe [id=%s]", id));
                     
                     Declaration declaration = generateDeclaration(lastDec);
-                    declarationService.demand(declaration);
+                    declarationService.demand(declaration, false);
                 }
                 
                 successIds.add(id);
             } catch (Exception e) {
-                LOGGER.error("There is a problem while processing BienTaxe [id=" + id + "]", e);
+                LOGGER.error(String.format("There is a problem while processing BienTaxe [id=%s]", id), e);
                 failedIds.add(id);
             }
         }
@@ -122,7 +122,7 @@ public class DeclarationGenerationJob implements ApplicationEventPublisherAware 
         LOGGER.debug("List of failed bien taxe ids: " + failedIds);
         
         eventPublisher.publishEvent(new ScheduleTaskEndEvent(this));
-        LOGGER.debug("End DeclarationGenerationJob");
+        LOGGER.debug("End DeclarationGenerationJob.");
     }
     
     private Declaration generateDeclaration(Declaration previousDec) {

@@ -42,6 +42,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -79,7 +80,7 @@ import org.springframework.stereotype.Service;
 public class ExcelExportingServiceImpl implements ExcelExportingService {
 
     private void setCellData(Workbook workbook, Cell cell, CellDataDto cellData, CellFormatter formatter,
-            boolean forHSSF) {
+            boolean forHSSF, HashMap<Integer, CellStyle> cellStyles) {
         if (cellData == null || cellData.getValue() == null || cellData.getDataType() == null) {
             cell.setCellType(Cell.CELL_TYPE_BLANK);
 
@@ -122,7 +123,7 @@ public class ExcelExportingServiceImpl implements ExcelExportingService {
             cell.setCellFormula(cellData.getValue().toString());
         }
 
-        formatCellIfPossible(workbook, cell, formatter);
+        formatCellIfPossible(workbook, cell, formatter, cellStyles);
     }
 
     /**
@@ -133,30 +134,32 @@ public class ExcelExportingServiceImpl implements ExcelExportingService {
      * @param cell
      * @param formatter
      */
-    private void formatCellIfPossible(Workbook workbook, Cell cell, CellFormatter formatter) {
+    private void formatCellIfPossible(Workbook workbook, Cell cell, CellFormatter formatter, HashMap<Integer, CellStyle> cellStyles) {    	
         if (formatter != null && formatter.isNotEmptyFormatter()) {
-            CellStyle style = workbook.createCellStyle();
-            CellStyle availStyle = cell.getCellStyle();
-
-            if (StringUtils.isNotBlank(formatter.getDataFormatString())) {
-                style.setDataFormat(workbook.createDataFormat().getFormat(formatter.getDataFormatString()));
-            } else if (availStyle != null) {
-                style.setDataFormat(availStyle.getDataFormat());
-            }
-
-            if (formatter.getAlignment() != null) {
-                style.setAlignment(formatter.getAlignment());
-            } else if (availStyle != null) {
-                style.setAlignment(availStyle.getAlignment());
-            }
-
-            if (formatter.getWrapText() != null) {
-                style.setWrapText(formatter.getWrapText());
-            } else if (availStyle != null) {
-                style.setWrapText(availStyle.getWrapText());
-            }
-
-            cell.setCellStyle(style);
+        	if(!cellStyles.containsKey(cell.getColumnIndex())){        		   
+	            CellStyle style = workbook.createCellStyle();
+	            CellStyle availStyle = cell.getCellStyle();
+	
+	            if (StringUtils.isNotBlank(formatter.getDataFormatString())) {
+	                style.setDataFormat(workbook.createDataFormat().getFormat(formatter.getDataFormatString()));
+	            } else if (availStyle != null) {
+	                style.setDataFormat(availStyle.getDataFormat());
+	            }
+	
+	            if (formatter.getAlignment() != null) {
+	                style.setAlignment(formatter.getAlignment());
+	            } else if (availStyle != null) {
+	                style.setAlignment(availStyle.getAlignment());
+	            }
+	
+	            if (formatter.getWrapText() != null) {
+	                style.setWrapText(formatter.getWrapText());
+	            } else if (availStyle != null) {
+	                style.setWrapText(availStyle.getWrapText());
+	            }
+	            cellStyles.put(cell.getColumnIndex(), style);	           
+	        }
+        	cell.setCellStyle(cellStyles.get(cell.getColumnIndex()));
         }
     }
 
@@ -189,7 +192,7 @@ public class ExcelExportingServiceImpl implements ExcelExportingService {
     }
 
     private void fillInDataToRow(Workbook workbook, boolean forHSSF, Sheet sheet, int rowIdx, RowDataDto rowDto,
-            List<CellFormatter> formatters) {
+            List<CellFormatter> formatters, HashMap<Integer, CellStyle> cellStyles) {
         // retrieve the row to process
         Row dataRow = getOrCreateRow(sheet, rowDto, rowIdx);
 
@@ -204,15 +207,15 @@ public class ExcelExportingServiceImpl implements ExcelExportingService {
                 throw new CannotExportToExcelFileException(String.format(
                         "Can't retrieve the formatter for the cell at column at index %d (0-based)", cellIdx));
             }
-            setCellData(workbook, cell, cellData, formatter, forHSSF);
+            setCellData(workbook, cell, cellData, formatter, forHSSF, cellStyles);
         }
     }
 
-    private void fillInDataToExcel(String fileName, List<SheetDataDto> data, Workbook workbook, boolean forHSSF) {
+    private void fillInDataToExcel(String fileName, List<SheetDataDto> data, Workbook workbook, boolean forHSSF, HashMap<Integer, CellStyle> cellStyles) {
         FileOutputStream os = null;
         try {
             os = new FileOutputStream(new File(fileName));
-            fillInDataToExcel(os, data, workbook, forHSSF);
+            fillInDataToExcel(os, data, workbook, forHSSF, cellStyles);
 
         } catch (Exception e) {
             IOUtils.closeQuietly(os);
@@ -221,7 +224,7 @@ public class ExcelExportingServiceImpl implements ExcelExportingService {
         }
     }
 
-    private void fillInDataToExcel(OutputStream os, List<SheetDataDto> data, Workbook workbook, boolean forHSSF) {
+    private void fillInDataToExcel(OutputStream os, List<SheetDataDto> data, Workbook workbook, boolean forHSSF, HashMap<Integer, CellStyle> cellStyles) {
         for (SheetDataDto sheetDto : data) {
             Sheet sheet = null;
             if (!sheetDto.isOverriden()) {
@@ -257,12 +260,12 @@ public class ExcelExportingServiceImpl implements ExcelExportingService {
             // create header row
             RowDataDto headerRowDto = sheetDto.getHeaderRow();
             if (headerRowDto != null) {
-                fillInDataToRow(workbook, forHSSF, sheet, rowIdx++, headerRowDto, null);
+                fillInDataToRow(workbook, forHSSF, sheet, rowIdx++, headerRowDto, null, cellStyles);
             }
 
             // create row data
             for (RowDataDto rowDto : sheetDto.getRows()) {
-                fillInDataToRow(workbook, forHSSF, sheet, rowIdx++, rowDto, sheetDto.getFormatters());
+                fillInDataToRow(workbook, forHSSF, sheet, rowIdx++, rowDto, sheetDto.getFormatters(), cellStyles);
             }
 
             // freeze the first row to view data if necessary
@@ -285,6 +288,9 @@ public class ExcelExportingServiceImpl implements ExcelExportingService {
     @Override
     public void exportToExcel(String fileName, List<SheetDataDto> data, boolean append, ExcelFormatTypeEnum exportType) {
         Workbook workbook = null;
+        
+        HashMap cellStyles = new HashMap<Integer, CellStyle>();
+        
         if (!append) {
             if (exportType == ExcelFormatTypeEnum.XLS) {
                 workbook = new HSSFWorkbook();
@@ -314,7 +320,7 @@ public class ExcelExportingServiceImpl implements ExcelExportingService {
             }
         }
 
-        fillInDataToExcel(fileName, data, workbook, exportType.isForHSSF());
+        fillInDataToExcel(fileName, data, workbook, exportType.isForHSSF(), cellStyles);
     }
     //CHECKSTYLE:ON
     //CHECKSTYLE:OFF AvoidInlineConditionals
@@ -323,6 +329,7 @@ public class ExcelExportingServiceImpl implements ExcelExportingService {
             ExcelFormatTypeEnum exportType) {
 
         Workbook workbook = null;
+        HashMap cellStyles = new HashMap<Integer, CellStyle>();
         try {
             if (exportType == ExcelFormatTypeEnum.XLS) {
                 workbook = input == null ? new HSSFWorkbook() : new HSSFWorkbook(input);
@@ -336,7 +343,7 @@ public class ExcelExportingServiceImpl implements ExcelExportingService {
                     "An error happened while trying to open the excel file with the input stream: " + e.getMessage(), e);
         }
 
-        fillInDataToExcel(output, data, workbook, exportType.isForHSSF());
+        fillInDataToExcel(output, data, workbook, exportType.isForHSSF(), cellStyles);
     }
     //CHECKSTYLE:ON
 }
